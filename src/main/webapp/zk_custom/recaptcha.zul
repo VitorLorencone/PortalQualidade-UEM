@@ -1,0 +1,19 @@
+<zk xmlns:c="client" xmlns:x="xhtml">
+
+    <script type="text/javascript" src='https://www.google.com/recaptcha/api.js' />
+    
+    <script>
+        <![CDATA[ 
+            function afterValidate(gRecaptchaResponse){
+                zAu.send(new zk.Event(zk.Widget.$(jq('$g-recaptcha')[0]), 'onCaptchaResponse', gRecaptchaResponse, {toServer:true}));
+            } 
+            
+            function afterExpiration(){
+                zAu.send(new zk.Event(zk.Widget.$(jq('$g-recaptcha')[0]), 'onCaptchaExpiration', {}, {toServer:true}));
+            } 
+        ]]>
+    </script>
+
+    <x:div id="g-recaptcha" class="g-recaptcha" data-callback="afterValidate" data-expired-callback="afterExpiration" />		
+
+</zk>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <window title="" id="win" >
+
+        <!-- 
+            ANTES
+        -->
+        <grid>
+            <columns>
+                <column hflex="min" /> 
+                <column hflex="min" /> 
+            </columns>
+            <rows>
+                <row>
+                    Código:
+                    <textbox id="tbCodigo" maxlength="3" width="100px"/>
+                </row>
+                <row>
+                    Lista:
+                    <listbox id="lbLista" mold="select" width="180px"></listbox>
+                </row>
+            </rows>
+        </grid>
+        <button label="Executar" onClick="win.executar()" />
+
+
+        <!-- 
+            DEPOIS 
+            - Em vez de usar "grid" ("table") utilizamdo "div" com classes "row" e "col"
+            - Todo componente recebe a classe "form-control" 
+            - Todo botão recebe a classe "btn"
+            - NÃO utilizamos largura em pixel nem porcentual (raras exceções)
+        -->
+        <div class="row"> 
+            <div class="col-md-2">
+                Código:
+            </div>
+            <div class="col-md-10">
+                <textbox id="tbCodigo2" maxlength="3" class="form-control"/>
+            </div>
+        </div>
+        <div class="row">       
+            <div class="col-md-2">
+                Lista:
+            </div>
+            <div class="col-md-10">
+                <listbox id="lbLista2" mold="select" class="form-control"></listbox>
+            </div>
+        </div>
+        <button label="Executar" onClick="win.executar()" class="btn btn-primary"/>
+
+
+    </window>       
+</zk>
