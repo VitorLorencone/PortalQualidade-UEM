@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<!-- Ícones dos favoritos -->
+<?link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"?>
+<?link rel="icon" type="image/x-icon" href="/images/favicon.ico"?>
+
+<!-- CSS -->
+<?link rel="stylesheet" type="text/css" href="/css/bootstrap.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/zkbootstrap.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+    <!--
+    O login chama "index.zul" e está dentro de uma pasta chamada "/login", 
+    pois assim no navegador basta chamar www.seusite.com.br/login que automaticamente
+    a pasta irá abrir o arquivo index, ou seja, não precisa chamar o index.zul diretamente,
+    mas sim apenas a pasta.
+    -->
+  
+    <nodom id="login" use="login.controller.LoginController" zclass="z-window-overlapped">
+            
+        <zscript language="Java">
+                <![CDATA[
+                    import application.service.Application;
+                    String tituloPadrao = Application.getInstance().getProperty(Application.NAME) + " - " + Application.getInstance().getProperty(Application.DESCRIPTION);
+                ]]>
+        </zscript>
+            
+        <include src="../header.zul"></include>
+
+        <div class="card mt-4 offset-sm-3 col-sm-6 offset-md-3 col-md-6 offset-lg-4 col-lg-4 offset-xl-4 col-xl-4">
+            <div class="card-body g-3">
+                <div id="div_desenv" class="col-sm-12 alert alert-warning text-center border-0" visible="false">  
+                    Você está conectado no banco de dados de teste!
+                </div>
+                <div class="row g-3"> 
+                    <div class="col-12">
+                        <n:label>Login</n:label>
+                        <textbox id="usuario" class="form-control" width="100%" onFocus="login.hideErro()" onOK="senha.setFocus(true);"/>
+                    </div>
+                    <div class="col-12">
+                        <n:label>Senha</n:label>
+                        <textbox id="senha" class="form-control" type="password" width="100%" onFocus="login.hideErro()" onOK="btn_acessar.setFocus(true);login.acessar();"/>
+                        <zscript language="Java">
+                                <![CDATA[
+                                    void showhidepwd() {
+                                        if(senha.getType()=="text"){
+                                            senha.setType("password"); 
+                                            btn_showhidepwd.setIconSclass("z-icon-eye-slash");
+                                        }else{
+                                            senha.setType("text");
+                                            btn_showhidepwd.setIconSclass("z-icon-eye");
+                                        }
+                                    }
+                                ]]>
+                        </zscript>
+                        <style>
+                            .btn-icon-only:hover {
+                            color: #495057;
+                            border-color: transparent;
+                            background-color: transparent;
+                            }
+                            .btn-icon-only:focus {
+                            color: #495057;
+                            border-color: transparent;
+                            background-color: transparent;
+                            }
+                        </style>
+                        <button id="btn_showhidepwd" iconSclass="z-icon-eye-slash" Sclass="btn btn-icon-only" onClick='showhidepwd()' style="float:right; margin-top:-37px;"></button>
+                    </div>
+                    <div class="col align-self-center">
+                        <n:a href="//npd.uem.br/senha" target="_blank" class="text-decoration-none fs-6">Esqueceu sua senha?</n:a>
+                    </div>
+                    <div class="col text-end">
+                        <button id="btn_acessar" class="btn btn-primary" label="Entrar" onClick="login.acessar()" autodisable="self"/>
+                    </div>
+                </div>
+                <div class="form-group mb-0">
+                    <label id="msg_erro" class="col-sm-12 alert alert-danger text-center mb-0 mt-3 border-0 animated fadeIn" value="Mensagem de erro" visible="false"/>
+                </div>
+            </div>
+        </div>
+        
+        <n:p class="text-center text-secondary p-4">
+        Em todo controlador você tem que ter no método onCreate() a chamada Sessao.validarSessao();
+        Desse modo caso não exista ninguém logado na sessão, o sistema redireciona para esta página de login.
+        </n:p>
+        <!-- 
+            Nome e descrição do sistema está no pom.xml
+            A versão é a versão no pom.xml com a data de compilação 
+        -->
+        <popup id="logo-tooltip">
+            <n:strong>${tituloPadrao}</n:strong>
+            <separator/>
+            <label id="lb_versao" style="font-family: monospace;">Versão</label>
+        </popup>
+
+    </nodom>
+    
+    
+</zk>

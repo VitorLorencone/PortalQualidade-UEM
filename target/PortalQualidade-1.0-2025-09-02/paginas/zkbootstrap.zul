@@ -1,0 +1,1292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <div>
+
+        <div class="d-flex">
+            <div class="col">
+                <n:h4>Componentes ZK com Bootstrap</n:h4>
+            </div>
+        </div>
+        <div class="row pb-4">
+            <div class="col-12">
+                Exemplos de componentes ZK com estilos do Bootstrap. Esta página também é um exemplo de como montar um layout responsivo com Bootstrap.
+            </div>
+        </div>
+        
+        <!-- 
+            Como montar um Layout responsivo? 
+            O que você precisa saber para layout responsivo com Boostrap é o sistema de "grid" do Bootstrap.
+            A divisão da tela é em 12 "colunas" onde você define para cada div quantas colunas ela irá ocupar para cada tamanho de tela,
+            sendo que os tamanhos de telas são small (sm), medium (md), large (lg).
+            Tem alguns exemplo no fim da página. Explicação desse sistema de grid do Bootstrap você encontra aqui: https://getbootstrap.com/docs/5.3/layout/grid/
+        -->
+        
+        <div class="row gy-4"> 
+            
+            <!-- 
+                Os componentes Textbox, Intbox e Doublebox precisam da classe "form-control" 
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/getting_started/input e aqui https://www.zkoss.org/zkdemo/input?search=input
+            -->
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <n:h5>Textbox</n:h5>
+                <textbox maxlength="40" class="form-control"/>
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <n:h5>Intbox</n:h5>
+                <intbox  maxlength="4" cols="4" class="form-control"/> 
+            </div>
+            <div class="col-sm-6 col-md-4 col-lg-2">
+                <n:h5>Doublebox</n:h5>
+                <doublebox  maxlength="6" cols="6" class="form-control"/> 
+            </div>
+            
+            <!-- 
+                O componente Datebox para selecionar datas 
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/input/date_and_time_picker
+            -->
+            <div class="col-sm-6 col-md-3 col-lg-2">
+                <n:h5>Datebox</n:h5>
+                <datebox timeZone="GMT-3" locale="pt_BR" format="dd/MM/yyyy" class="form-control"/>
+            </div>
+            
+            <div class="col-sm-6 col-md-3 col-lg-2">
+                <n:h5>Timebox</n:h5>
+                <timebox timeZone="GMT-3" locale="pt_BR" cols="8" format="HH:mm:ss" class="form-control"/>
+            </div>
+            
+            <!-- 
+                O componente Chosenbox é uma alternativa ao Listbox para seleção múltipla 
+                Mais detalhes aqui https://www.zkoss.org/wiki/ZK_Component_Reference/Input/Chosenbox 
+            -->
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <n:h5>Chosenbox</n:h5>
+                <zscript>
+                    ListModelList listaLocales = new ListModelList(Locale.getAvailableLocales());
+                </zscript>
+                <chosenbox class="form-control" creatable="false" model="${listaLocales}"
+                               emptyMessage="Nenhum item selecionado" 
+                               noResultsText="Nenhum item '{0}' encontrado."
+                               createMessage="Nenhum item '{0}' encontrado, porém ao adicionar você irá criá-lo.">
+                    <attribute name="onSearch">
+                        Object obj = event.getValue();
+                        ((ListModelList)listaLocales).add(obj);
+                        self.addItemToSelection(obj);
+                    </attribute>
+                </chosenbox>
+            </div>
+            
+            <!-- 
+                O Input-Group é um Textbox com Button integrado, é um recurso visual interessante que o Bootstrap oferece.
+                Mais detalhes de como montar input-groups aqui https://getbootstrap.com/docs/5.3/forms/input-group/
+            -->
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <n:h5>Input Group</n:h5>
+                <div class="input-group">
+                    <textbox id="vlPesquisa"  class="form-control">
+                        <attribute name="onOK">
+                            //colocar aqui a mesma coisa que o onClick do button abaixo
+                        </attribute>
+                    </textbox>        
+                    <button label="" class="btn btn-outline-secondary" iconSclass="z-icon-search" onClick=""/>
+                </div>
+            </div>
+       
+            <!-- 
+                O componente Listbox precisa da classe "form-select" 
+                Mais detalhes o Listbox aqui https://www.zkoss.org/zkdemo/getting_started/listbox e aqui https://www.zkoss.org/zkdemo/listbox
+            -->
+            <div class="col-sm-6 col-md-6 col-lg-4">
+                <n:h5>Listbox</n:h5>
+                <listbox mold="select" class="form-select">
+                    <listitem value="" selected="true">
+                        <listcell label="Selecione"/>
+                    </listitem>
+                    <listitem value="1">
+                        <listcell label="Opção 1"/>
+                    </listitem>
+                    <listitem value="2">
+                        <listcell label="Opção 2"/>
+                    </listitem>
+                    <listitem value="3">
+                        <listcell label="Opção 3"/>
+                    </listitem>
+                </listbox>
+            </div>
+            
+            <!-- 
+                O componente Radio permite apenas um item selecionado por vez 
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/input/radio_button
+            -->
+            <div class="col-sm-6 col-md-4 col-lg-4">
+                <n:h5>Radio</n:h5>
+                <radiogroup>
+                    <radio label="Item 1" selected="true"/>
+                    <radio label="Item 2"/>
+                    <radio label="Item 3"/>
+                </radiogroup>
+            </div>
+            
+            <!-- 
+                O componente Checkbox permite múltiplos itens selecionados por vez. Ele tem em versão "switch".
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/input/checkbox
+            -->
+            <style>
+                .checkboxred input[type="checkbox"]:checked {
+                background-color: #dc3545!important;
+                }
+
+                .checkboxred input[type="checkbox"]:checked:before {
+                content: "\f00d";
+                }
+            </style>
+            <div class="col-sm-6 col-md-8 col-lg-8">
+                <n:h5>Checkbox</n:h5>
+                <checkbox id="1" label="Item 1" />
+                <checkbox id="2" label="Item 2" checked="true"/>
+                <checkbox class="checkboxred" id="3" label="Item 3 (customizado)"  checked="true"/>
+                <checkbox mold="switch" label="Item 4 (switch)"/>
+            </div>
+
+            <!--
+                CKEditor (https://ckeditor.com) é um editor WYSIWYG para ZK (https://www.zkoss.org/wiki/ZK_Component_Reference/Input/CKEditor)
+                Utilizado para formatar o texto (cores, negrito, itálico, etc.) e pegar o html gerado, para usar em campos de
+                envio de e-mail, message chats, etc.
+                Veja um exemplo na tela de envio de e-mail.
+                Repare que é necessário ter o /js/ckeditor.js para funcionar.
+            -->
+            <div class="col-sm-12 col-md-6">
+                <n:h5>CKEditor (Editor HTML) </n:h5>
+                <ckeditor id="editor_html" customConfigurationsPath="/js/ckeditor.js" width="400" height="100"/>
+            </div>
+            
+            <!-- 
+                Ace Editor para ZK. Editor de código-fonte SQL, Java, PHP, etc.
+                Para ver opções de "theme" e "mode" ver em https://ace.c9.io/build/kitchen-sink.html
+                Existe uma biblioteca no pom.xml necessária para funcionar.
+            -->
+            <div class="col-sm-12 col-md-6">
+                <n:h5>ACE Editor (Editor de código-fonte) </n:h5>
+                <aceditor id="aceditor" mode="sql" theme="github" width="400px" height="200px" value="SELECT * FROM SCHEMA.TABELA"></aceditor>
+            </div>
+            
+            <!-- 
+                Mais sobre como personalizar links aqui https://getbootstrap.com/docs/5.3/helpers/colored-links/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Links</n:h5>
+                <a href="" class="link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Link Underline</a>
+                <a href="" class="text-decoration-none">Link Sem Underline</a>
+                <a href="" class="link-primary">Link Primary</a>
+                <a href="" class="link-secondary">Link Secondary</a>
+                <a href="" class="link-success">Link Success</a>
+                <a href="" class="link-warning">Link Warnig</a>
+                <a href="" class="link-danger">Link Danger</a>
+                <a href="" class="link-info">Link Info</a>
+            </div>
+            
+            <!-- 
+                O componente Button precisa da classe "btn", e com a classe adicional "btn-XXX" você determina a cor e/ou o tamanho 
+                Mais detalhes do Button do ZK aqui https://www.zkoss.org/zkdemo/input/button
+                Mais detalhes de como personalizar com Boostrap aqui https://getbootstrap.com/docs/5.3/components/buttons/
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Buttons</n:h5>
+                <button label="Primary" class="btn btn-primary"/>
+                <button label="Secondary" class="btn btn-secondary"/>
+                <button label="Success" class="btn btn-success"/>
+                <button label="Danger" class="btn btn-danger"/>
+                <button label="Warning" class="btn btn-warning"/>
+                <button label="Info" class="btn btn-info"/>
+                <button label="Light" class="btn btn-light"/>
+                <button label="Dark" class="btn btn-dark"/>
+                <button label="Link" class="btn btn-link"/>
+                
+                <button label="Primary" class="btn btn-outline-primary"/>
+                <button label="Secondary" class="btn btn-outline-secondary"/>
+                <button label="Success" class="btn btn-outline-success"/>
+                <button label="Danger" class="btn btn-outline-danger"/>
+                <button label="Warning" class="btn btn-outline-warning"/>
+                <button label="Info" class="btn btn-outline-info"/>
+                <button label="Light" class="btn btn-outline-light"/>
+                <button label="Dark" class="btn btn-outline-dark"/>
+                
+                <button label="Large" class="btn btn-primary btn-lg"/>
+                <button label="Small" class="btn btn-primary btn-sm"/>
+                
+                <div class="btn-group" >
+                    <button class="btn btn-outline-primary">Esquerda</button>
+                    <button class="btn btn-outline-primary">Meio</button>
+                    <button class="btn btn-outline-primary">Direita</button>
+                </div>
+            </div>
+            
+            <!-- 
+                Tabbox do ZK, mais detalhes aqui https://www.zkoss.org/zkdemo/tabbox
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Tabbox</n:h5>
+                <tabbox id="tabbox">
+                    <tabs id="tabs" class="card-header card-header-tab-animation">
+                        <tab id="tab_1" label="Tab 1"/>
+                        <tab id="tab_2" label="Tab 2"/>
+                        <tab id="tab_3" label="Tab 3"/>
+                        <tab id="tab_4" label="Tab 4"/>
+                        <tab id="tab_5" label="Tab 5"/>
+                    </tabs>
+                    <tabpanels>
+                        <tabpanel>
+                            Conteúdo da Tab 1
+                        </tabpanel>
+                        <tabpanel>
+                            Conteúdo da Tab 2
+                        </tabpanel>
+                        <tabpanel>
+                            Conteúdo da Tab 3
+                        </tabpanel>
+                        <tabpanel>
+                            Conteúdo da Tab 4
+                        </tabpanel>
+                        <tabpanel>
+                            Conteúdo da Tab 5
+                        </tabpanel>
+                    </tabpanels>
+                </tabbox>
+            </div>
+            
+            <!-- 
+                O componente grid do zk já esta costumizado com css do bootstrap e não precisa de classes adicionais
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/getting_started/grid e aqui https://www.zkoss.org/zkdemo/grid
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Grid (tables)</n:h5>
+                <!-- é importante colocar o grid dentro desta div com a classe "responsive-grid-md" para que apareça a barra de rolagem horizontal em telas pequenas -->
+                <div class="responsive-grid-md"> 
+                    <grid sizedByContent="false" mold="paging" width="100%" pageSize="4" emptyMessage="Nenhum dado encontrado">
+                        <columns>
+                            <column label="Coluna 1" sort="auto"/>
+                            <column label="Coluna 2" sort="auto"/>
+                            <column label="Coluna 3" sort="auto"/>
+                            <column label="Coluna 4" sort="auto"/>
+                            <column label="Coluna 5" sort="auto"/>
+                        </columns>
+                        <!-- as linhas podem ser coloridas, para mais cores consulte em https://getbootstrap.com/docs/5.3/utilities/background/#background-color -->
+                        <rows>
+                            <row class="bg-info-subtle">
+                                <label value="Valor A1" class="table-primary"/>
+                                <label value="Valor A2" />
+                                <label value="Valor A3" />
+                                <label value="Valor A4" />
+                                <label value="Valor A5" /> 
+                            </row>
+                            <row >
+                                <label value="Valor B1" />
+                                <label value="Valor B2" />
+                                <label value="Valor B3" />
+                                <label value="Valor B4" />
+                                <label value="Valor B5" /> 
+                            </row>
+                            <row class="bg-success-subtle">
+                                <label value="Valor C1" />
+                                <label value="Valor C2" />
+                                <label value="Valor C3" />
+                                <label value="Valor C4" />
+                                <label value="Valor C5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor D1" />
+                                <label value="Valor D2" />
+                                <label value="Valor D3" />
+                                <label value="Valor D4" />
+                                <label value="Valor D5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor E1" />
+                                <label value="Valor E2" />
+                                <label value="Valor E3" />
+                                <label value="Valor E4" />
+                                <label value="Valor E5" /> 
+                            </row>
+                            <row class="bg-warning-subtle">
+                                <label value="Valor F1" />
+                                <label value="Valor F2" />
+                                <label value="Valor F3" />
+                                <label value="Valor F4" />
+                                <label value="Valor F5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor G1" />
+                                <label value="Valor G2" />
+                                <label value="Valor G3" />
+                                <label value="Valor G4" />
+                                <label value="Valor G5" /> 
+                            </row>
+                            <row class="bg-danger-subtle">
+                                <label value="Valor H1" />
+                                <label value="Valor H2" />
+                                <label value="Valor H3" />
+                                <label value="Valor H4" />
+                                <label value="Valor H5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor I1" />
+                                <label value="Valor I2" />
+                                <label value="Valor I3" />
+                                <label value="Valor I4" />
+                                <label value="Valor I5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor J1" />
+                                <label value="Valor J2" />
+                                <label value="Valor J3" />
+                                <label value="Valor J4" />
+                                <label value="Valor J5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor K1" />
+                                <label value="Valor K2" />
+                                <label value="Valor K3" />
+                                <label value="Valor K4" />
+                                <label value="Valor K5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor L1" />
+                                <label value="Valor L2" />
+                                <label value="Valor L3" />
+                                <label value="Valor L4" />
+                                <label value="Valor L5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor M1" />
+                                <label value="Valor M2" />
+                                <label value="Valor M3" />
+                                <label value="Valor M4" />
+                                <label value="Valor M5" /> 
+                            </row>
+                            <row>
+                                <label value="Valor N1" />
+                                <label value="Valor N2" />
+                                <label value="Valor N3" />
+                                <label value="Valor N4" />
+                                <label value="Valor N5" /> 
+                            </row>
+                        </rows>
+                    </grid>
+                </div>
+            </div>
+            
+            <!--
+                Notificações do tipo Clients.showNotification é bom para informar erros em determinados compoenentes.
+                Caso você tenha um controller atrelado ao zul, você deve trocar o "self" por "this.nomeDoCompoenente".
+                Notificações do tipo Toast é interessante para informar coisas que não precisa de ação do usuário, por 
+                exemplo, dizer que os dados foram alterados com sucesso. 
+                Notificações do tipo Messabox é interessante para informar coisas que precisa de muita atenção do usuário, 
+                forçando ele clicar em OK, por exemplo, informar algo muito importante que necessita que a mensagem 
+                seja lida com atenção.
+                Notificação tipo Alert é uma alternativa ao Toast com a mesma vantagem do Messagebox. 
+                A dificuldade de usar é que tem que criar uma div e sempre deixar essa div no código onde irá aparecer a mensagem,
+                além de que esse componente é puro html/css do Bootstrap, não tendo um recurso Java com ZK para manipular o elemento.
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Notificações no Componente <span class="fw-lighter">(clique para ver)</span></n:h5> 
+                <zscript>
+                    import org.zkoss.zk.ui.util.Clients;
+                </zscript>
+                <button label="Notificação Info" class="btn btn-success">
+                    <attribute name="onClick">
+                        Clients.showNotification("Esta é uma notificação de informação no componente", Clients.NOTIFICATION_TYPE_INFO, self, "end_center", 0);
+                    </attribute>
+                </button>
+                <button label="Notificação Warning" class="btn btn-warning">
+                    <attribute name="onClick">
+                        Clients.showNotification("Esta é uma notificação de alerta no componente", Clients.NOTIFICATION_TYPE_WARNING, self, "end_center", 0);
+                    </attribute>
+                </button>
+                <button label="Notificação Error" class="btn btn-danger">
+                    <attribute name="onClick">
+                        Clients.showNotification("Esta é uma notificação de erro no componente", Clients.NOTIFICATION_TYPE_ERROR, self, "end_center", 0);
+                    </attribute>
+                </button>
+            </div>
+            
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Notificações Toast <span class="fw-lighter">(clique para ver)</span></n:h5>
+                <zscript>
+                    import zk.custom.Toast;
+                </zscript>
+                <button label="Toast Success" class="btn btn-success">
+                    <attribute name="onClick">
+                        Toast.show("Este é um Toast de sucesso", "Sucesso", Toast.Type.SUCCESS);
+                    </attribute>
+                </button>
+                <button label="Toast Info" class="btn btn-info">
+                    <attribute name="onClick">
+                        Toast.show("Este é um Toast de informação", "Sucesso", Toast.Type.INFO);
+                    </attribute>
+                </button>
+                <button label="Toast Warning" class="btn btn-warning">
+                    <attribute name="onClick">
+                        Toast.show("Este é um Toast de alerta", "Sucesso", Toast.Type.WARNING);
+                    </attribute>
+                </button>
+                <button label="Toast Error" class="btn btn-danger">
+                    <attribute name="onClick">
+                        Toast.show("Este é um Toast de erro", "Sucesso", Toast.Type.ERROR);
+                    </attribute>
+                </button>
+            </div>
+            
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Messabox <span class="fw-lighter">(clique para ver)</span></n:h5>
+                <zscript>
+                    import utilitarios.ZkUtils;
+                    ZkUtils zkUtils = new ZkUtils();
+                </zscript>
+                <button label="Messagebox de Confirmação" class="btn btn-primary">
+                    <attribute name="onClick">
+                        if (zkUtils.MensagemConfirmacao("Confirma executar a ação?")) {
+                        zkUtils.Mensagem("Você confirmou!");ã
+                        } else {
+                        zkUtils.Mensagem("Você NÃO confirmou!");
+                        }
+                    </attribute>
+                </button>
+                <button label="Messagebox Info" class="btn btn-info">
+                    <attribute name="onClick">
+                        zkUtils.Mensagem("Esta é uma mensagem de informação!");
+                    </attribute>
+                </button>
+                <button label="Messagebox Warning" class="btn btn-warning">
+                    <attribute name="onClick">
+                        zkUtils.MensagemAtencao("Esta é uma mensagem de atenção!");
+                    </attribute>
+                </button>
+                <button label="Messagebox Error" class="btn btn-danger">
+                    <attribute name="onClick">
+                        zkUtils.MensagemErro("Esta é uma mensagem de erro!");
+                    </attribute>
+                </button>
+            </div>
+            
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Alerts  <span class="fw-lighter">(clique para ver)</span></n:h5>
+                <div id="alert_primary" class="alert alert-primary alert-dismissible fade show" visible="false">
+                    Um alerta primário simples e com botão de fechar – confira!
+                    <button type="button" class="btn-close" onClick="alert_primary.setVisible(false)"></button>
+                </div>
+                <div id="alert_secondary" class="alert alert-secondary alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_info" class="alert alert-info alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_success" class="alert alert-success alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_warning" class="alert alert-warning alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_danger" class="alert alert-danger alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_light" class="alert alert-light alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <div id="alert_dark" class="alert alert-dark alert-dismissible fade show" visible="false">
+                    Um alerta primário simples – confira!
+                </div>
+                <button label="Alert Primary" class="btn btn-primary" onClick=" alert_primary.setVisible(!alert_primary.isVisible());"/>
+                <button label="Alert Secondary" class="btn btn-secondary" onClick="alert_secondary.setVisible(!alert_secondary.isVisible());"/>
+                <button label="Alert Info" class="btn btn-info" onClick="alert_info.setVisible(!alert_info.isVisible());"/>
+                <button label="Alert Success" class="btn btn-success" onClick="alert_success.setVisible(!alert_success.isVisible());"/>
+                <button label="Alert Warning" class="btn btn-warning" onClick="alert_warning.setVisible(!alert_warning.isVisible());"/>
+                <button label="Alert Danger" class="btn btn-danger" onClick="alert_danger.setVisible(!alert_danger.isVisible());"/>
+                <button label="Alert Light" class="btn btn-light" onClick="alert_light.setVisible(!alert_light.isVisible());"/>
+                <button label="Alert Dark" class="btn btn-dark" onClick="alert_dark.setVisible(!alert_dark.isVisible());"/>
+            </div>
+            
+            <!-- 
+                O Tooltip é aparece quando ocorre o evento onMouseOver e desaparece em 0,5 segundo após o cursor se afastar. 
+                A pop-up aparece em um evento onClick e desaparece quando perde o foco. 
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/popup/pop-ups
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Pop-up / Tooltip</n:h5>
+                <label value="Passe o cursor sobre mim!" tooltip="popup" />
+                <separator/>
+                <label value="Clique em mim!" popup="popup" />
+                <separator/>
+                <button class="btn p-0" iconSclass="z-icon-question-circle-o" popup="popup" tooltip="popup" style="cursor: help"></button>
+                <popup id="popup">
+                    Este é um exemplo de Pop-up ou Tooltip feito em ZK. 
+                    <separator/>
+                    Mais informações dos componentes ZK <a label="clique aqui" target="zkdemo" href="https://www.zkoss.org/zkdemo/"/>.
+                </popup>
+            </div>
+            
+            <!-- 
+                Barra de progresso
+                Podemos utilizar a barra de progresso em html puro com bootstrap (primeiro dois exemplos),
+                ou utilizar a barra de progresso do ZK (último exemplo). Recomento utilizar a barra do ZK 
+                será mais fácil de manipular em Java.
+                Mais detalhes aqui https://www.zkoss.org/zkdemo/miscellaneous/progress_meter
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Progress Bar</n:h5>
+                <n:div class='progress' >
+                    <n:div class='progress-bar' role='progressbar' style='width: 25%;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>25%</n:div>
+                </n:div>
+                <div class="pt-3"></div>
+                <n:div class='progress' >
+                    <n:div class='progress-bar progress-bar-striped bg-info progress-bar-animated' role='progressbar' style='width: 25%;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'>25%</n:div>
+                </n:div>
+                <div class="pt-3"></div>
+                <div>
+                    <progressmeter id="progress_meter" value="25" width="100%"/>
+                </div>
+            </div>
+            
+            <!-- 
+                StepBar customizado, pois o ZK não tem esse componente de graça
+                É possível pegar o componente no Java e alterar o step atual dele por meio do método setStep(),
+                assim como alterar os valores dos subtitles e o número de passos.
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Stepbar <span class="fw-lighter">(clique para ver)</span></n:h5>
+                <stepbar id="stepbar" step="1" size="4" subtitles="Passo 1,Passo 2,Passo 3,Passo 4">
+                    <attribute name="onClick">
+                        self.next();
+                    </attribute>
+                </stepbar>
+            </div>
+            
+            <!-- 
+                Navbar do Bootstrap 
+                Este elemento é feito em html "puro" com as classes CSS e Javascript do Bootstrap.
+                Desse modo, é importante a utilização do prefixo "n:" antes das tags html, para poder dizer para o ZK ignorar essas tags e
+                processar como html "puro", pois são tag "nativas" do html.
+                Este Navbar é melhor que o menubar ou navbar do ZK, pois é responsivo.
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Navbar</n:h5>
+                <n:nav class="navbar navbar-expand-lg navbar-light bg-light border bg-white">
+                    <div class="container-fluid">
+                        <n:a class="navbar-brand" href="">
+                            <n:img src="images/uem50anos.png" alt="UEM" title="UEM 50 Anos" class="d-inline-block align-text-top" style="height:23px;"/>
+                            Menu
+                        </n:a>
+                        <n:button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <n:span class="navbar-toggler-icon"></n:span>
+                        </n:button>
+                        <n:div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <n:ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <n:li class="nav-item">
+                                    <a class="nav-link" href="">Item 1</a>
+                                </n:li>
+                                <n:li class="nav-item">
+                                    <a class="nav-link" href="">Item 2</a>
+                                </n:li>
+                                <n:li class="nav-item">
+                                    <a class="nav-link" href="">Item 3</a>
+                                </n:li>
+                                <n:li class="nav-item dropdown">
+                                    <n:a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Dropdown
+                                    </n:a>
+                                    <n:ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <n:li>
+                                            <a class="dropdown-item" href="">Item 4</a>
+                                        </n:li>
+                                        <n:li>
+                                            <a class="dropdown-item" href="">Item 5</a>
+                                        </n:li>
+                                        <n:li>
+                                            <n:hr class="dropdown-divider"/>
+                                        </n:li>
+                                        <n:li>
+                                            <a class="dropdown-item" href="">Item 6</a>
+                                        </n:li>
+                                    </n:ul>
+                                </n:li>
+                                <n:li class="nav-item">
+                                    <a class="nav-link" href="" disabled="true">Item 7</a>
+                                </n:li>
+                            </n:ul>
+                            <n:form class="d-flex">
+                                <button class="btn btn-outline-secondary">Botão</button>
+                            </n:form>
+                        </n:div>
+                    </div>
+                </n:nav>
+            </div>
+            
+            <!-- 
+                Exemplo de ícones: o ZK utiliza os ícones da Fontawesome 4 https://fontawesome.com/v4/icons/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Icons</n:h5>
+                <div class="z-icon-glass" /> 
+                <div class="z-icon-music" /> 
+                <div class="z-icon-search" /> 
+                <div class="z-icon-envelope-o" /> 
+                <div class="z-icon-heart" /> 
+                <div class="z-icon-star" /> 
+                <div class="z-icon-star-o" /> 
+                <div class="z-icon-user" /> 
+                <div class="z-icon-film" /> 
+                <div class="z-icon-th-large" /> 
+                <div class="z-icon-th" /> 
+                <div class="z-icon-th-list" /> 
+                <div class="z-icon-check" /> 
+                <div class="z-icon-times" /> 
+                <div class="z-icon-search-plus" /> 
+                <div class="z-icon-search-minus" /> 
+                <div class="z-icon-power-off" /> 
+                <div class="z-icon-signal" /> 
+                <div class="z-icon-gear" /> 
+                <div class="z-icon-trash-o" /> 
+                <div class="z-icon-home" /> 
+                <div class="z-icon-file-o" /> 
+                <div class="z-icon-clock-o" /> 
+                <div class="z-icon-road" /> 
+                <div class="z-icon-download" /> 
+                <div class="z-icon-arrow-circle-o-down" /> 
+                <div class="z-icon-arrow-circle-o-up" /> 
+                <div class="z-icon-inbox" /> 
+                <div class="z-icon-play-circle-o" /> 
+                <div class="z-icon-rotate-right" /> 
+                <div class="z-icon-repeat" /> 
+                <div class="z-icon-refresh" /> 
+                <div class="z-icon-list-alt" /> 
+                <div class="z-icon-lock" /> 
+                <div class="z-icon-flag" /> 
+                <div class="z-icon-headphones" /> 
+                <div class="z-icon-volume-off" /> 
+                <div class="z-icon-volume-down" /> 
+                <div class="z-icon-volume-up" /> 
+                <div class="z-icon-qrcode" /> 
+                <div class="z-icon-barcode" /> 
+                <div class="z-icon-tag" /> 
+                <div class="z-icon-tags" /> 
+                <div class="z-icon-book" /> 
+                <div class="z-icon-bookmark" /> 
+                <div class="z-icon-print" /> 
+                <div class="z-icon-camera" /> 
+                <div class="z-icon-font" /> 
+                <div class="z-icon-bold" /> 
+                <div class="z-icon-italic" /> 
+                <div class="z-icon-text-height" /> 
+                <div class="z-icon-text-width" /> 
+                <div class="z-icon-align-left" /> 
+                <div class="z-icon-align-center" /> 
+                <div class="z-icon-align-right" /> 
+                <div class="z-icon-align-justify" /> 
+                <div class="z-icon-list" /> 
+                <div class="z-icon-dedent" /> 
+                <div class="z-icon-outdent" /> 
+                <div class="z-icon-indent" /> 
+                <div class="z-icon-video-camera" /> 
+                <div class="z-icon-picture-o" /> 
+                <div class="z-icon-pencil" /> 
+                <div class="z-icon-map-marker" /> 
+                <div class="z-icon-adjust" /> 
+                <div class="z-icon-tint" /> 
+                <div class="z-icon-edit" /> 
+                <div class="z-icon-pencil-square-o" /> 
+                <div class="z-icon-share-square-o" /> 
+                <div class="z-icon-check-square-o" /> 
+                <div class="z-icon-step-backward" /> 
+                <div class="z-icon-fast-backward" /> 
+                <div class="z-icon-backward" /> 
+                <div class="z-icon-play" /> 
+                <div class="z-icon-pause" /> 
+                <div class="z-icon-stop" /> 
+                <div class="z-icon-forward" /> 
+                <div class="z-icon-fast-forward" /> 
+                <div class="z-icon-step-forward" /> 
+                <div class="z-icon-eject" /> 
+                <div class="z-icon-chevron-left" /> 
+                <div class="z-icon-chevron-right" /> 
+                <div class="z-icon-plus-circle" /> 
+                <div class="z-icon-minus-circle" /> 
+                <div class="z-icon-times-circle" /> 
+                <div class="z-icon-check-circle" /> 
+                <div class="z-icon-question-circle" /> 
+                <div class="z-icon-info-circle" /> 
+                <div class="z-icon-crosshairs" /> 
+                <div class="z-icon-times-circle-o" /> 
+                <div class="z-icon-check-circle-o" /> 
+                <div class="z-icon-ban" /> 
+                <div class="z-icon-arrow-left" /> 
+                <div class="z-icon-arrow-right" /> 
+                <div class="z-icon-arrow-up" /> 
+                <div class="z-icon-arrow-down" /> 
+                <div class="z-icon-mail-forward" /> 
+                <div class="z-icon-share" /> 
+                <div class="z-icon-plus" /> 
+                <div class="z-icon-minus" /> 
+                <div class="z-icon-asterisk" /> 
+                <div class="z-icon-exclamation-circle" /> 
+                <div class="z-icon-gift" /> 
+                <div class="z-icon-leaf" /> 
+                <div class="z-icon-fire" /> 
+                <div class="z-icon-eye" /> 
+                <div class="z-icon-eye-slash" /> 
+                <div class="z-icon-warning" /> 
+                <div class="z-icon-plane" /> 
+                <div class="z-icon-calendar" /> 
+                <div class="z-icon-random" /> 
+                <div class="z-icon-comment" /> 
+                <div class="z-icon-magnet" /> 
+                <div class="z-icon-chevron-up" /> 
+                <div class="z-icon-chevron-down" /> 
+                <div class="z-icon-retweet" /> 
+                <div class="z-icon-shopping-cart" /> 
+                <div class="z-icon-folder" /> 
+                <div class="z-icon-folder-open" /> 
+                <div class="z-icon-bar-chart-o" /> 
+                <div class="z-icon-twitter-square" /> 
+                <div class="z-icon-facebook-square" /> 
+                <div class="z-icon-camera-retro" /> 
+                <div class="z-icon-key" /> 
+                <div class="z-icon-gears" /> 
+                <div class="z-icon-cogs" /> 
+                <div class="z-icon-comments" /> 
+                <div class="z-icon-thumbs-o-up" /> 
+                <div class="z-icon-thumbs-o-down" /> 
+                <div class="z-icon-star-half" /> 
+                <div class="z-icon-heart-o" /> 
+                <div class="z-icon-sign-out" /> 
+                <div class="z-icon-linkedin-square" /> 
+                <div class="z-icon-thumb-tack" /> 
+                <div class="z-icon-external-link" /> 
+                <div class="z-icon-sign-in" /> 
+                <div class="z-icon-trophy" /> 
+                <div class="z-icon-github-square" /> 
+                <div class="z-icon-upload" /> 
+                <div class="z-icon-lemon-o" /> 
+                <div class="z-icon-phone" /> 
+                <div class="z-icon-square-o" /> 
+                <div class="z-icon-bookmark-o" /> 
+                <div class="z-icon-phone-square" /> 
+                <div class="z-icon-twitter" /> 
+                <div class="z-icon-facebook" /> 
+                <div class="z-icon-github" /> 
+                <div class="z-icon-unlock" /> 
+                <div class="z-icon-credit-card" /> 
+                <div class="z-icon-rss" /> 
+                <div class="z-icon-hdd-o" /> 
+                <div class="z-icon-bullhorn" /> 
+                <div class="z-icon-bell" /> 
+                <div class="z-icon-certificate" /> 
+                <div class="z-icon-hand-o-right" /> 
+                <div class="z-icon-hand-o-left" /> 
+                <div class="z-icon-hand-o-up" /> 
+                <div class="z-icon-hand-o-down" /> 
+                <div class="z-icon-arrow-circle-left" /> 
+                <div class="z-icon-arrow-circle-right" /> 
+                <div class="z-icon-arrow-circle-up" /> 
+                <div class="z-icon-arrow-circle-down" /> 
+                <div class="z-icon-globe" /> 
+                <div class="z-icon-wrench" /> 
+                <div class="z-icon-tasks" /> 
+                <div class="z-icon-filter" /> 
+                <div class="z-icon-briefcase" /> 
+                <div class="z-icon-group" /> 
+                <div class="z-icon-chain" /> 
+                <div class="z-icon-link" /> 
+                <div class="z-icon-cloud" /> 
+                <div class="z-icon-flask" /> 
+                <div class="z-icon-cut" /> 
+                <div class="z-icon-scissors" /> 
+                <div class="z-icon-copy" /> 
+                <div class="z-icon-files-o" /> 
+                <div class="z-icon-paperclip" /> 
+                <div class="z-icon-save" /> 
+                <div class="z-icon-floppy-o" /> 
+                <div class="z-icon-square" /> 
+                <div class="z-icon-reorder" /> 
+                <div class="z-icon-list-ul" /> 
+                <div class="z-icon-list-ol" /> 
+                <div class="z-icon-strikethrough" /> 
+                <div class="z-icon-underline" /> 
+                <div class="z-icon-table" /> 
+                <div class="z-icon-magic" /> 
+                <div class="z-icon-truck" /> 
+                <div class="z-icon-pinterest" /> 
+                <div class="z-icon-pinterest-square" /> 
+                <div class="z-icon-google-plus-square" /> 
+                <div class="z-icon-google-plus" /> 
+                <div class="z-icon-money" /> 
+                <div class="z-icon-caret-down" /> 
+                <div class="z-icon-caret-up" /> 
+                <div class="z-icon-caret-left" /> 
+                <div class="z-icon-caret-right" /> 
+                <div class="z-icon-columns" /> 
+                <div class="z-icon-unsorted" /> 
+                <div class="z-icon-sort" /> 
+                <div class="z-icon-sort-down" /> 
+                <div class="z-icon-sort-asc" /> 
+                <div class="z-icon-sort-up" /> 
+                <div class="z-icon-sort-desc" /> 
+                <div class="z-icon-envelope" /> 
+                <div class="z-icon-linkedin" /> 
+                <div class="z-icon-rotate-left" /> 
+                <div class="z-icon-undo" /> 
+                <div class="z-icon-legal" /> 
+                <div class="z-icon-gavel" /> 
+                <div class="z-icon-dashboard" /> 
+                <div class="z-icon-tachometer" /> 
+                <div class="z-icon-comment-o" /> 
+                <div class="z-icon-comments-o" /> 
+                <div class="z-icon-flash" /> 
+                <div class="z-icon-bolt" /> 
+                <div class="z-icon-sitemap" /> 
+                <div class="z-icon-umbrella" /> 
+                <div class="z-icon-paste" /> 
+                <div class="z-icon-clipboard" /> 
+                <div class="z-icon-lightbulb-o" /> 
+                <div class="z-icon-exchange" /> 
+                <div class="z-icon-cloud-download" /> 
+                <div class="z-icon-cloud-upload" /> 
+                <div class="z-icon-user-md" /> 
+                <div class="z-icon-stethoscope" /> 
+                <div class="z-icon-suitcase" /> 
+                <div class="z-icon-bell-o" /> 
+                <div class="z-icon-coffee" /> 
+                <div class="z-icon-cutlery" /> 
+                <div class="z-icon-file-text-o" /> 
+                <div class="z-icon-building" /> 
+                <div class="z-icon-ambulance" /> 
+                <div class="z-icon-medkit" /> 
+                <div class="z-icon-fighter-jet" /> 
+                <div class="z-icon-beer" /> 
+                <div class="z-icon-h-square" /> 
+                <div class="z-icon-plus-square" /> 
+                <div class="z-icon-angle-double-left" /> 
+                <div class="z-icon-angle-double-right" /> 
+                <div class="z-icon-angle-double-up" /> 
+                <div class="z-icon-angle-double-down" /> 
+                <div class="z-icon-angle-left" /> 
+                <div class="z-icon-angle-right" /> 
+                <div class="z-icon-angle-up" /> 
+                <div class="z-icon-angle-down" /> 
+                <div class="z-icon-desktop" /> 
+                <div class="z-icon-laptop" /> 
+                <div class="z-icon-tablet" /> 
+                <div class="z-icon-mobile-phone" /> 
+                <div class="z-icon-mobile" /> 
+                <div class="z-icon-circle-o" /> 
+                <div class="z-icon-quote-left" /> 
+                <div class="z-icon-quote-right" /> 
+                <div class="z-icon-spinner" /> 
+                <div class="z-icon-circle" /> 
+                <div class="z-icon-mail-reply" /> 
+                <div class="z-icon-reply" /> 
+                <div class="z-icon-github-alt" /> 
+                <div class="z-icon-folder-o" /> 
+                <div class="z-icon-folder-open-o" /> 
+                <div class="z-icon-smile-o" /> 
+                <div class="z-icon-frown-o" /> 
+                <div class="z-icon-meh-o" /> 
+                <div class="z-icon-gamepad" /> 
+                <div class="z-icon-keyboard-o" /> 
+                <div class="z-icon-flag-o" /> 
+                <div class="z-icon-flag-checkered" /> 
+                <div class="z-icon-terminal" /> 
+                <div class="z-icon-code" /> 
+                <div class="z-icon-reply-all" /> 
+                <div class="z-icon-mail-reply-all" /> 
+                <div class="z-icon-star-half-empty" /> 
+                <div class="z-icon-location-arrow" /> 
+                <div class="z-icon-crop" /> 
+                <div class="z-icon-code-fork" /> 
+                <div class="z-icon-unlink" /> 
+                <div class="z-icon-chain-broken" /> 
+                <div class="z-icon-question" /> 
+                <div class="z-icon-info" /> 
+                <div class="z-icon-exclamation" /> 
+                <div class="z-icon-superscript" /> 
+                <div class="z-icon-subscript" /> 
+                <div class="z-icon-eraser" /> 
+                <div class="z-icon-puzzle-piece" /> 
+                <div class="z-icon-microphone" /> 
+                <div class="z-icon-microphone-slash" /> 
+                <div class="z-icon-shield" /> 
+                <div class="z-icon-calendar-o" /> 
+                <div class="z-icon-fire-extinguisher" /> 
+                <div class="z-icon-rocket" /> 
+                <div class="z-icon-maxcdn" /> 
+                <div class="z-icon-chevron-circle-left" /> 
+                <div class="z-icon-chevron-circle-right" /> 
+                <div class="z-icon-chevron-circle-up" /> 
+                <div class="z-icon-chevron-circle-down" /> 
+                <div class="z-icon-html5" /> 
+                <div class="z-icon-css3" /> 
+                <div class="z-icon-anchor" /> 
+                <div class="z-icon-bullseye" /> 
+                <div class="z-icon-rss-square" /> 
+                <div class="z-icon-play-circle" /> 
+                <div class="z-icon-ticket" /> 
+                <div class="z-icon-minus-square" /> 
+                <div class="z-icon-minus-square-o" /> 
+                <div class="z-icon-level-up" /> 
+                <div class="z-icon-level-down" /> 
+                <div class="z-icon-check-square" /> 
+                <div class="z-icon-pencil-square" /> 
+                <div class="z-icon-external-link-square" /> 
+                <div class="z-icon-share-square" /> 
+                <div class="z-icon-compass" /> 
+                <div class="z-icon-toggle-down" /> 
+                <div class="z-icon-toggle-up" /> 
+                <div class="z-icon-toggle-right" /> 
+                <div class="z-icon-euro" /> 
+                <div class="z-icon-eur" /> 
+                <div class="z-icon-gbp" /> 
+                <div class="z-icon-dollar" /> 
+                <div class="z-icon-usd" /> 
+                <div class="z-icon-rupee" /> 
+                <div class="z-icon-inr" /> 
+                <div class="z-icon-cny" /> 
+                <div class="z-icon-rmb" /> 
+                <div class="z-icon-ruble" /> 
+                <div class="z-icon-rouble" /> 
+                <div class="z-icon-won" /> 
+                <div class="z-icon-krw" /> 
+                <div class="z-icon-bitcoin" /> 
+                <div class="z-icon-btc" /> 
+                <div class="z-icon-file" /> 
+                <div class="z-icon-file-text" /> 
+                <div class="z-icon-sort-alpha-asc" /> 
+                <div class="z-icon-sort-alpha-desc" /> 
+                <div class="z-icon-sort-amount-asc" /> 
+                <div class="z-icon-sort-amount-desc" /> 
+                <div class="z-icon-sort-numeric-asc" /> 
+                <div class="z-icon-sort-numeric-desc" /> 
+                <div class="z-icon-thumbs-up" /> 
+                <div class="z-icon-thumbs-down" /> 
+                <div class="z-icon-youtube-square" /> 
+                <div class="z-icon-youtube" /> 
+                <div class="z-icon-xing" /> 
+                <div class="z-icon-xing-square" /> 
+                <div class="z-icon-youtube-play" /> 
+                <div class="z-icon-dropbox" /> 
+                <div class="z-icon-stack-overflow" /> 
+                <div class="z-icon-instagram" /> 
+                <div class="z-icon-flickr" /> 
+                <div class="z-icon-adn" /> 
+                <div class="z-icon-bitbucket" /> 
+                <div class="z-icon-bitbucket-square" /> 
+                <div class="z-icon-tumblr" /> 
+                <div class="z-icon-tumblr-square" /> 
+                <div class="z-icon-long-arrow-down" /> 
+                <div class="z-icon-long-arrow-up" /> 
+                <div class="z-icon-long-arrow-left" /> 
+                <div class="z-icon-long-arrow-right" /> 
+                <div class="z-icon-apple" /> 
+                <div class="z-icon-windows" /> 
+                <div class="z-icon-android" /> 
+                <div class="z-icon-linux" /> 
+                <div class="z-icon-dribbble" /> 
+                <div class="z-icon-skype" /> 
+                <div class="z-icon-foursquare" /> 
+                <div class="z-icon-trello" /> 
+                <div class="z-icon-female" /> 
+                <div class="z-icon-male" /> 
+                <div class="z-icon-gittip" /> 
+                <div class="z-icon-sun-o" /> 
+                <div class="z-icon-moon-o" /> 
+                <div class="z-icon-archive" /> 
+                <div class="z-icon-bug" /> 
+                <div class="z-icon-vk" /> 
+                <div class="z-icon-weibo" /> 
+                <div class="z-icon-renren" /> 
+                <div class="z-icon-pagelines" /> 
+                <div class="z-icon-stack-exchange" /> 
+                <div class="z-icon-arrow-circle-o-right" /> 
+                <div class="z-icon-arrow-circle-o-left" /> 
+                <div class="z-icon-toggle-left" /> 
+                <div class="z-icon-dot-circle-o" /> 
+                <div class="z-icon-wheelchair" /> 
+                <div class="z-icon-vimeo-square" /> 
+                <div class="z-icon-turkish-lira" /> 
+                <div class="z-icon-try" /> 
+                <a id="opa" href="">Para ver todos os ícones clique aqui.
+                    <attribute name="onClick">
+                        Include include = ((Include)opa.getSpaceOwner()).getSpaceOwner().getFellowIfAny("conteudo", true);
+                        if(include != null){
+                        include.setSrc("/paginas/fontawesome4.zul");
+                        }
+                    </attribute>
+                </a>
+            </div>
+
+            <!-- 
+                Mais detalhes de Cards em https://getbootstrap.com/docs/5.3/components/card/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Cards</n:h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <n:h5 class="card-title">Título</n:h5>
+                                <n:h6 class="card-subtitle mb-2 text-body-secondary">Subtítulo</n:h6>
+                                <n:p class="card-text">Algum texto de exemplo rápido para construir sobre o título do cartão e compor a maior parte do conteúdo do cartão.</n:p>
+                                <button href="" class="btn btn-primary">Executar</button>
+                                <a class="card-subtitle mb-2">Link para ir</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Destaque
+                            </div>
+                            <div class="card-body">
+                                <n:h5 class="card-title">Tratamento especial do título</n:h5>
+                                <n:p class="card-text">Com texto de suporte abaixo como uma introdução natural a conteúdo adicional.</n:p>
+                                <button href="" class="btn btn-primary">Botão</button>
+                            </div>
+                            <div class="card-footer text-body-secondary">
+                                Rodapé
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+                Mais detalhes de tipos de sombras em https://getbootstrap.com/docs/5.3/utilities/shadows/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3" >Sombras</n:h5>
+                <div class="row">
+                    <div class="col-2">
+                        <div class="shadow-none p-3 bg-body-tertiary">Sem sombra</div>
+                    </div>
+                    <div class="col-2">
+                        <div class="shadow-sm p-3 bg-body-tertiary" >Sombra Small</div>
+                    </div>
+                    <div class="col-2">
+                        <div class="shadow p-3 bg-body-tertiary" >Sombra Padrão</div>
+                    </div>
+                    <div class="col-2">
+                        <div class="shadow-lg p-3 bg-body-tertiary" >Sombra Larger</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+                Mais detalhes de tipos de bordas em https://getbootstrap.com/docs/5.3/utilities/borders/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Bordas</n:h5>
+                <div class="row">
+                    <div class="col-1">
+                        <div class="border p-3 bg-body-tertiary">Borda padrão</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-primary p-3 bg-body-tertiary">Borda primary</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-warning p-3 bg-body-tertiary">Borda warning</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-danger p-3 bg-body-tertiary">Borda danger</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-dark p-3 bg-body-tertiary">Borda dark</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-1 p-3 bg-body-tertiary">Borda grossura nível 1</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border border-5 p-3 bg-body-tertiary">Borda grossura nível 5</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border rounded p-3 bg-body-tertiary">Borda arredondado nível 1</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border rounded-5 p-3 bg-body-tertiary">Borda arredondado nível 5</div>
+                    </div>
+                    <div class="col-1">
+                        <div class="border-start border-bottom p-3 bg-body-tertiary">Borda em dois lados apenas</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 
+                Mais detalhes de Badges em https://getbootstrap.com/docs/5.3/components/badge/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Badges</n:h5>
+                <div class="col">
+                    <span class="badge text-bg-primary">Primary</span>
+                    <span class="badge text-bg-secondary">Secondary</span>
+                    <span class="badge text-bg-success">Success</span>
+                    <span class="badge text-bg-danger">Danger</span>
+                    <span class="badge text-bg-warning">Warning</span>
+                    <span class="badge text-bg-info">Info</span>
+                    <span class="badge text-bg-light">Light</span>
+                    <span class="badge text-bg-dark">Dark</span>  
+                    <span class="badge rounded-pill text-bg-primary">Primary</span>
+                    <span class="badge rounded-pill text-bg-secondary">Secondary</span>
+                    <span class="badge rounded-pill text-bg-success">Success</span>
+                    <span class="badge rounded-pill text-bg-danger">Danger</span>
+                    <span class="badge rounded-pill text-bg-warning">Warning</span>
+                    <span class="badge rounded-pill text-bg-info">Info</span>
+                    <span class="badge rounded-pill text-bg-light">Light</span>
+                    <span class="badge rounded-pill text-bg-dark">Dark</span>
+                    <n:button class="btn btn-primary position-relative">
+                        Botão
+                        <label id="" class="badge text-bg-secondary" style="font-size: 0.75rem!important">99</label>
+                    </n:button>
+                    <n:button class="btn btn-primary position-relative ">
+                        <n:i class="z-icon-comments"></n:i>
+                        Botão
+                        <label id="" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.75rem!important">99</label>
+                    </n:button>
+                </div>
+            </div>
+            
+            <!-- 
+                Mais detalhes de Textos e Fonts em https://getbootstrap.com/docs/5.3/utilities/text/ 
+            -->
+            <div class="col-md-12">
+                <n:h5 class="mt-3">Texto e Fonte</n:h5>
+                <span>Texto normal.</span>
+                <span class="fw-bold">Texto negrito.</span>
+                <span class="fw-medium">Texto medium weight.</span>
+                <span class="fw-light">Texto light weight.</span>
+                <span class="fst-italic">Texto itálico.</span>
+                <span class="text-lowercase">Texto lowercase.</span>
+                <span class="text-uppercase">Texto uppercase.</span>
+                <span class="text-capitalize">texto capitalized.</span>
+                <span class="text-decoration-underline">Texto underline.</span>
+                <span class="text-decoration-line-through">Texto strikethrough.</span>
+                <span class="fs-1">Tamanho 1</span>
+                <span class="fs-2">Tamanho 2</span>
+                <span class="fs-3">Tamanho 3</span>
+                <span class="fs-4">Tamanho 4</span>
+                <span class="fs-5">Tamanho 5</span>
+                <span class="fs-6">Tamanho 6</span>
+            </div>
+            
+            <!-- 
+                O sistem de Grid permite você definir o quanto de espaço na tela um determinado elemento irá ocupar. 
+                Além disso, você pode definir um espaço diferente para cada tamanho de tela (sm para telas pequenas, md para telas médias, lg para telas grandes). 
+                O bootstrap divide visualmente a tela em 12 partes, então basta dizer que o elemento ira ocupar uma coluna (col), 
+                dizer para qual tela você está definindo (md, sm ou lg) e por fim dizer o tanto de espaço que irá ocupar (de 1 a 12 pedaços). 
+                Por exemplo: col-md-6 irá ocupar 6 pedaços de 12, ou seja, irá ocupar metade da tela quando a tela for média ou maior que média, 
+                e caso a tela for menor, por padrão ele irá ocupar a tela toda. Você pode misturar as definições, colocando uma definição para cada tamanho de tela, 
+                porém para facilitar você pode colocar apenas o "md" que é a definição apenas para telas médias ou maiores que média, 
+                e no caso de telas menores o bootstrap se encarregará de ocupar a tela toda. Mais informações veja https://getbootstrap.com/docs/5.3/layout/grid/ 
+            -->
+            <div class="col-md-12">
+                <style>
+                    .exemplo-colorido [class^="col"] {
+                    padding-top: 0.75rem;
+                    padding-bottom: 0.75rem;
+                    background-color: rgba(var(--bs-secondary-rgb), 0.15);
+                    border: 1px solid rgba(var(--bs-secondary-rgb), 0.3);
+                    }
+                </style>
+                <n:h5 class="mt-3">Sistema Grid do Boostrap <span class="fw-lighter">(como disponibilizar elementos na tela, redimensione a janela para ver o comportamento)</span></n:h5>
+                <div class="text-center exemplo-colorido">
+                    <div class="row">
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                        <div class="col-1">col-1</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-1">col-sm-1</div>
+                        <div class="col-sm-3">col-sm-3</div>
+                        <div class="col-sm-1">col-sm-1</div>
+                        <div class="col-sm-1">col-sm-1</div>
+                        <div class="col-sm-2">col-sm-2</div>
+                        <div class="col-sm-4">col-sm-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">col-md-1</div>
+                        <div class="col-md-3">col-md-3</div>
+                        <div class="col-md-1">col-md-1</div>
+                        <div class="col-md-1">col-md-1</div>
+                        <div class="col-md-2">col-md-2</div>
+                        <div class="col-md-4">col-md-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1">col-lg-1</div>
+                        <div class="col-lg-3">col-lg-3</div>
+                        <div class="col-lg-1">col-lg-1</div>
+                        <div class="col-lg-1">col-lg-1</div>
+                        <div class="col-lg-2">col-lg-2</div>
+                        <div class="col-lg-4">col-lg-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">col-md-3</div>
+                        <div class="col-md-3">col-md-3</div>
+                        <div class="col-md-3">col-md-3</div>
+                        <div class="col-md-3">col-md-3</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">col-md-4</div>
+                        <div class="col-md-4">col-md-4</div>
+                        <div class="col-md-4">col-md-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">col-md-2</div>
+                        <div class="col-md-4">col-md-4</div>
+                        <div class="col-md-6">col-md-6</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">col-md-8</div>
+                        <div class="col-md-4">col-md-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">col-md-12</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 col-lg-3">col-sm-12 col-md-6 col-lg-2</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">col-md-4</div>
+                        <div class="col-md-4 offset-md-4">col-md-4 offset-md-4</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 offset-md-3">col-md-3 offset-md-3</div>
+                        <div class="col-md-3 offset-md-3">col-md-3 offset-md-3</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 offset-md-3">col-md-6 offset-md-3</div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-4">
+                            Duas colunas alinhadas "justify between"
+                        </div>
+                        <div class="col-4">
+                            Duas colunas alinhadas "justify between"
+                        </div>
+                    </div>
+                    <div class="row justify-content-evenly">
+                        <div class="col-4">
+                            Duas colunas alinhadas "justify evenly"
+                        </div>
+                        <div class="col-4">
+                            Duas colunas alinhadas "justify evenly"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>       
+</zk>

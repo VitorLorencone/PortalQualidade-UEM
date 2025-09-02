@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winAnexo" use="exemplos.anexo.controller.AnexoController">
+
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Arquivos Anexos</n:h4>
+            </div>
+        </div>
+        
+        <div class="row ">
+            <div class="col-md-12">
+                Este é um exemplo de anexo o qual ao clicar em "salvar" é salvo os dados no banco e no servidor de arquivos.
+            </div>
+        </div>
+        
+        <!--  -->
+        
+        <div class="card" >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <n:h5 class="">Arquivos</n:h5>
+                
+                        <vlayout id="listAnexos" hflex="1" sclass="fileList" />
+                        <button id="btn_anexar" class="btn btn-primary mt-2" iconSclass="z-icon-paperclip" label="Anexar arquivo..." tooltiptext="Anexar arquivo" upload="true,maxsize=-1, accept=.png|.jpg|.pdf" onUpload="winAnexo.anexarArquivo(event.getMedia())" />
+                        <label id="btn_anexar_label" class="small text-muted"></label>  
+
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-md-12 text-right mt-3">
+                        <button id="btnSalvar" label="Salvar" class="btn btn-success" iconSclass="z-icon-check" onClick="winAnexo.salvar()" autodisable="self" visible="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nodom>       
+</zk>

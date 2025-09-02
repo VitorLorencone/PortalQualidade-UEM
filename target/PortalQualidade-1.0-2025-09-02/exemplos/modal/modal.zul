@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+ 
+    <window id="winModal" use="exemplos.modal.controller.ModalController">
+
+        <div class="row">
+            <div class="col-sm-3">
+                <label>Código</label>
+                <intbox id="intExemplo" class="form-control"/>
+            </div>
+            <div class="col-sm-9">
+                <label>Texto</label>
+                <textbox id="txtExemplo" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label>Data</label>
+                <datebox id="dateExemplo" timeZone="GMT-3" format="dd/MM/yyyy" width="100%"/>
+            </div>
+        </div>
+        
+        <div class="row text-end mt-3 border-top pt-3">
+            <div class="col-sm-12 ">
+                <button id="cancelar" label="Cancelar" class="btn btn-secondary" onClick="winModal.fechar()"/>
+                <button id="salvar" label="Salvar" class="btn btn-primary" iconSclass="z-icon-check" onClick="winModal.fechar()" autodisable="self" />
+            </div>
+        </div>
+        
+    </window>
+       
+</zk>

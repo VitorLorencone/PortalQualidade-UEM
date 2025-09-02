@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winInscricaoList" use="inscricao.controller.InscricaoListController">
+  
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Inscrição</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Nova Inscrição" iconSclass="z-icon-plus" onClick="winInscricaoList.novaInscricao()" class="btn btn-primary"/>
+            </div>
+        </div>
+        
+        <div class="card" >
+            <div class="card-body">
+                FAZER BASEANDO-SE NO CADASTRO DE CURSO
+            </div>
+        </div>
+    </nodom>       
+</zk>

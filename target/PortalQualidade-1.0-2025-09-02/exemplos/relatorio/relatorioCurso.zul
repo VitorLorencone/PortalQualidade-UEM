@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+
+    <nodom id="win" use="exemplos.relatorios.CursoRelatorios">
+        
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Relatórios</n:h4>
+            </div>
+        </div>
+        
+        <!-- FUNCIONANDO -->
+        
+        <div class="card" >
+            <div class="card-body">
+
+                <div class="row g-3"> 
+                    <div class="col-md-2">
+                        <label value="Relatório de Cursos"  />  
+                    </div>
+                    <div class="col-md-10">
+                        <button class="btn btn-primary" label="Visualizar Relatório" onClick="win.relatorioCursoLista()"/>
+                    </div>
+
+                    <div class="col-md-2">
+                        <label value="Relatório de Tipo de Cursos (exemplo passando filtro)"  />  
+                    </div>
+                    <div class="col-md-10">
+                        <listbox id="tpCurso" mold="select" class="form-select">
+                            <listitem value="0" selected="true">
+                                <listcell label="Selecione"/> 
+                            </listitem>
+                            <listitem value="1">
+                                <listcell label="Curso"/>
+                            </listitem>
+                            <listitem value="2">
+                                <listcell label="Mini curso"/>
+                            </listitem>
+                            <listitem value="3">
+                                <listcell label="Palestra"/>
+                            </listitem>
+                        </listbox> 
+                        <button class="btn btn-primary" label="Visualizar Relatório" onClick="win.relatorioCursoTipo()" autodisable="self"/>
+                    </div>
+           
+                </div>
+            </div>
+        </div>
+
+    </nodom>
+       
+</zk>

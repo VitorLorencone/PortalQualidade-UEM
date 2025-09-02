@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winEndereco" use="exemplos.endereco.controller.EnderecoController">
+
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Endereço</n:h4>
+            </div>
+        </div>
+        
+        <div class="row ">
+            <div class="col-md-12">
+                Este é um cadastro "modelo padrão" de endereço com busca por CEP, com exemplo de uso de máscara nos campos Celular e CEP e validação de E-mail. 
+            </div>
+        </div>
+        
+        <!-- FUNCIONANDO -->
+        
+        <div class="card" >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <n:h5 class="pt-3">Dados de endereço</n:h5>
+           
+                        <div class="row"> 
+                            <div class="col-sm-4">
+                                <label value="CEP"/>
+                                <textbox id="cep" width="100%" class="form-control cepMask" onChange ="winEndereco.populaEnderecoPorCep();" />
+                            </div>                
+                        </div>
+
+                        <div class="row"> 
+                            <div class="col-sm-2 ">
+                                <label value="UF"/>
+                                <listbox id="uf" mold="select" class="form-select" onSelect="winEndereco.populaCidades();"/>
+                            </div>
+                            <div class="col-sm-6">
+                                <label value="Município"/>
+                                <listbox id="municipio" width="100%" class="form-select" mold="select" />                            
+                            </div>    
+                            <div class="col-sm-4">
+                                <label value="Bairro"/>
+                                <textbox id="bairro" width="100%" class="form-control" maxlength="30" />
+                            </div> 
+                        </div>
+
+                        <div class="row"> 
+                            <div class="col-sm-10">
+                                <label value="Endereço"/>
+                                <textbox id="logradouro" width="100%" class="form-control" maxlength="40"/>
+                            </div>    
+                            <div class="col-sm-2">
+                                <label value="Número"/>
+                                <textbox id="numero" width="100%" class="form-control" maxlength="10"/>
+                            </div>   
+                        </div>
+
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-md-12 text-right mt-3">
+                        <button id="btnSalvar" label="Salvar" class="btn btn-primary" iconSclass="z-icon-check" onClick="winEndereco.salvar()" autodisable="self" visible="true"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nodom>       
+</zk>

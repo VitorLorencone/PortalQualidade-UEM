@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom id="winWebcam" use="exemplos.webcam.controller.WebcamController">
+         
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Exemplo de Webcam</n:h4>
+            </div>
+        </div>
+        
+        <div class="row ">
+            <div class="col-md-12">
+                Este é um exemplo de como capturar uma imagem da webcam
+            </div>
+        </div>
+        
+        <!-- FUNCIONANDO -->
+        
+        <div class="card" >
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        
+                        
+                        <div class="row ">
+                            <div  class="alert alert-warning">
+                                A câmera necessita de HTTPS para funcionar, ou seja, não irá funcionar em "localhost".
+                                Para funcionar acesse <span class="font-monospace">chrome://flags/#unsafely-treat-insecure-origin-as-secure</span>, 
+                                habilite o item e coloque as URLs permitidas, por exemplo <span class="font-monospace">http://localhost</span>, na caixa de diálogo.
+                            </div>
+                        </div>
+                        
+                        <n:h5 class="">Tirar uma foto da webcam</n:h5>
+                        
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                
+                                <!-- 
+                                    Este script cria um componente do ZK chamado MyWebcam que pode configura uma div com umas funcionalidades extras em JavaScript.
+                                    - Esse componente "escuta" o botão de tirar foto, caso ele seja clicado a imagem da webcam é capturada e colocado no componente ZK "image"
+                                    - Para savar a foto, basta pegarmos o que está no componente "image" do ZK
+                                -->
+                                <script>
+                                    zk.afterLoad('zul.wgt', function() {
+                                    
+                                    window.URL = window.URL || window.webkitURL;
+                                    navigator.getUserMedia =
+                                    navigator.getUserMedia || navigator.webkitGetUserMedia ||
+                                    navigator.mozGetUserMedia || navigator.msGetUserMedia ||
+                                    navigator.oGetUserMedia || navigator.mediaDevices.getUserMedia;
+
+                                    MyWebcam = zk.$extends(zul.wgt.Div, {
+                                    bind_: function() {
+                                    this.$supers('bind_', arguments);
+
+                                    var widget = this;
+                                    var video = this.$n().querySelector('video');
+                                    var canvas = document.createElement('canvas');
+                                    var context = canvas.getContext("2d");
+                                    
+                                    canvas.width = 240;
+                                    canvas.height = 300;
+
+                                    this.capture = function() {
+                                    context.drawImage(video, 150,45,300, 400,0,0, canvas.width, canvas.height);
+                                    widget.fire('onCaptureImage', canvas.toDataURL( "image/png"), {toServer: true});
+                                    };
+
+                                    this.snapButton = $(this).find('button').zk.$();
+                                    this.snapButton.listen({ onClick: this.capture });
+
+                                    navigator.getUserMedia( { video : true },
+                                    function(stream) { video.srcObject = stream; },
+                                    function(e) { console.error('An error :', e); }
+                                    );
+                                    },
+                                    
+                                    unbind_: function() {
+                                    this.snapButton.unlisten({ onClick: this.capture });
+                                    this.$supers('unbind_', arguments);
+                                    }
+                                    
+                                    });//zk.extends
+                                    });//zk.afterLoad
+                                </script>
+                                
+                                <div w:use="MyWebcam" onCaptureImage="foto.setSrc(event.getData())">
+                                    <hbox>
+                                        <vbox align="center" spacing="10px" >
+                                            <n:video  class="border rounded " width="320" height="240" autoplay="true" preload="auto" poster="images/camera.jpg"/>
+                                            <button label="Tirar foto" class="btn btn-light" iconSclass="z-icon-camera" />
+                                        </vbox>
+                                        <image id="foto" class="border rounded" style="width:240px;height:300px;"/>
+                                    </hbox>
+                                </div>
+                                
+                                <div id="espacamento" class="mt-3"></div>
+                                
+                                <button id="btnSalvar" label="Salvar foto" class="btn btn-primary" iconSclass="z-icon-picture-o" onClick="winWebcam.salvarFoto()" autodisable="self" visible="true"/>
+                            </div>
+                        </div>
+                            
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </nodom>       
+</zk>
