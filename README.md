@@ -1,5 +1,5 @@
 
-# mavenbootstrap
+# Portal Qualidade
 
 Projeto em Maven para desenvolvimento em Java utilizando ZK Framework com Bootstrap para desenvolvimento *frontend* e Hibernate para comunicação com o banco de dados. 
 
