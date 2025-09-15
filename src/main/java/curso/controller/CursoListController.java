@@ -1,3 +1,10 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package curso.controller;
 
 import application.service.Sessao;
@@ -17,10 +24,6 @@ import pessoa.model.Pessoa;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 
-/**
- *
- * @author alison
- */
 public class CursoListController extends Window {
 
     private Window win;

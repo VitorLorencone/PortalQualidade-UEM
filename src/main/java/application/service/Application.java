@@ -1,8 +1,10 @@
 /*
  * Universidade Estadual de Maringá - UEM
  * Núcleo de Processamento de Dados - NPD
- * Copyright (c) 2020. All rights reserved.
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
  */
+
 package application.service;
 
 import dao.DAO;
@@ -14,21 +16,10 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Window;
 import utilitarios.Utils;
 
-/**
- *
- * @author alison
- *
- * Application contém as propriedades do sistema.
- *
- * Para pegar os atributos de Application, deve-se utilizar o singleton
- * getInstance para pegar o objeto Application e posteriormente pegar os
- * atributos.
- */
 public class Application {
 
     private Properties properties = new Properties();
-    private String enviroment = "";
-    private Window janela;
+    private String enviroment = "desenvol";
 
     private static Application instance;
 
@@ -54,7 +45,7 @@ public class Application {
 
         String ambiente = DAO.getConnectionName();
 
-        if (ambiente != null && (ambiente.contains("desenvol") || ambiente.contains("186.233.154.47"))) {
+        if (ambiente != null && (ambiente.contains(DEVELOP) || ambiente.contains("186.233.154.47"))) { // Provavelmente o IP de um dos servers deles
             this.setEnviroment(DEVELOP);
         } else {
             this.setEnviroment(PRODUCTION);

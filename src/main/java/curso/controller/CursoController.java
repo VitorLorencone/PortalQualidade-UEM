@@ -1,3 +1,10 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package curso.controller;
 
 import java.text.ParseException;
@@ -16,10 +23,6 @@ import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
 
-/**
- *
- * @author alison
- */
 public class CursoController extends Window {
 
     private Window win;

@@ -1,12 +1,14 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package application.model;
 
 import java.io.Serializable;
 
-
-/**
- *
- * @author alison
- */
 public class Usuario implements Serializable {
 
     private Long id;
@@ -45,6 +47,5 @@ public class Usuario implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
    
 }
