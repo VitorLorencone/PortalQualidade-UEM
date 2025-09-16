@@ -1,3 +1,10 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package inscricao.model;
 
 import java.io.Serializable;
@@ -13,10 +20,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-/**
- *
- * @author equipes
- */
 @Getter
 @Setter
 @Entity

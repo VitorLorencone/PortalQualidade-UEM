@@ -1,9 +1,12 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package login.controller;
 
-/**
- *
- * @author alison
- */
 import application.service.Application;
 import application.service.Sessao;
 import application.model.Usuario;
@@ -16,10 +19,6 @@ import org.zkoss.zul.Label;
 import utilitarios.CookieUtil;
 import utilitarios.LdapUtil;
 
-/**
- *
- * @author Alison
- */
 public class LoginController extends Window {
 
     private Textbox usuarioDigitado;
