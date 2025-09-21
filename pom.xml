@@ -487,7 +487,8 @@
 
     <build>
         <!-- Nome do pacote .war -->
-        <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName>
+        <!-- <finalName>${project.artifactId}-${project.version}-${maven.build.timestamp}</finalName> -->
+        <finalName>portal</finalName>
         
         <!-- Preenche as variáveis do application.properties com os valores do pom.xml -->
         <resources>
