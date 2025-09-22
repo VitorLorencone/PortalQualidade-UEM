@@ -1,3 +1,10 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package dao;
 
 import java.io.Serializable;
@@ -11,10 +18,6 @@ import org.hibernate.Session;
 /**
  * DAO genérico. Esta classe não dá para ser usada diretamente. Todo DAO deve
  * extender desta classe.
- *
- * @author alison
- * @param <T>
- * @param <I>
  */
 public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 

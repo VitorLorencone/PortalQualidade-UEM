@@ -1,3 +1,10 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package dao;
 
 import io.hypersistence.utils.hibernate.query.SQLExtractor;
@@ -12,10 +19,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.query.Query;
 
-/**
- *
- * @author alison
- */
 public class DAO {
 
     private static final boolean SHOW_SQL_TO_DEBUG = false;
@@ -45,7 +48,6 @@ public class DAO {
 
     public static void beginTransaction(Session session) {
         session.beginTransaction();
-
     }
 
     public static void commit(Session session) {

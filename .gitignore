@@ -61,3 +61,4 @@ release.properties
 pom.xml.releaseBackup
 pom.xml.tag
 src/main/resources/hibernate.cfg.xml
+*.bat

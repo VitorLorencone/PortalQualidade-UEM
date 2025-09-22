@@ -1,10 +1,11 @@
 /*
  * Universidade Estadual de Maringá - UEM
  * Núcleo de Processamento de Dados - NPD
- * Copyright (c) 2020. All rights reserved.
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
  */
-package application.service;
 
+package application.service;
 
 import application.model.Usuario;
 import java.util.HashMap;
@@ -12,10 +13,6 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
 
-/**
- *
- * @author Alison
- */
 public class Sessao {
 
     private static Sessao instance;
@@ -66,7 +63,7 @@ public class Sessao {
 
     /*
         PERMISSõES INICIALIZADA NO MENU:
-     */
+    */
     public void setPermissao(String arquivoZul, String acao) {
         Session session = Sessions.getCurrent();
         arquivoZul = arquivoZul.toUpperCase();

@@ -1,7 +1,13 @@
+/*
+ * Universidade Estadual de Maringá - UEM
+ * Núcleo de Processamento de Dados - NPD
+ * Alunos de Ciência da Computação - 2025
+ * Copyright (c) 2025. All rights reserved.
+ */
+
 package curso.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -19,22 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import pessoa.model.Pessoa;
 
-/**
- *
- * @author alison
- *
- * Esta classe usa Lombok https://projectlombok.org assim não precisamos
- * declarar os getters e setters, basta usar as anotações @Data (que também
- * implementa os getters e setter e também o toString(), equals() e hashCode())
- * ou @Getter e @Setter (os quais apenas implementam os getters e setter).
- * Atenção: caso esta classe for transformada em json (por exemplo, em
- * aplicações REST/API), NÃO usar o @Data, utilizar apenas @Getter e @Setter
- * para não dar erro de referência circular com o toString. Mais em
- * https://projectlombok.org/features/Data e
- * https://projectlombok.org/features/GetterSetter
- */
 @Getter
 @Setter
 @Entity
@@ -45,28 +36,35 @@ public class Curso implements Serializable {
     @Basic(optional = false)
     @Column(name = "CD_CURSO")
     private Integer cdCurso;
+
     @Column(name = "DE_TITULO")
     private String deTitulo;
+
     @Column(name = "TP_CURSO")
     private Short tpCurso;
+
     @Column(name = "NU_CARGA")
     private Short nuCarga;
+
     @Column(name = "DT_CURSO_INICIO")
     @Temporal(TemporalType.DATE)
     private Date dtCursoInicio;
+
     @Column(name = "DT_CURSO_FIM")
     @Temporal(TemporalType.DATE)
     private Date dtCursoFim;
+
     @Column(name = "NU_VAGAS")
     private Short nuVagas;
+
     @Column(name = "DT_INSCRICAO_INICIO")
     @Temporal(TemporalType.DATE)
     private Date dtInscricaoInicio;
+
     @Column(name = "DT_INSCRICAO_FIM")
     @Temporal(TemporalType.DATE)
     private Date dtInscricaoFim;
-    //aqui estamos usando a coluna anexo para outro fim. 
-    //para ver como salvar anexos, veja o exemplo de anexos na tela de Anexos
+
     @Column(name = "NM_ANEXO")
     private String nmUrl;
 
