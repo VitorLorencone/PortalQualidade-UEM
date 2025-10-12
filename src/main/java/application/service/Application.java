@@ -110,13 +110,21 @@ public class Application {
      */
     public void insereDadosNoConsole(Window janela) {
         String organization = this.getProperty("app_organization");
+        String[] partes = organization.split("I");
 
-        String uem = organization.split("I")[0].trim();
-        String npd = organization.split("I")[1].trim();
+        String uem = partes[0].trim();
+        String npd = partes.length > 1 ? partes[1].trim() : "";
 
-        Clients.evalJavaScript(" console.log('%c " + uem.split("-")[0].trim() + " ' + '%c " + uem.split("-")[1].trim() + " ', 'font-weight: bold; background: #aaa; color: #980000', 'font-weight: normal; background: #222; color: white'); ");
-        Clients.evalJavaScript(" console.log('%c " + npd.split("-")[0].trim() + " ' + '%c " + npd.split("-")[1].trim() + " ', 'font-weight: bold; background: white; color: #222', 'font-weight: normal; background: white; color: #222'); ");
-        Clients.evalJavaScript(" console.log(' " + this.getProperty(Application.NAME) + " versão " + this.getVersion() + "'); ");
+        Clients.evalJavaScript("console.log('%c " + uem.split("-")[0].trim() +
+                " ' + '%c " + (uem.contains("-") ? uem.split("-")[1].trim() : "") +
+                " ', 'font-weight: bold; background: #aaa; color: #980000', 'font-weight: normal; background: #222; color: white');");
+
+        Clients.evalJavaScript("console.log('%c " + (npd.contains("-") ? npd.split("-")[0].trim() : "") +
+                " ' + '%c " + (npd.contains("-") ? npd.split("-")[1].trim() : "") +
+                " ', 'font-weight: bold; background: white; color: #222', 'font-weight: normal; background: white; color: #222');");
+
+        Clients.evalJavaScript("console.log(' " + this.getProperty(Application.NAME) +
+                " versão " + this.getVersion() + "');");
 
         PageCtrl pg = (PageCtrl) janela.getPage();
         pg.addBeforeHeadTags("<!-- \n"

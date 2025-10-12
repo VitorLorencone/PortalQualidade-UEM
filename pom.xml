@@ -482,7 +482,15 @@
             <artifactId>datafaker</artifactId>
             <version>1.9.0</version>
         </dependency>
-        
+
+        <!-- Argon2 para hash de senhas -->
+        <dependency>
+            <groupId>de.mkammerer</groupId>
+            <artifactId>argon2-jvm</artifactId>
+            <version>2.11</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
