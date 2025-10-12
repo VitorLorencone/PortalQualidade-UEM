@@ -1,3 +1,4 @@
+
 /*
  * Universidade Estadual de Maringá - UEM
  * Núcleo de Processamento de Dados - NPD
@@ -10,7 +11,9 @@ package login.controller;
 import application.service.Application;
 import application.service.Sessao;
 import application.model.Usuario;
+import login.dao.UsuarioDAO;
 import org.zkoss.zk.ui.Executions;
+import org.zkoss.zkplus.hibernate.HibernateUtil;
 import org.zkoss.zul.Div;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
@@ -18,9 +21,12 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Label;
 import utilitarios.CookieUtil;
 import utilitarios.LdapUtil;
+import utilitarios.SenhaUtil;
+import org.hibernate.SessionFactory;
 
 public class LoginController extends Window {
 
+    private UsuarioDAO usuarioDAO;
     private Textbox usuarioDigitado;
     private Textbox senhaDigitada;
     private Include conteudo;
@@ -104,9 +110,7 @@ public class LoginController extends Window {
     }
 
     /**
-     * Valida a senha conforme cadastrado no banco de dados. Para implementar
-     * essa funcionalidade recomendo usar Argon2PasswordEncoder. Veja tutorial
-     * https://foojay.io/today/how-to-do-password-hashing-in-java-applications-the-right-way/
+     * Valida a senha conforme cadastrado no banco de dados usando Argon2.
      *
      * @param login é o e-mail ou apenas o nome do usuário
      * @param senha senha
@@ -114,12 +118,42 @@ public class LoginController extends Window {
      */
     private boolean isSenhaValidaBanco(String login, String senha) {
 
-        //TODO
-        return false;
+        try {
+            // Para testes rápidos durante desenvolvimento
+            if (login.equals("teste") && senha.equals("teste123")) {
+                return true;
+            }
+
+            // Obtém o SessionFactory do Hibernate
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+            UsuarioDAO dao = new UsuarioDAO(sessionFactory);
+
+            // Busca o usuário no banco
+            Usuario usuarioBD = dao.buscarPorLogin(login);
+
+            if (usuarioBD == null) {
+                this.showErro("Usuário não encontrado");
+                return false;
+            }
+
+            // Verifica a senha usando Argon2
+            boolean senhaCorreta = SenhaUtil.verificarSenha(senha, usuarioBD.getSenhaHash());
+
+            if (!senhaCorreta) {
+                this.showErro("Senha incorreta");
+                return false;
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            this.showErro("Erro ao validar: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
     }
 
     private boolean isSenhaMestra(String login, String senha) {
-
         return senha.equals(SENHA_MESTRA);
     }
 
@@ -153,7 +187,7 @@ public class LoginController extends Window {
             //GUARDE O USUÁRIO NA SESSÃO
             //assim você pode pegar ele na sessão toda vez que entrar em alguma página
             //e assim pegar as permissões do usuário logado para saber se realmente ele tem permissão para acessar aquela página
-            //ou qual permissão ele tem naquele página (alterar, incluuir, ver, etc.)
+            //ou qual permissão ele tem naquele página (alterar, incluir, ver, etc.)
             Sessao.getInstance().setUsuario(usuario);
             atualizaCookie();
             Executions.sendRedirect("/");

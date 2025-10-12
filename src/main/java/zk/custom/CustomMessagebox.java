@@ -13,7 +13,7 @@ import org.zkoss.zul.Messagebox;
 /**
  * Extended messagebox que permite mensagem com quebra de linha e tem visual
  * customizado com Bootstrap. <br>
- * Linhas podem ser quebradas com \n . <br>
+ * Linhas podem ser quebradas com \n. <br>
  * <br>
  *
  * @author alison

@@ -4,17 +4,30 @@
  * Alunos de Ciência da Computação - 2025
  * Copyright (c) 2025. All rights reserved.
  */
-
 package application.model;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "usuarios")
 public class Usuario implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "nome", nullable = false)
     private String nome;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "senha_hash", nullable = false)
+    private String senhaHash;
 
     public Long getId() {
         return id;
@@ -47,5 +60,12 @@ public class Usuario implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-   
+
+    public String getSenhaHash() {
+        return senhaHash;
+    }
+
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
+    }
 }
