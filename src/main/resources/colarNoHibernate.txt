@@ -11,6 +11,7 @@ Colem o texto abaixo no hibernate.cfg.xml no lugar do "<!-- Lista das classes mo
         <mapping class="inscricao.model.Inscricao"/>
         <mapping class="pessoa.model.Pessoa"/> -->
 
+        <mapping class="application.model.Usuario"/>
         <mapping class="model.Pessoa"/>
         <mapping class="model.Administrador"/>
         <mapping class="model.FuncionarioHU"/>
