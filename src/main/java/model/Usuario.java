@@ -4,7 +4,7 @@
  * Alunos de Ciência da Computação - 2025
  * Copyright (c) 2025. All rights reserved.
  */
-package application.model;
+package model;
 
 import java.io.Serializable;
 import javax.persistence.*;

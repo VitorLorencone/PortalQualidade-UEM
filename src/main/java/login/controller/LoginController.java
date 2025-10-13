@@ -9,8 +9,9 @@ package login.controller;
 
 import application.service.Application;
 import application.service.Sessao;
-import application.model.Usuario;
 import login.dao.UsuarioDAO;
+import model.Usuario;
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zkplus.hibernate.HibernateUtil;
 import org.zkoss.zul.Div;

@@ -11,7 +11,7 @@ Não se esqueçam de sempre fazer drop em todas as tabelas do seu banco de dados
         <mapping class="inscricao.model.Inscricao"/>
         <mapping class="pessoa.model.Pessoa"/> -->
 
-        <mapping class="application.model.Usuario"/>
+        <mapping class="model.Usuario"/>
         <mapping class="model.Pessoa"/>
         <mapping class="model.Administrador"/>
         <mapping class="model.FuncionarioHU"/>
