@@ -1,4 +1,3 @@
-
 /*
  * Universidade Estadual de Maringá - UEM
  * Núcleo de Processamento de Dados - NPD

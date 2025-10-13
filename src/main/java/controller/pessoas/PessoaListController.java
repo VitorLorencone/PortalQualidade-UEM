@@ -50,19 +50,28 @@ public class PessoaListController extends Window {
     public void filtrar() {
         String filtro = " 1=1 ";
         String ordem = " order by t.nome ";  // ✅ Usa o atributo da classe com alias 't'
-        
+        String campoSelecionado = this.vlCampo.getSelectedItem() != null ? (String) this.vlCampo.getSelectedItem().getValue() : "";
         String textoDaPesquisa = this.vlPesquisa.getValue();
+
         if (textoDaPesquisa != null && !textoDaPesquisa.isEmpty()) {
-            if (NumberUtils.isCreatable(textoDaPesquisa)) {
-                // Se for número filtramos por código
-                filtro += " AND t.cdPessoa = " + textoDaPesquisa;  // ✅ Adiciona alias 't'
+            // Se for texto, fazemos a normalização
+            String textoTratado = Normalizer.normalize(textoDaPesquisa, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "").trim().toUpperCase();
+
+            if ("nome".equals(campoSelecionado)) {
+                filtro += " AND UPPER(t.nome) LIKE '%" + textoTratado + "%'";
+            } else if ("email".equals(campoSelecionado)) {
+                filtro += " AND UPPER(t.email) LIKE '%" + textoTratado + "%'";
+            } else if ("celular".equals(campoSelecionado)) {
+                String celularTratado = textoDaPesquisa != null ? textoTratado.replaceAll("\\D", "") : "";
+                filtro += " AND REGEXP_REPLACE(t.celular, '[^0-9]', '') LIKE '%" + celularTratado + "%'";
             } else {
-                // Se for texto, fazemos a normalização
-                String textoTratado = Normalizer.normalize(textoDaPesquisa, Normalizer.Form.NFD)
-                    .replaceAll("[^\\p{ASCII}]", "").trim().toUpperCase();
-                
-                // ✅ Usa o atributo da classe com alias 't'
-                filtro += " AND UPPER(t.nome) like '%" + textoTratado + "%'";
+                // Se "Todos os campos" estiver selecionado
+                String celularTratado = textoDaPesquisa != null ? textoTratado.replaceAll("\\D", "") : "";
+                filtro += " AND ( UPPER(t.nome) LIKE '%" + textoTratado + "%'"
+                        + " OR UPPER(t.email) LIKE '%" + textoTratado + "%'"
+                        + (celularTratado.isEmpty() ? "" : " OR REGEXP_REPLACE(t.celular, '[^0-9]', '') LIKE '%" + celularTratado + "%'")
+                        + " )";
             }
         }
         
