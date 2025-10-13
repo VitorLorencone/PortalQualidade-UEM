@@ -16,9 +16,6 @@
 # Maven 
 target/
 
-# Hibernate
-src/main/resources/hibernate.cfg.xml
-
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 

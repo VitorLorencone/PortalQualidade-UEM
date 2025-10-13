@@ -44,11 +44,6 @@ public class MenuController extends Window {
         Clients.evalJavaScript("window.history.pushState(null, '', '/regras');");
     }
 
-    public void abrirPaginaOrgaos() {
-        this.conteudo.setSrc("/dados/orgaos/orgaos.zul");
-        Clients.evalJavaScript("window.history.pushState(null, '', '/regras');");
-    }
-
     public void abrirPaginaRelatorios() {
         this.conteudo.setSrc("/dados/relatorios/rel.zul");
         Clients.evalJavaScript("window.history.pushState(null, '', '/relatorios');");

@@ -22,7 +22,6 @@ import org.hibernate.Session;
 public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     private final Class<T> classe;
-    private static final boolean SHOW_SQL_TO_DEBUG = true;  // Mude para true
 
     public GenericDAO(Class<T> classe) {
         this.classe = classe;
@@ -112,11 +111,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     public void autoIncrementarId(Session session, T entidade) throws Exception {
         Field fieldId = getIdField(entidade);
         if (fieldId != null) {
-            String nomeClasse = entidade.getClass().getSimpleName();
-            String nomeAtributo = fieldId.getName();
-            String hql = "select coalesce(max(t." + nomeAtributo + "), 0) + 1 from " + nomeClasse + " t";
-            
-            Query q = session.createQuery(hql);
+            Query q = session.createQuery("select coalesce(max(" + fieldId.getName() + "), 0) + 1 as id from " + entidade.getClass().getName());
             I idAutoincremento = (I) q.uniqueResult();
             fieldId.set(entidade, idAutoincremento);
         }

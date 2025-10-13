@@ -1,84 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
-    <nodom title="" id="winPessoaList" use="controller.pessoas.PessoaListController">
-  
-        <div class="d-flex pb-4">
-            <div class="col">
-                <n:h4>Cadastro de Pessoas</n:h4>
-            </div>
-            <div class="col text-end">
-                <button label="Nova Pessoa" iconSclass="z-icon-plus" onClick="winPessoaList.novaPessoa()" class="btn btn-primary"/>
-            </div>
-        </div>
-        
-        <div class="card" >
-            <div class="card-body">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
 
-                <!-- Parte com botões. A classe justify-content-between fará com que os botões fiquem justificados, ou seja, grudado à esquerda e à direita. -->
-                <div class="d-flex justify-content-between form-group mb-3">
-                    <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
-                        <div class="row"> 
-                            <div class="col-md-6"> 
-                                <div class="input-group">
-                                    <textbox id="vlPesquisa" class="form-control" placeholder="Buscar por nome, email ou celular...">
-                                        <attribute name="onOK">
-                                <![CDATA[
-                                    winPessoaList.filtrar();
-                                ]]>
-                                        </attribute>
-                                    </textbox>        
-                                    <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winPessoaList.filtrar()" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">                
-                                <listbox id="vlCampo" mold="select" class="form-select">
-                                    <listitem value="" selected="true">
-                                        <listcell label="Todos os campos"/>
-                                    </listitem>
-                                    <listitem value="nome">
-                                        <listcell label="Nome"/>
-                                    </listitem>
-                                    <listitem value="email">
-                                        <listcell label="Email"/>
-                                    </listitem>
-                                    <listitem value="celular">
-                                        <listcell label="Celular"/>
-                                    </listitem>
-                                </listbox>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        
-                    </div>
-                </div>
-        
-                <!-- Parte com o grid. Aqui definimos as colunas e como os dados serão mostrados. -->
-                <div class="row responsive-grid-md"> 
-                    <grid id="resultados" sizedByContent="false" mold="paging" width="100%" pageSize="10" emptyMessage="Nenhuma pessoa encontrada">
-                        <columns>
-                            <column label="Código" sort="auto(cdPessoa)" width="10%" />
-                            <column label="Nome" sort="auto(nome)" width="40%"/>
-                            <column label="Email" sort="auto(email)" width="25%"/>
-                            <column label="Celular" sort="auto(celular)" width="15%"/>
-                            <column label="" width="120px" />
-                        </columns>
-                        <template name="model">
-                            <row onClick="winPessoaList.onClickedVerPessoa(event)" style="cursor: pointer;">
-                                <attribute ca:name="id">${each.cdPessoa}</attribute>
-                                <label>${each.cdPessoa}</label>
-                                <label>${each.nome}</label>
-                                <label>${each.email}</label>
-                                <label>${each.celular}</label>
-                                <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winPessoaList.onClickedAlterarPessoa(event)" >
-                                    <attribute ca:name="id">${each.cdPessoa}</attribute>
-                                </button>
-                            </row>
-                        </template>
-                    </grid>
-                </div>
-        
-            </div>
+    <div class="col p-3 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 195px);">
+        <div class="text-center">
+            <label value="Estamos em Pessoas" class="h3"/>
         </div>
-    </nodom>       
+    </div>
+
 </zk>
