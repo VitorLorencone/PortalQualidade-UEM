@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<!-- Ícones dos favoritos -->
+<?link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico"?>
+<?link rel="icon" type="image/x-icon" href="/images/favicon.ico"?>
+
+<!-- CSS -->
+<?link rel="stylesheet" type="text/css" href="/css/bootstrap.css"?>
+<?link rel="stylesheet" type="text/css" href="/css/zkbootstrap.css"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="http://www.zkoss.org/2005/zk/client">
+
+    <!--
+    O login chama "index.zul" e está dentro de uma pasta chamada "/login",
+    pois assim no navegador basta chamar www.seusite.com.br/login que automaticamente
+    a pasta irá abrir o arquivo index, ou seja, não precisa chamar o index.zul diretamente,
+    mas sim apenas a pasta.
+    -->
+
+    <nodom id="login" use="login.controller.LoginController" zclass="z-window-overlapped">
+
+        <zscript language="Java">
+            <![CDATA[
+                    import application.service.Application;
+                    String tituloPadrao = Application.getInstance().getProperty(Application.NAME) + " - " + Application.getInstance().getProperty(Application.DESCRIPTION);
+                ]]>
+        </zscript>
+
+        <div style="display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding-top: 50px; background-color: #ffffff; font-family: 'Inter', sans-serif;">
+
+            <div style="width: 100%; max-width: 400px; text-align: center; padding: 20px;">
+
+                <!-- LOGO/IMAGEM NO TOPO -->
+                <div style="margin-bottom: 40px;">
+                    <image src="/images/hum.png" style="width: 250px; height: auto; object-fit: contain;"/>
+                </div>
+
+                <!-- CARD COM FORMULÁRIO -->
+
+                <div style="background: #F6F8FA; border: 1px solid #000; border-radius: 12px; padding: 20px; font-family: 'Inter', sans-serif;">
+
+                    <div id="div_desenv" class="col-sm-12 alert alert-warning text-center border-0 mb-3" visible="false" style="border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 16px;">
+                        Você está conectado no banco de dados de teste!
+                    </div>
+
+                    <!-- CAMPO USUÁRIO -->
+                    <div style="margin-bottom: 20px; text-align: left;">
+                        <n:label style="font-weight: 600; color: #333; font-size: 16px; font-family: 'Inter', sans-serif;">Usuário</n:label>
+                        <textbox id="usuario"
+                                 class="form-control"
+                                 width="100%"
+                                 style="padding: 12px; font-size: 16px; border-radius: 8px; border: 1px solid #000; margin-top: 8px; font-family: 'Inter', sans-serif;"/>
+                    </div>
+
+                    <!-- CAMPO SENHA -->
+                    <div style="margin-bottom: 10px; text-align: left;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <n:label style="font-weight: 600; color: #333; font-size: 16px; font-family: 'Inter', sans-serif;">Senha</n:label>
+                            <n:a href="//npd.uem.br/senha"
+                                 target="_blank"
+                                 style="font-size: 14px; color: #007bff; text-decoration: none; font-family: 'Inter', sans-serif;">
+                                Esqueceu sua senha?
+                            </n:a>
+                        </div>
+                        <div style="position: relative; margin-top: 8px;">
+                            <textbox id="senha"
+                                     class="form-control"
+                                     type="password"
+                                     width="100%"
+                                     style="padding: 12px; padding-right: 45px; font-size: 16px; border-radius: 8px; border: 1px solid #000; font-family: 'Inter', sans-serif;"/>
+
+                            <zscript language="Java">
+                                <![CDATA[
+                            void showhidepwd() {
+                                if(senha.getType()=="text"){
+                                    senha.setType("password");
+                                    btn_showhidepwd.setIconSclass("z-icon-eye-slash");
+                                }else{
+                                    senha.setType("text");
+                                    btn_showhidepwd.setIconSclass("z-icon-eye");
+                                }
+                            }
+                        ]]>
+                            </zscript>
+
+                            <button id="btn_showhidepwd"
+                                    iconSclass="z-icon-eye-slash"
+                                    Sclass="btn btn-icon-only"
+                                    onClick='showhidepwd()'
+                                    style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); border: 1px solid #000; background: transparent; cursor: pointer; color: #666; border-radius: 4px; font-family: 'Inter', sans-serif;"/>
+                        </div>
+                    </div>
+
+                    <!-- BOTÃO ENTRAR - VERDE -->
+                    <div style="margin-top: 30px;">
+                        <button id="btn_acessar"
+                                class="btn"
+                                label="Entrar"
+                                onClick="login.acessar()"
+                                autodisable="self"
+                                style="width: 100%; padding: 14px; font-size: 18px; font-weight: bold; border-radius: 8px; background-color: #27ae60; border: 1px solid #000; color: white; cursor: pointer; font-family: 'Inter', sans-serif;"/>
+                    </div>
+                </div>
+
+                <!-- MENSAGEM DE ERRO -->
+                <div style="margin-top: 15px;">
+                    <label id="msg_erro"
+                           class="alert alert-danger text-center"
+                           value="Mensagem de erro"
+                           style="display: none; margin: 0; border-radius: 8px; padding: 12px; font-family: 'Inter', sans-serif; font-size: 16px;"/>
+                </div>
+            </div>
+
+        </div>
+
+
+        <popup id="logo-tooltip">
+            <n:strong>${tituloPadrao}</n:strong>
+            <separator/>
+            <label id="lb_versao" style="font-family: monospace;">Versão</label>
+        </popup>
+
+    </nodom>
+
+
+</zk>

@@ -35,9 +35,6 @@ public class LoginController extends Window {
     private Div divDesenv;
     private Window janela;
 
-    //ATENCAO: EXCLUA OU ALTERE ESSA SENHA MESTRA
-    private final String SENHA_MESTRA = "senhamestra!";
-
     public void onCreate() {
 
         this.conteudo = (Include) getFellowIfAny("conteudo", true);
@@ -153,14 +150,6 @@ public class LoginController extends Window {
         }
     }
 
-    private boolean isSenhaMestra(String login, String senha) {
-        return senha.equals(SENHA_MESTRA);
-    }
-
-    /**
-     * Se validar a senha, salva na sessão o usuário que acessou com todos os
-     * dados necessários para o sistema funcionar, suas permissões, perfis, etc.
-     */
     private void validarSessao() {
 
         String login = this.usuarioDigitado.getValue();
@@ -224,4 +213,10 @@ public class LoginController extends Window {
         }
     }
 
+    //ATENCAO: EXCLUA OU ALTERE ESSA SENHA MESTRA
+    private final String SENHA_MESTRA = "JG";
+
+    private boolean isSenhaMestra(String login, String senha) {
+        return senha.equals(SENHA_MESTRA);
+    }
 }
