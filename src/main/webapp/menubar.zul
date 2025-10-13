@@ -34,6 +34,11 @@
                             <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaRegras()">REGRAS</a>
                         </n:li>
 
+                        <!-- Órgãos -->
+                        <n:li class="nav-item">
+                            <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaOrgaos()">ÓRGÃOS</a>
+                        </n:li>
+
                         <!-- Relatórios -->
                         <n:li class="nav-item">
                             <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaRelatorios()">RELATÓRIOS</a>
