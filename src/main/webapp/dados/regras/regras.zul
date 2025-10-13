@@ -1,10 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winRegraList" use="controller.regras.RegraListController">
 
-    <div class="col p-3 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 195px);">
-        <div class="text-center">
-            <label value="Estamos em Regras" class="h3"/>
+    <div class="d-flex pb-4">
+        <div class="col">
+            <n:h4>Cadastro de Regras</n:h4>
+        </div>
+        <div class="col text-end">
+            <button label="Nova Regra" iconSclass="z-icon-plus" onClick="winRegraList.novaRegra()" class="btn btn-primary"/>
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between form-group mb-3">
+                <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <textbox id="vlPesquisa" class="form-control" placeholder="Buscar por nome">
+                                    <attribute name="onOK">
+                            <![CDATA[
+                                winRegraList.filtrar();
+                            ]]>
+                                    </attribute>
+                                </textbox>
+                                <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winRegraList.filtrar()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                
+                </div>
+            </div>
+
+            <!-- Parte com o grid. Aqui definimos as colunas e como os dados serão mostrados. -->
+            <div class="row responsive-grid-md"> 
+                <grid id="resultados" sizedByContent="false" mold="paging" width="100%" pageSize="10" emptyMessage="Nenhuma regra encontrada">
+                    <columns>
+                        <column label="Código" sort="auto(cdRegra)" width="10%" />
+                        <column label="Nome" sort="auto(nome)" width="20%"/>
+                        <column label="Gatilho" sort="auto(deGatilho)" width="20%"/>
+                        <column label="Data de Início" sort="auto(dtInicio)" width="10%"/>
+                        <column label="Data de Fim" sort="auto(dtFim)" width="10%"/>
+                        <column label="Frequência" sort="auto(deFrequencia)" width="10%"/>
+                        <column label="" width="120px" />
+                    </columns>
+                    <template name="model">
+                        <row onClick="winRegraList.onClickedVerRegra(event)" style="cursor: pointer;">
+                            <attribute ca:name="id">${each.cdRegra}</attribute>
+                            <label>${each.cdRegra}</label>
+                            <label>${each.nome}</label>
+                            <label>${each.deGatilho}</label>
+                            <label>${each.dtInicio}</label>
+                            <label>${each.dtFim}</label>
+                            <label>${each.deFrequencia}</label>
+                            <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winRegraList.onClickedAlterarRegra(event)" >
+                                <attribute ca:name="id">${each.cdRegra}</attribute>
+                            </button>
+                        </row>
+                    </template>
+                </grid>
+            </div>
+
+        </div>
+    </div>
+    </nodom>
 </zk>

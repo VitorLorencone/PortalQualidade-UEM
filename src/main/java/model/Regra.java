@@ -22,6 +22,9 @@ public class Regra implements Serializable {
     @Column(name = "CD_REGRA")
     private Integer cdRegra;
 
+    @Column(name = "NM_REGRA")
+    private String nome;
+
     @Column(name = "DE_GATILHO")
     private String deGatilho;
 
