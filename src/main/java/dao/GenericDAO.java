@@ -22,7 +22,7 @@ import org.hibernate.Session;
 public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     private final Class<T> classe;
-    private static final boolean SHOW_SQL_TO_DEBUG = true;  // Mude para true
+    private static final boolean SHOW_SQL_TO_DEBUG = true;
 
     public GenericDAO(Class<T> classe) {
         this.classe = classe;
@@ -33,8 +33,8 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     }
 
     /**
-     * Salvar um objeto no banco, gerando um id para ele. Este método fará o
-     * autoincremento do @Id.
+     * Salvar um objeto no banco. A geração do ID é feita automaticamente pelo
+     * Hibernate usando @GeneratedValue(strategy = GenerationType.IDENTITY).
      *
      * @param entidade objeto a ser inserido no banco
      * @return id do objeto inserido
@@ -45,7 +45,6 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
         try {
             session = openSession();
             beginTransaction(session);
-            autoIncrementarId(session, entidade);
             id = incluir(session, entidade);
             commit(session);
         } catch (Exception e) {
@@ -83,7 +82,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     /**
      * Salvar um objeto no banco de forma transacional. Utilize este método caso
-     * precise fazer várias alterações no banco na na mesma transação. Será
+     * precise fazer várias alterações no banco na mesma transação. Será
      * necessário pegar a sessão e iniciar a transação manualmente, passar a
      * sessão para este método, depois commitar ou fazer rollback, e fechar a
      * sessão.
@@ -97,48 +96,6 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
         session.flush();
         session.refresh(entidade);
         return idEntidade;
-    }
-
-    /**
-     * Busca e preenche o próximo id para o objeto a ser salvo. Este método
-     * utiliza a anotação @Id do objeto para saber qual é o atributo referente
-     * ao id. Caso o id seja uma chave composta, esse método não funcionará.
-     *
-     * @param session sessão do hibernate
-     * @param entidade objeto a ser inserido no banco
-     * @throws IllegalArgumentException
-     * @throws IllegalAccessException
-     */
-    public void autoIncrementarId(Session session, T entidade) throws Exception {
-        Field fieldId = getIdField(entidade);
-        if (fieldId != null) {
-            String nomeClasse = entidade.getClass().getSimpleName();
-            String nomeAtributo = fieldId.getName();
-            String hql = "select coalesce(max(t." + nomeAtributo + "), 0) + 1 from " + nomeClasse + " t";
-            
-            Query q = session.createQuery(hql);
-            I idAutoincremento = (I) q.uniqueResult();
-            fieldId.set(entidade, idAutoincremento);
-        }
-    }
-
-    /**
-     * Retorna o atributo do objeto que tem a anotação @id. Utilizado para pegar
-     * o id do objeto e realizar o autoincremento ou o seu valor.
-     *
-     * @param entidade objeto a ser buscado o atributo id
-     * @return field que tem o @id anotado na classe modelo
-     */
-    private Field getIdField(T entidade) {
-        Field fieldId = null;
-        for (Field field : entidade.getClass().getDeclaredFields()) {
-            if (field.getAnnotation(Id.class) != null) {
-                field.setAccessible(true);
-                fieldId = field;
-                break;
-            }
-        }
-        return fieldId;
     }
 
     /**
@@ -167,7 +124,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     /**
      * Exclui um objeto do banco de forma transacional. Utilize este método caso
-     * precise fazer várias alterações no banco na na mesma transação. Será
+     * precise fazer várias alterações no banco na mesma transação. Será
      * necessário pegar a sessão e iniciar a transação manualmente, passar a
      * sessão para este método, depois commitar ou fazer rollback, e fechar a
      * sessão.
@@ -182,7 +139,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     /**
      * Exclui um objeto do banco passando um id. Utilize este método caso você
-     * não tenho o objeto que veio do banco de dados, ou seja, tenha apenas o
+     * não tenha o objeto que veio do banco de dados, ou seja, tenha apenas o
      * valor do id.
      *
      * @param codigo id do objeto a ser excluído
@@ -208,18 +165,15 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     /**
      * Exclui um objeto do banco de forma transacional, passando um id. Utilize
-     * este método caso você não tenho o objeto que veio do banco de dados, ou
-     * seja, tenha apenas o valdor do id. Utilize este método caso precise fazer
-     * várias alterações no banco na na mesma transação. Será necessário pegar a
-     * sessão e iniciar a transação manualmente, passar a sessão para este
-     * método, depois commitar ou fazer rollback, e fechar a sessão.
+     * este método caso você não tenha o objeto que veio do banco de dados, ou
+     * seja, tenha apenas o valor do id.
      *
      * @param session sessão do hibernate
      * @param codigo id do objeto a ser excluído
      */
     public void excluir(Session session, I codigo) {
         T genericClass = (T) session.get(classe, codigo);
-        if (genericClass.getClass().getName() != null) {
+        if (genericClass != null) {
             session.delete(genericClass);
         }
     }
@@ -250,7 +204,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
 
     /**
      * Atualiza um objeto no banco de forma transacional. Utilize este método
-     * caso precise fazer várias alterações no banco na na mesma transação. Será
+     * caso precise fazer várias alterações no banco na mesma transação. Será
      * necessário pegar a sessão e iniciar a transação manualmente, passar a
      * sessão para este método, depois commitar ou fazer rollback, e fechar a
      * sessão.
@@ -265,10 +219,11 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     }
 
     /**
-     * Buscar um objeto no banco de dados.
+     * Buscar um objeto no banco de dados. Para herança JOINED, retorna o tipo
+     * correto (FuncionarioHU, FuncionarioQualidade, ou Pessoa).
      *
      * @param codigo id do objeto a ser encontrado
-     * @return o objeto encontrado desejada
+     * @return o objeto encontrado desejado
      */
     public T buscar(I codigo) {
         T object = null;
@@ -285,7 +240,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     }
 
     /**
-     * Lista todos os objetos existentes no banco da classe desesejada.
+     * Lista todos os objetos existentes no banco da classe desejada.
      *
      * @return lista de objetos
      */
@@ -309,11 +264,10 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     }
 
     /**
-     * Lista os objetos da classe Curso do banco de dados baseado em um filtro e
-     * ordem.
+     * Lista os objetos da classe baseado em um filtro e ordem.
      *
-     * @param filtro condições que irá no where, em hql
-     * @param ordem condições que irá no order by, em hql
+     * @param filtro condições que irão no where, em hql
+     * @param ordem condições que irão no order by, em hql
      * @return lista de objetos
      */
     public List<T> listar(String filtro, String ordem) {
@@ -335,11 +289,10 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     }
 
     /**
-     * Lista os objetos da classe Curso do banco de dados baseado em um filtro e
-     * ordem de forma paginada.
+     * Lista os objetos da classe baseado em um filtro e ordem de forma paginada.
      *
-     * @param filtro condições que irá no where, em hql
-     * @param ordem condições que irá no order by, em hql
+     * @param filtro condições que irão no where, em hql
+     * @param ordem condições que irão no order by, em hql
      * @param page é o offset, ou seja, inicio dos dados a serem buscados
      * @param pageSize é o limit, ou seja, quantidade de dados a serem buscados
      * @return lista de objetos
@@ -367,7 +320,7 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
     /**
      * Quantidade de dados encontrados na tabela.
      *
-     * @param filtro condições que irá no where, em hql
+     * @param filtro condições que irão no where, em hql
      * @return quantidade de dados encontrados
      */
     public int contar(String filtro) {
@@ -472,5 +425,4 @@ public abstract class GenericDAO<T, I extends Serializable> extends DAO {
         }
         return result;
     }
-
 }

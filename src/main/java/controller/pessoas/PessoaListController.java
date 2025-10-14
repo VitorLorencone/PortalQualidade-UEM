@@ -1,13 +1,8 @@
-/*
- * Universidade Estadual de Maringá - UEM
- * Núcleo de Processamento de Dados - NPD
- * Alunos de Ciência da Computação - 2025
- * Copyright (c) 2025. All rights reserved.
- */
-
 package controller.pessoas;
 
 import dao.PessoaDAO;
+import factory.PessoaFactory;
+import factory.PessoaFactory.TipoPessoa;
 import model.Pessoa;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Include;
@@ -20,13 +15,13 @@ import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import java.text.Normalizer;
 import java.util.List;
-import org.apache.commons.lang3.math.NumberUtils;
 
 public class PessoaListController extends Window {
 
     private Window win;
 
     private Listbox vlCampo;
+    private Listbox vlTipoPessoa;
     private Textbox vlPesquisa;
     private Grid resultados;
 
@@ -42,6 +37,7 @@ public class PessoaListController extends Window {
         //para pegarmos ou pularmos com valores
         this.vlPesquisa = (Textbox) getFellow("vlPesquisa");
         this.vlCampo = (Listbox) getFellow("vlCampo");
+        this.vlTipoPessoa = (Listbox) getFellow("vlTipoPessoa");
         this.resultados = (Grid) getFellow("resultados");
 
         filtrar();
@@ -49,27 +45,75 @@ public class PessoaListController extends Window {
 
     public void filtrar() {
         String filtro = " 1=1 ";
-        String ordem = " order by t.nome ";  // ✅ Usa o atributo da classe com alias 't'
-        
+        String ordem = " order by t.nome ";
+        String campoSelecionado = this.vlCampo.getSelectedItem() != null ? (String) this.vlCampo.getSelectedItem().getValue() : "";
+        String tipoPessoaSelecionado = this.vlTipoPessoa.getSelectedItem() != null ? (String) this.vlTipoPessoa.getSelectedItem().getValue() : "";
         String textoDaPesquisa = this.vlPesquisa.getValue();
+
+        // Filtro por tipo de pessoa
+        TipoPessoa tipo = TipoPessoa.fromCodigo(tipoPessoaSelecionado);
+        if (tipo != TipoPessoa.TODOS) {
+            filtro += gerarFiltroTipo(tipo);
+        }
+
+        // Filtro por texto de pesquisa
         if (textoDaPesquisa != null && !textoDaPesquisa.isEmpty()) {
-            if (NumberUtils.isCreatable(textoDaPesquisa)) {
-                // Se for número filtramos por código
-                filtro += " AND t.cdPessoa = " + textoDaPesquisa;  // ✅ Adiciona alias 't'
+            String textoTratado = Normalizer.normalize(textoDaPesquisa, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "").trim().toUpperCase();
+
+            if ("nome".equals(campoSelecionado)) {
+                filtro += " AND UPPER(t.nome) LIKE '%" + textoTratado + "%'";
+            } else if ("email".equals(campoSelecionado)) {
+                filtro += " AND UPPER(t.email) LIKE '%" + textoTratado + "%'";
+            } else if ("celular".equals(campoSelecionado)) {
+                String celularTratado = textoDaPesquisa != null ? textoTratado.replaceAll("\\D", "") : "";
+                filtro += " AND REGEXP_REPLACE(t.celular, '[^0-9]', '') LIKE '%" + celularTratado + "%'";
             } else {
-                // Se for texto, fazemos a normalização
-                String textoTratado = Normalizer.normalize(textoDaPesquisa, Normalizer.Form.NFD)
-                    .replaceAll("[^\\p{ASCII}]", "").trim().toUpperCase();
-                
-                // ✅ Usa o atributo da classe com alias 't'
-                filtro += " AND UPPER(t.nome) like '%" + textoTratado + "%'";
+                // Se "Todos os campos" estiver selecionado
+                String celularTratado = textoDaPesquisa != null ? textoTratado.replaceAll("\\D", "") : "";
+                filtro += " AND ( UPPER(t.nome) LIKE '%" + textoTratado + "%'"
+                        + " OR UPPER(t.email) LIKE '%" + textoTratado + "%'"
+                        + (celularTratado.isEmpty() ? "" : " OR REGEXP_REPLACE(t.celular, '[^0-9]', '') LIKE '%" + celularTratado + "%'")
+                        + " )";
             }
         }
-        
+
         List<Pessoa> pessoas = pessoaDao.listar(filtro, ordem);
         if (pessoas != null) {
             SimpleListModel listModel = new SimpleListModel(pessoas);
             this.resultados.setModel(listModel);
+        }
+    }
+
+    /**
+     * Gera o filtro SQL baseado no tipo de pessoa selecionado.
+     * Usa a anotação @Entity para determinar a tabela específica.
+     */
+    private String gerarFiltroTipo(TipoPessoa tipo) {
+        // Define as subqueries HQL que buscam o ID (cdPessoa) nas tabelas filhas.
+        // É crucial que 'cdPessoa' seja o nome da sua chave primária na classe Pessoa.
+        final String HU_QUERY = "(SELECT f.cdPessoa FROM FuncionarioHU f)";
+        final String QUALIDADE_QUERY = "(SELECT q.cdPessoa FROM FuncionarioQualidade q)";
+
+        switch (tipo) {
+            case FUNCIONARIO_HU:
+                // FUNCIONARIO_HU: Filtra Pessoas (t) cujos IDs existem na tabela FuncionarioHU
+                return " AND t.cdPessoa IN " + HU_QUERY;
+                
+            case FUNCIONARIO_QUALIDADE:
+                // FUNCIONARIO_QUALIDADE: Filtra Pessoas (t) cujos IDs existem na tabela FuncionarioQualidade
+                return " AND t.cdPessoa IN " + QUALIDADE_QUERY;
+                
+            case PESSOA_GENERICA:
+                // PESSOA GENÉRICA (SOMENTE):
+                // Filtra Pessoas (t) cujos IDs NÃO existam nas tabelas filhas (é uma Pessoa que não é subclass).
+                return " AND t.cdPessoa NOT IN " + HU_QUERY
+                    + " AND t.cdPessoa NOT IN " + QUALIDADE_QUERY;
+                
+            case TODOS:
+            default:
+                // TODOS / Sem Filtro: Retorna vazio.
+                return "";
         }
     }
 

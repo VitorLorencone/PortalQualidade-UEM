@@ -1,4 +1,3 @@
-
 /*
  * Universidade Estadual de Maringá - UEM
  * Núcleo de Processamento de Dados - NPD
@@ -10,8 +9,9 @@ package login.controller;
 
 import application.service.Application;
 import application.service.Sessao;
-import application.model.Usuario;
 import login.dao.UsuarioDAO;
+import model.Usuario;
+
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zkplus.hibernate.HibernateUtil;
 import org.zkoss.zul.Div;
@@ -34,9 +34,6 @@ public class LoginController extends Window {
     private Label lbErro;
     private Div divDesenv;
     private Window janela;
-
-    //ATENCAO: EXCLUA OU ALTERE ESSA SENHA MESTRA
-    private final String SENHA_MESTRA = "senhamestra!";
 
     public void onCreate() {
 
@@ -153,14 +150,6 @@ public class LoginController extends Window {
         }
     }
 
-    private boolean isSenhaMestra(String login, String senha) {
-        return senha.equals(SENHA_MESTRA);
-    }
-
-    /**
-     * Se validar a senha, salva na sessão o usuário que acessou com todos os
-     * dados necessários para o sistema funcionar, suas permissões, perfis, etc.
-     */
     private void validarSessao() {
 
         String login = this.usuarioDigitado.getValue();
@@ -224,4 +213,10 @@ public class LoginController extends Window {
         }
     }
 
+    //ATENCAO: EXCLUA OU ALTERE ESSA SENHA MESTRA
+    private final String SENHA_MESTRA = "JG";
+
+    private boolean isSenhaMestra(String login, String senha) {
+        return senha.equals(SENHA_MESTRA);
+    }
 }

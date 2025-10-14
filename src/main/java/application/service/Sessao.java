@@ -7,11 +7,12 @@
 
 package application.service;
 
-import application.model.Usuario;
 import java.util.HashMap;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.Sessions;
+
+import model.Usuario;
 
 public class Sessao {
 

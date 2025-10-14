@@ -4,6 +4,7 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Window;
 import org.zkoss.zk.ui.util.Clients;
+import application.service.Sessao;
 
 public class MenuController extends Window {
 
@@ -11,6 +12,8 @@ public class MenuController extends Window {
     private Include conteudo;
 
     public void onCreate() {
+        Sessao.getInstance().validarSessao(); // Validar Sessão
+
         this.winMenu = (Window) getFellow("winMenu");
         this.conteudo = (Include) getFellowIfAny("conteudo", true);
     }

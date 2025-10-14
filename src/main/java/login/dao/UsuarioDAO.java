@@ -1,9 +1,10 @@
 package login.dao;
 
-import application.model.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+
+import model.Usuario;
 
 public class UsuarioDAO {
 
