@@ -1,15 +1,15 @@
 package model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,30 +18,35 @@ import lombok.Setter;
 @Entity
 @Table(name = "SIS_MENSAGEM")
 public class Mensagem implements Serializable {
-
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CD_MENSAGEM")
     private Integer cdMensagem;
-
-    @Column(name = "DE_CORPO")
+    
+    @Column(name = "DE_NOME", length = 200)
+    private String deNome;
+    
+    @Column(name = "DE_CORPO", length = 1000)
     private String deCorpo;
-
-    // Relacionamento com Documento
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "SIS_DOCUMENTO_MENSAGEM",
-        joinColumns = @JoinColumn(name = "CD_MENSAGEM"),
-        inverseJoinColumns = @JoinColumn(name = "CD_DOCUMENTO")
-    )
-    private List<Documento> documentos;
-
-    // Relacionamento com Regra
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "SIS_MENSAGEM_REGRA",
-        joinColumns = @JoinColumn(name = "CD_MENSAGEM"),
-        inverseJoinColumns = @JoinColumn(name = "CD_REGRA")
-    )
-    private List<Regra> regras;
-
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DT_INICIO")
+    private Date dtInicio;
+    
+    @Temporal(TemporalType.DATE)
+    @Column(name = "DT_FIM")
+    private Date dtFim;
+    
+    @Column(name = "DE_FREQUENCIA", length = 1)
+    private String deFrequencia;
+    
+    // Métodos auxiliares para trabalhar com o enum
+    public FrequenciaMensagem getFrequenciaEnum() {
+        return deFrequencia != null ? FrequenciaMensagem.fromCodigo(deFrequencia) : null;
+    }
+    
+    public void setFrequenciaEnum(FrequenciaMensagem frequencia) {
+        this.deFrequencia = frequencia != null ? frequencia.getCodigo() : null;
+    }
 }

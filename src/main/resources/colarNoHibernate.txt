@@ -21,4 +21,3 @@ Não se esqueçam de sempre fazer drop em todas as tabelas do seu banco de dados
         <mapping class="model.Setor"/>
         <mapping class="model.Documento"/>
         <mapping class="model.Mensagem"/>
-        <mapping class="model.Regra"/>

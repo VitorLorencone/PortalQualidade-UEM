@@ -54,10 +54,6 @@ public class Documento implements Serializable {
     @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
     private List<Setor> setores;
 
-    // Relacionamento bidirecional com Mensagem
-    @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
-    private List<Mensagem> mensagens;
-
     // Relacionamento bidirecional com FuncionárioQualidade
     @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
     private List<FuncionarioQualidade> funcionariosQualidade;
