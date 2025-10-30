@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -21,6 +23,7 @@ import lombok.Setter;
 public class Documento implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CD_DOCUMENTO")
     private Integer cdDocumento;
 
@@ -50,6 +53,13 @@ public class Documento implements Serializable {
     @JoinColumn(name = "CD_ORGAO", referencedColumnName = "CD_ORGAO")
     private Diretoria diretoria;
 
+    // Relacionamento N:1 com FuncionarioHU no contexto de Responsável Técnico
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CD_PESSOA", referencedColumnName = "CD_PESSOA")
+    private FuncionarioHU rt;
+
+    // RELACIONAMENTOS N:N (gerenciados em telas/abas separadas QUE SERÃO FEITAS DEPOIS)
+
     // Relacionamento bidirecional com Setor
     @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
     private List<Setor> setores;
@@ -61,11 +71,6 @@ public class Documento implements Serializable {
     // Relacionamento bidirecional com FuncionarioHU no contexto de Avaliador
     @ManyToMany(mappedBy = "documentosAvaliador", fetch = FetchType.LAZY)
     private List<FuncionarioHU> avaliadores;
-
-    // Relacionamento N:1 com FuncionarioHU no contexto de Responsável Técnico
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CD_PESSOA", referencedColumnName = "CD_PESSOA")
-    private FuncionarioHU rt;
 
     // Relacionamento bidirecional com FuncionarioHU no contexto de Autor
     @ManyToMany(mappedBy = "documentosAutor", fetch = FetchType.LAZY)
