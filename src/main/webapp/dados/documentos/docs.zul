@@ -17,9 +17,9 @@
 
                 <!-- Parte com botões. A classe justify-content-between fará com que os botões fiquem justificados -->
                 <div class="d-flex justify-content-between form-group mb-3">
-                    <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
+                    <div class="col-sm-12 col-md-12 col-lg-10 pl-0">
                         <div class="row"> 
-                            <div class="col-md-4"> 
+                            <div class="col-md-3"> 
                                 <div class="input-group">
                                     <textbox id="vlPesquisa" class="form-control" 
                                         placeholder="Buscar documentos...">
@@ -33,7 +33,7 @@
                                         iconSclass="z-icon-search" onClick="winDocumentoList.filtrar()"/>
                                 </div>
                             </div>
-                            <div class="col-md-4">                
+                            <div class="col-md-3">                
                                 <listbox id="vlCampo" mold="select" class="form-select">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os campos"/>
@@ -44,40 +44,54 @@
                                     <listitem value="descricao">
                                         <listcell label="Descrição"/>
                                     </listitem>
-                                    <listitem value="status_inicial">
-                                        <listcell label="Status Inicial"/>
-                                    </listitem>
-                                    <listitem value="status_final">
-                                        <listcell label="Status Final"/>
-                                    </listitem>
                                 </listbox>
                             </div>
-                            <div class="col-md-4">                
+                            <div class="col-md-3">                
                                 <listbox id="vlTipoDocumento" mold="select" class="form-select" 
                                     onChange="winDocumentoList.filtrar()">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os tipos"/>
                                     </listitem>
                                     <listitem value="POP">
-                                        <listcell label="POP - Procedimento Operacional Padrão"/>
+                                        <listcell label="POP"/>
                                     </listitem>
                                     <listitem value="IT">
-                                        <listcell label="IT - Instrução de Trabalho"/>
+                                        <listcell label="IT"/>
                                     </listitem>
                                     <listitem value="PR">
-                                        <listcell label="PR - Procedimento"/>
+                                        <listcell label="PR"/>
                                     </listitem>
                                     <listitem value="PS">
-                                        <listcell label="PS - Protocolo de Serviço"/>
+                                        <listcell label="PS"/>
                                     </listitem>
                                     <listitem value="FORM">
-                                        <listcell label="FORM - Formulário"/>
+                                        <listcell label="FORM"/>
                                     </listitem>
                                     <listitem value="REG">
-                                        <listcell label="REG - Regulamento"/>
+                                        <listcell label="REG"/>
                                     </listitem>
                                     <listitem value="OUTROS">
-                                        <listcell label="OUTROS - Outros Tipos"/>
+                                        <listcell label="OUTROS"/>
+                                    </listitem>
+                                </listbox>
+                            </div>
+                            <div class="col-md-3">                
+                                <listbox id="vlEstado" mold="select" class="form-select" 
+                                    onChange="winDocumentoList.filtrar()">
+                                    <listitem value="" selected="true">
+                                        <listcell label="Todos os estados"/>
+                                    </listitem>
+                                    <listitem value="ELABORACAO">
+                                        <listcell label="Elaboração"/>
+                                    </listitem>
+                                    <listitem value="AVALIACAO">
+                                        <listcell label="Avaliação"/>
+                                    </listitem>
+                                    <listitem value="SUGESTAO">
+                                        <listcell label="Sugestão"/>
+                                    </listitem>
+                                    <listitem value="ASSINATURA">
+                                        <listcell label="Assinatura"/>
                                     </listitem>
                                 </listbox>
                             </div>
@@ -94,39 +108,23 @@
                         pageSize="10" emptyMessage="Nenhum documento encontrado">
                         <columns>
                             <column label="Código" sort="auto(cdDocumento)" width="8%"/>
-                            <column label="Nome" sort="auto(nmDocumento)" width="30%"/>
-                            <column label="Tipo" sort="auto(tpDocumento)" width="12%"/>
+                            <column label="Nome" sort="auto(nmDocumento)" width="32%"/>
+                            <column label="Tipo" sort="auto(tpDocumento)" width="10%"/>
                             <column label="Data Criação" sort="auto(dtCriacao)" width="12%"/>
-                            <column label="Data Vencimento" sort="auto(dtVencimento)" width="13%"/>
-                            <column label="Status" width="15%"/>
+                            <column label="Estado" sort="auto(estado)" width="13%"/>
+                            <column label="Diretoria" width="15%"/>
                             <column label="" width="120px"/>
                         </columns>
                         <template name="model">
                             <row onClick="winDocumentoList.onClickedVerDocumento(event)" 
                                 style="cursor: pointer;">
                                 <attribute ca:name="id">${each.cdDocumento}</attribute>
-                                <label>${each.cdDocumento}</label>
-                                <label>${each.nmDocumento}</label>
-                                <label>${each.tpDocumento}</label>
-                                <label>
-                                    <attribute name="value">
-                                        <![CDATA[
-                                            ${each.dtCriacao != null ? 
-                                            c:formatDate(each.dtCriacao, 'dd/MM/yyyy') : '-'}
-                                        ]]>
-                                    </attribute>
-                                </label>
-                                <label>
-                                    <attribute name="value">
-                                        <![CDATA[
-                                            ${each.dtVencimento != null ? 
-                                            c:formatDate(each.dtVencimento, 'dd/MM/yyyy') : '-'}
-                                        ]]>
-                                    </attribute>
-                                </label>
-                                <label>
-                                    ${each.stInicial != null ? each.stInicial : '-'}
-                                </label>
+                                <label value="${each.cdDocumento}"/>
+                                <label value="${each.nmDocumento}"/>
+                                <label value="${each.tpDocumento}"/>
+                                <label value="${each.dtCriacao != null ? c:formatDate(each.dtCriacao, 'dd/MM/yyyy') : '-'}"/>
+                                <label value="${each.estado != null ? each.estado.descricao : '-'}"/>
+                                <label value="${each.diretoria != null ? each.diretoria.nmOrgao : '-'}"/>
                                 <button label="Alterar" class="border-0 btn btn-outline-primary" 
                                     iconSclass="z-icon-pencil" 
                                     onClick="winDocumentoList.onClickedAlterarDocumento(event)">

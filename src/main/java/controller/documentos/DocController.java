@@ -12,6 +12,7 @@ import dao.DiretoriaDAO;
 import dao.FuncionarioHUDAO;
 import model.Documento;
 import model.Diretoria;
+import model.EstadoDocumento;
 import model.FuncionarioHU;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
@@ -29,8 +30,7 @@ public class DocController extends Window {
     private Datebox dtCriacao;
     private Datebox dtVencimento;
     private Textbox deDescricao;
-    private Textbox stInicial;
-    private Textbox stFinal;
+    private Listbox estado;
     private Listbox diretoria;
     private Listbox rt;
 
@@ -60,8 +60,7 @@ public class DocController extends Window {
         this.dtCriacao = (Datebox) getFellow("dtCriacao");
         this.dtVencimento = (Datebox) getFellow("dtVencimento");
         this.deDescricao = (Textbox) getFellow("deDescricao");
-        this.stInicial = (Textbox) getFellow("stInicial");
-        this.stFinal = (Textbox) getFellow("stFinal");
+        this.estado = (Listbox) getFellow("estado");
         this.diretoria = (Listbox) getFellow("diretoria");
         this.rt = (Listbox) getFellow("rt");
         
@@ -91,8 +90,7 @@ public class DocController extends Window {
                 this.dtCriacao.setDisabled(true);
                 this.dtVencimento.setDisabled(true);
                 this.deDescricao.setDisabled(true);
-                this.stInicial.setDisabled(true);
-                this.stFinal.setDisabled(true);
+                this.estado.setDisabled(true);
                 this.diretoria.setDisabled(true);
                 this.rt.setDisabled(true);
             }
@@ -113,12 +111,12 @@ public class DocController extends Window {
     }
 
     /**
-     * Carrega as diretorias no listbox
+     * Carrega as diretorias no listbox dinamicamente do banco de dados
      */
     private void carregarDiretorias() {
         try {
-            // Lista todas as diretorias
-            List<Diretoria> diretorias = diretoriaDao.listar();
+            // Lista todas as diretorias do banco usando filtro "1=1" e ordenação
+            List<Diretoria> diretorias = diretoriaDao.listar("1=1", "order by t.nmOrgao");
             
             if (diretorias != null && !diretorias.isEmpty()) {
                 // Limpa os itens atuais (exceto o primeiro que é "Selecione...")
@@ -137,6 +135,10 @@ public class DocController extends Window {
                     
                     this.diretoria.appendChild(item);
                 }
+                
+                System.out.println("Diretorias carregadas: " + diretorias.size());
+            } else {
+                System.out.println("Nenhuma diretoria encontrada no banco de dados");
             }
         } catch (Exception e) {
             System.err.println("Erro ao carregar diretorias: " + e.getMessage());
@@ -145,12 +147,12 @@ public class DocController extends Window {
     }
 
     /**
-     * Carrega os funcionários HU (responsáveis técnicos) no listbox
+     * Carrega os funcionários HU (responsáveis técnicos) no listbox dinamicamente do banco
      */
     private void carregarResponsaveisTecnicos() {
         try {
-            // Lista todos os funcionários HU
-            List<FuncionarioHU> funcionarios = funcionarioHUDao.listar();
+            // Lista todos os funcionários HU do banco usando filtro "1=1" e ordenação
+            List<FuncionarioHU> funcionarios = funcionarioHUDao.listar("1=1", "order by t.nome");
             
             if (funcionarios != null && !funcionarios.isEmpty()) {
                 // Limpa os itens atuais (exceto o primeiro que é "Selecione...")
@@ -169,6 +171,10 @@ public class DocController extends Window {
                     
                     this.rt.appendChild(item);
                 }
+                
+                System.out.println("Funcionários HU carregados: " + funcionarios.size());
+            } else {
+                System.out.println("Nenhum funcionário HU encontrado no banco de dados");
             }
         } catch (Exception e) {
             System.err.println("Erro ao carregar responsáveis técnicos: " + e.getMessage());
@@ -186,8 +192,7 @@ public class DocController extends Window {
         this.dtCriacao.setValue(null);
         this.dtVencimento.setValue(null);
         this.deDescricao.setRawValue(null);
-        this.stInicial.setRawValue(null);
-        this.stFinal.setRawValue(null);
+        this.estado.setSelectedIndex(0);
         this.diretoria.setSelectedIndex(0);
         this.rt.setSelectedIndex(0);
         this.nmDocumento.setFocus(true);
@@ -201,8 +206,6 @@ public class DocController extends Window {
         zkUtils.popularCampo(this.cdDocumento, (Object) this.documento.getCdDocumento());
         zkUtils.popularCampo(this.nmDocumento, (Object) this.documento.getNmDocumento());
         zkUtils.popularCampo(this.deDescricao, (Object) this.documento.getDeDescricao());
-        zkUtils.popularCampo(this.stInicial, (Object) this.documento.getStInicial());
-        zkUtils.popularCampo(this.stFinal, (Object) this.documento.getStFinal());
         
         // Popular datas
         if (this.documento.getDtCriacao() != null) {
@@ -215,6 +218,11 @@ public class DocController extends Window {
         // Popular tipo de documento
         if (this.documento.getTpDocumento() != null) {
             selecionarTipoDocumento(this.documento.getTpDocumento());
+        }
+
+        // Popular estado
+        if (this.documento.getEstado() != null) {
+            selecionarEstado(this.documento.getEstado());
         }
 
         // Popular diretoria
@@ -235,6 +243,20 @@ public class DocController extends Window {
         for (Listitem item : this.tpDocumento.getItems()) {
             if (item.getValue().equals(tipo)) {
                 this.tpDocumento.setSelectedItem(item);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Seleciona o estado no listbox baseado no código String
+     */
+    private void selecionarEstado(EstadoDocumento estadoDoc) {
+        String codigoEstado = estadoDoc.name(); // Retorna "ELABORACAO", "AVALIACAO", etc.
+        
+        for (Listitem item : this.estado.getItems()) {
+            if (item.getValue() != null && item.getValue().equals(codigoEstado)) {
+                this.estado.setSelectedItem(item);
                 break;
             }
         }
@@ -292,6 +314,14 @@ public class DocController extends Window {
             this.dtCriacao.setFocus(true);
         }
 
+        if (this.estado.getSelectedItem() == null) {
+            Clients.showNotification("Estado do documento é obrigatório!", 
+                Clients.NOTIFICATION_TYPE_WARNING, this.estado, "end_center", 0);
+            gerouErro = true;
+            this.estado.setFocus(true);
+            return false;
+        }
+
         // Validação: data de vencimento deve ser posterior à data de criação
         if (this.dtCriacao.getValue() != null && this.dtVencimento.getValue() != null) {
             if (this.dtVencimento.getValue().before(this.dtCriacao.getValue())) {
@@ -316,8 +346,11 @@ public class DocController extends Window {
             documento.setDtCriacao(this.dtCriacao.getValue());
             documento.setDtVencimento(this.dtVencimento.getValue());
             documento.setDeDescricao(this.deDescricao.getValue());
-            documento.setStInicial(this.stInicial.getValue());
-            documento.setStFinal(this.stFinal.getValue());
+            
+            // Atualiza o estado (converte String para ENUM)
+            String estadoString = (String) this.estado.getSelectedItem().getValue();
+            EstadoDocumento estadoEnum = EstadoDocumento.valueOf(estadoString);
+            documento.setEstado(estadoEnum);
 
             // Atualiza diretoria se selecionada
             if (this.diretoria.getSelectedItem() != null && this.diretoria.getSelectedIndex() > 0) {

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,11 +44,9 @@ public class Documento implements Serializable {
     @Column(name = "DE_DESCRICAO")
     private String deDescricao;
 
-    @Column(name = "ST_INICIAL")
-    private String stInicial;
-
-    @Column(name = "ST_FINAL")
-    private String stFinal;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ST_ESTADO")
+    private EstadoDocumento estado;
 
     // Relacionamento N:1 com Diretoria
     @ManyToOne(fetch = FetchType.LAZY)

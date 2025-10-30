@@ -9,6 +9,7 @@ package controller.documentos;
 
 import dao.DocumentoDAO;
 import model.Documento;
+import model.EstadoDocumento;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Listbox;
@@ -28,6 +29,7 @@ public class DocListController extends Window {
 
     private Listbox vlCampo;
     private Listbox vlTipoDocumento;
+    private Listbox vlEstado;
     private Textbox vlPesquisa;
     private Grid resultados;
 
@@ -45,6 +47,7 @@ public class DocListController extends Window {
         this.vlPesquisa = (Textbox) getFellow("vlPesquisa");
         this.vlCampo = (Listbox) getFellow("vlCampo");
         this.vlTipoDocumento = (Listbox) getFellow("vlTipoDocumento");
+        this.vlEstado = (Listbox) getFellow("vlEstado");
         this.resultados = (Grid) getFellow("resultados");
 
         filtrar();
@@ -57,11 +60,18 @@ public class DocListController extends Window {
             (String) this.vlCampo.getSelectedItem().getValue() : "";
         String tipoDocumentoSelecionado = this.vlTipoDocumento.getSelectedItem() != null ? 
             (String) this.vlTipoDocumento.getSelectedItem().getValue() : "";
+        String estadoSelecionado = this.vlEstado.getSelectedItem() != null ?
+            (String) this.vlEstado.getSelectedItem().getValue() : "";
         String textoDaPesquisa = this.vlPesquisa.getValue();
 
         // Filtro por tipo de documento
         if (tipoDocumentoSelecionado != null && !tipoDocumentoSelecionado.isEmpty()) {
             filtro += " AND t.tpDocumento = '" + tipoDocumentoSelecionado + "'";
+        }
+
+        // Filtro por estado
+        if (estadoSelecionado != null && !estadoSelecionado.isEmpty()) {
+            filtro += " AND t.estado = '" + estadoSelecionado + "'";
         }
 
         // Filtro por texto de pesquisa
@@ -73,21 +83,17 @@ public class DocListController extends Window {
                 filtro += " AND UPPER(t.nmDocumento) LIKE '%" + textoTratado + "%'";
             } else if ("descricao".equals(campoSelecionado)) {
                 filtro += " AND UPPER(t.deDescricao) LIKE '%" + textoTratado + "%'";
-            } else if ("status_inicial".equals(campoSelecionado)) {
-                filtro += " AND UPPER(t.stInicial) LIKE '%" + textoTratado + "%'";
-            } else if ("status_final".equals(campoSelecionado)) {
-                filtro += " AND UPPER(t.stFinal) LIKE '%" + textoTratado + "%'";
             } else {
                 // Se "Todos os campos" estiver selecionado
                 filtro += " AND ( UPPER(t.nmDocumento) LIKE '%" + textoTratado + "%'"
                         + " OR UPPER(t.deDescricao) LIKE '%" + textoTratado + "%'"
-                        + " OR UPPER(t.stInicial) LIKE '%" + textoTratado + "%'"
-                        + " OR UPPER(t.stFinal) LIKE '%" + textoTratado + "%'"
                         + " )";
             }
         }
 
-        List<Documento> documentos = documentoDao.listar(filtro, ordem);
+        // IMPORTANTE: Usar listarComFetch para carregar relacionamentos LAZY
+        List<Documento> documentos = documentoDao.listarComFetch(filtro, ordem);
+        
         if (documentos != null) {
             SimpleListModel listModel = new SimpleListModel(documentos);
             this.resultados.setModel(listModel);

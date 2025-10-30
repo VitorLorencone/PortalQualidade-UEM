@@ -52,6 +52,24 @@
                         </listbox>
                     </div>
                     
+                    <div class="col-md-6">
+                        <label value="Estado do Documento *"/>
+                        <listbox id="estado" mold="select" class="form-select">
+                            <listitem value="ELABORACAO" selected="true">
+                                <listcell label="Elaboração"/>
+                            </listitem>
+                            <listitem value="AVALIACAO">
+                                <listcell label="Avaliação"/>
+                            </listitem>
+                            <listitem value="SUGESTAO">
+                                <listcell label="Sugestão"/>
+                            </listitem>
+                            <listitem value="ASSINATURA">
+                                <listcell label="Assinatura"/>
+                            </listitem>
+                        </listbox>
+                    </div>
+                    
                     <div class="col-md-3">
                         <label value="Data de Criação *"/>  
                         <datebox id="dtCriacao" format="dd/MM/yyyy" class="form-control" 
@@ -64,31 +82,13 @@
                             placeholder="dd/mm/aaaa"/>
                     </div>
                     
-                    <div class="col-md-12">
-                        <label value="Descrição"/>  
-                        <textbox id="deDescricao" multiline="true" rows="4" maxlength="500" 
-                            class="form-control" placeholder="Descreva o documento..."/>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label value="Status Inicial"/>  
-                        <textbox id="stInicial" maxlength="50" class="form-control" 
-                            placeholder="Status inicial do documento"/>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <label value="Status Final"/>  
-                        <textbox id="stFinal" maxlength="50" class="form-control" 
-                            placeholder="Status final do documento"/>
-                    </div>
-                    
                     <div class="col-md-6">
                         <label value="Diretoria"/>  
                         <listbox id="diretoria" mold="select" class="form-select">
                             <listitem value="" selected="true">
                                 <listcell label="Selecione uma diretoria"/>
                             </listitem>
-                            <!-- As diretorias serão carregadas dinamicamente no controller -->
+                            <!-- As diretorias são carregadas dinamicamente no controller -->
                         </listbox>
                     </div>
                     
@@ -98,8 +98,18 @@
                             <listitem value="" selected="true">
                                 <listcell label="Selecione um responsável técnico"/>
                             </listitem>
-                            <!-- Os funcionários HU serão carregados dinamicamente no controller -->
+                            <!-- Os funcionários HU são carregados dinamicamente no controller -->
                         </listbox>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <label value="Descrição"/>  
+                        <textbox id="deDescricao" multiline="true" rows="4" maxlength="500" 
+                            class="form-control" placeholder="Descreva o documento..."/>
                     </div>
                     
                     <div class="col-md-12">
