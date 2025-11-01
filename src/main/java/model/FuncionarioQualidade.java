@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -19,12 +17,9 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "CD_PESSOA") // FK para SIS_PESSOA
 public class FuncionarioQualidade extends Pessoa {
 
-    // Relacionamento com Documento
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "SIS_DOCUMENTO_FUNCIONARIO_QUALIDADE",
-        joinColumns = @JoinColumn(name = "CD_PESSOA"),
-        inverseJoinColumns = @JoinColumn(name = "CD_DOCUMENTO")
-    )
+    // Relacionamento N:N com Documento
+    // mappedBy aponta para o campo "funcionariosQualidade" em Documento
+    // Documento é o dono deste relacionamento
+    @ManyToMany(mappedBy = "funcionariosQualidade", fetch = FetchType.LAZY)
     private List<Documento> documentos;
 }
