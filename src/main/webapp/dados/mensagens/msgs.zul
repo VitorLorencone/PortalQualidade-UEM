@@ -1,10 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
-
-    <div class="col p-3 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 195px);">
-        <div class="text-center">
-            <label value="Estamos em Mensagens" class="h3"/>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winMensagemList" use="controller.mensagens.MsgListController">
+  
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Mensagens</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Nova Mensagem" iconSclass="z-icon-plus" onClick="winMensagemList.novaMensagem()" class="btn btn-primary"/>
+            </div>
         </div>
-    </div>
+        
+        <div class="card">
+            <div class="card-body">
 
+                <div class="d-flex justify-content-between form-group mb-3">
+                    <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
+                        <div class="row"> 
+                            <div class="col-md-6"> 
+                                <div class="input-group">
+                                    <textbox id="vlPesquisa" class="form-control" placeholder="Buscar mensagens...">
+                                        <attribute name="onOK">
+                                <![CDATA[
+                                    winMensagemList.filtrar();
+                                ]]>
+                                        </attribute>
+                                    </textbox>        
+                                    <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winMensagemList.filtrar()" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">                
+                                <listbox id="vlCampo" mold="select" class="form-select">
+                                    <listitem value="" selected="true">
+                                        <listcell label="Todos os campos"/>
+                                    </listitem>
+                                    <listitem value="nome">
+                                        <listcell label="Nome/Título"/>
+                                    </listitem>
+                                    <listitem value="corpo">
+                                        <listcell label="Corpo"/>
+                                    </listitem>
+                                    <listitem value="frequencia">
+                                        <listcell label="Frequência"/>
+                                    </listitem>
+                                </listbox>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row responsive-grid-md"> 
+                    <grid id="resultados" sizedByContent="false" mold="paging" width="100%" pageSize="10" emptyMessage="Nenhuma mensagem encontrada">
+                        <columns>
+                            <column label="Código" sort="auto(cdMensagem)" width="8%" />
+                            <column label="Nome/Título" sort="auto(deNome)" width="25%"/>
+                            <column label="Corpo" sort="auto(deCorpo)" width="30%"/>
+                            <column label="Data Início" sort="auto(dtInicio)" width="12%"/>
+                            <column label="Data Fim" sort="auto(dtFim)" width="12%"/>
+                            <column label="Frequência" width="13%"/>
+                            <column label="" width="120px" />
+                        </columns>
+                        <template name="model">
+                            <row onClick="winMensagemList.onClickedVerMensagem(event)" style="cursor: pointer;">
+                                <attribute ca:name="id">${each.cdMensagem}</attribute>
+                                <label value="${each.cdMensagem}"/>
+                                <label value="${each.deNome}"/>
+                                <label value="${empty each.deCorpo ? '' : (c:length(each.deCorpo) gt 50 ? c:substring(each.deCorpo, 0, 50).concat('...') : each.deCorpo)}"/>
+                                <label value="${c:formatDate(each.dtInicio, 'dd/MM/yyyy')}"/>
+                                <label value="${c:formatDate(each.dtFim, 'dd/MM/yyyy')}"/>
+                                <label value="${empty each.deFrequencia ? '' : each.deFrequencia}"/>
+                                <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winMensagemList.onClickedAlterarMensagem(event)">
+                                    <attribute ca:name="id">${each.cdMensagem}</attribute>
+                                </button>
+                            </row>
+                        </template>
+                    </grid>
+                </div>
+        
+            </div>
+        </div>
+    </nodom>       
 </zk>

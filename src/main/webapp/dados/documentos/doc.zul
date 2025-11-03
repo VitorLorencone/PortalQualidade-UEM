@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winDocumento" use="controller.documentos.DocController">
+   
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Documento</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Voltar" iconSclass="z-icon-arrow-left" onClick="winDocumento.voltar()" class="btn btn-secondary"/>
+            </div>
+        </div>
+       
+        <div class="card">
+            <div class="card-body">
+                
+                <!-- Tabs para Dados Gerais, Setores e Equipe -->
+                <tabbox>
+                    <tabs>
+                        <tab label="Dados Gerais" selected="true"/>
+                        <tab label="Setores" id="tabSetores"/>
+                        <tab label="Equipe Qualidade" id="tabEquipe"/>
+                    </tabs>
+                    
+                    <tabpanels>
+                        <!-- ABA 1: DADOS GERAIS -->
+                        <tabpanel>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <label value="Código do Documento: "/>  
+                                    <label id="cdDocumento" value=""/>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <label value="Nome do Documento *"/>  
+                                    <textbox id="nmDocumento" maxlength="200" class="form-control" 
+                                        placeholder="Insira o nome do documento"/>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label value="Tipo de Documento *"/>  
+                                    <listbox id="tpDocumento" mold="select" class="form-select">
+                                        <listitem value="POP" selected="true">
+                                            <listcell label="POP - Procedimento Operacional Padrão"/>
+                                        </listitem>
+                                        <listitem value="IT">
+                                            <listcell label="IT - Instrução de Trabalho"/>
+                                        </listitem>
+                                        <listitem value="PR">
+                                            <listcell label="PR - Procedimento"/>
+                                        </listitem>
+                                        <listitem value="PS">
+                                            <listcell label="PS - Protocolo de Serviço"/>
+                                        </listitem>
+                                        <listitem value="FORM">
+                                            <listcell label="FORM - Formulário"/>
+                                        </listitem>
+                                        <listitem value="REG">
+                                            <listcell label="REG - Regulamento"/>
+                                        </listitem>
+                                        <listitem value="OUTROS">
+                                            <listcell label="OUTROS - Outros Tipos"/>
+                                        </listitem>
+                                    </listbox>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label value="Estado do Documento *"/>
+                                    <listbox id="estado" mold="select" class="form-select">
+                                        <listitem value="ELABORACAO" selected="true">
+                                            <listcell label="Elaboração"/>
+                                        </listitem>
+                                        <listitem value="AVALIACAO">
+                                            <listcell label="Avaliação"/>
+                                        </listitem>
+                                        <listitem value="SUGESTAO">
+                                            <listcell label="Sugestão"/>
+                                        </listitem>
+                                        <listitem value="ASSINATURA">
+                                            <listcell label="Assinatura"/>
+                                        </listitem>
+                                    </listbox>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label value="Data de Criação *"/>  
+                                    <datebox id="dtCriacao" format="dd/MM/yyyy" class="form-control" 
+                                        placeholder="dd/mm/aaaa"/>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <label value="Data de Vencimento"/>  
+                                    <datebox id="dtVencimento" format="dd/MM/yyyy" class="form-control" 
+                                        placeholder="dd/mm/aaaa"/>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label value="Diretoria"/>  
+                                    <listbox id="diretoria" mold="select" class="form-select">
+                                        <listitem value="" selected="true">
+                                            <listcell label="Selecione uma diretoria"/>
+                                        </listitem>
+                                    </listbox>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <label value="Responsável Técnico"/>  
+                                    <listbox id="rt" mold="select" class="form-select">
+                                        <listitem value="" selected="true">
+                                            <listcell label="Selecione um responsável técnico"/>
+                                        </listitem>
+                                    </listbox>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <label value="Descrição"/>  
+                                    <textbox id="deDescricao" multiline="true" rows="4" maxlength="500" 
+                                        class="form-control" placeholder="Descreva o documento..."/>
+                                </div>
+                                
+                                <div class="col-md-12">
+                                    <n:small class="text-muted">* Campos obrigatórios</n:small>
+                                </div>
+                                
+                                <div class="d-flex">
+                                    <div class="col-md-6">
+                                        <button class="btn btn-outline-danger" iconSclass="z-icon-trash" 
+                                            id="excluir" label="Excluir" onClick="winDocumento.excluir()" 
+                                            visible="false"/>
+                                    </div>
+                                    <div class="col-md-6 text-end">
+                                        <button class="btn btn-secondary" iconSclass="" id="cancelar" 
+                                            label="Cancelar" onClick="winDocumento.voltar()" visible="false"/>
+                                        <button class="btn btn-primary" iconSclass="z-icon-check" id="salvar" 
+                                            label="Salvar" onClick="winDocumento.gravar()" visible="false"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </tabpanel>
+                        
+                        <!-- ABA 2: SETORES -->
+                        <tabpanel>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <n:h5>Gerenciar Setores Vinculados</n:h5>
+                                    <n:p class="text-muted">Vincule os setores relacionados a este documento.</n:p>
+                                </div>
+                                
+                                <!-- Setores Disponíveis -->
+                                <div class="col-md-5">
+                                    <label value="Setores Disponíveis"/>
+                                    <listbox id="lstSetoresDisponiveis" height="300px" class="form-control">
+                                        <!-- Carregados dinamicamente -->
+                                    </listbox>
+                                    <div class="mt-2">
+                                        <button id="btnAdicionarSetor" label="Adicionar Setor" 
+                                            iconSclass="z-icon-arrow-right" 
+                                            onClick="winDocumento.adicionarSetor()" 
+                                            class="btn btn-primary"/>
+                                    </div>
+                                </div>
+                                
+                                <!-- Setores Vinculados -->
+                                <div class="col-md-7">
+                                    <label value="Setores Vinculados ao Documento"/>
+                                    <grid id="gridSetoresVinculados" emptyMessage="Nenhum setor vinculado">
+                                        <columns>
+                                            <column label="Código" width="15%"/>
+                                            <column label="Nome do Setor" width="65%"/>
+                                            <column label="" width="20%"/>
+                                        </columns>
+                                        <template name="model">
+                                            <row>
+                                                <label value="${each.cdOrgao}"/>
+                                                <label value="${each.nmOrgao}"/>
+                                                <button label="Remover" class="btn btn-sm btn-outline-danger"
+                                                    iconSclass="z-icon-trash"
+                                                    onClick="winDocumento.removerSetor(self)">
+                                                    <custom-attributes cdOrgao="${each.cdOrgao}"/>
+                                                </button>
+                                            </row>
+                                        </template>
+                                    </grid>
+                                </div>
+                            </div>
+                        </tabpanel>
+                        
+                        <!-- ABA 3: EQUIPE QUALIDADE -->
+                        <tabpanel>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <n:h5>Gerenciar Equipe de Qualidade</n:h5>
+                                    <n:p class="text-muted">Vincule os funcionários da equipe de qualidade a este documento.</n:p>
+                                </div>
+                                
+                                <!-- Funcionários Disponíveis -->
+                                <div class="col-md-5">
+                                    <label value="Funcionários Disponíveis"/>
+                                    <listbox id="lstFuncionariosDisponiveis" height="300px" class="form-control">
+                                        <!-- Carregados dinamicamente -->
+                                    </listbox>
+                                    <div class="mt-2">
+                                        <button id="btnAdicionarFuncionario" label="Adicionar Funcionário" 
+                                            iconSclass="z-icon-arrow-right" 
+                                            onClick="winDocumento.adicionarFuncionario()" 
+                                            class="btn btn-primary"/>
+                                    </div>
+                                </div>
+                                
+                                <!-- Funcionários Vinculados -->
+                                <div class="col-md-7">
+                                    <label value="Equipe Vinculada ao Documento"/>
+                                    <grid id="gridFuncionariosVinculados" emptyMessage="Nenhum funcionário vinculado">
+                                        <columns>
+                                            <column label="Código" width="15%"/>
+                                            <column label="Nome" width="65%"/>
+                                            <column label="" width="20%"/>
+                                        </columns>
+                                        <template name="model">
+                                            <row>
+                                                <label value="${each.cdPessoa}"/>
+                                                <label value="${each.nome}"/>
+                                                <button label="Remover" class="btn btn-sm btn-outline-danger"
+                                                    iconSclass="z-icon-trash"
+                                                    onClick="winDocumento.removerFuncionario(self)">
+                                                    <custom-attributes cdPessoa="${each.cdPessoa}"/>
+                                                </button>
+                                            </row>
+                                        </template>
+                                    </grid>
+                                </div>
+                            </div>
+                        </tabpanel>
+                    </tabpanels>
+                </tabbox>
+                
+            </div>
+        </div>
+ 
+    </nodom>      
+</zk>

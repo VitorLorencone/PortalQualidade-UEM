@@ -1,10 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
-
-    <div class="col p-3 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 195px);">
-        <div class="text-center">
-            <label value="Estamos em Órgãos" class="h3"/>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
+    <nodom title="" id="winOrgaoList" use="controller.orgaos.OrgaoListController">
+ 
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Órgãos</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Novo Órgão" iconSclass="z-icon-plus" onClick="winOrgaoList.novoOrgao()" class="btn btn-primary"/>
+            </div>
         </div>
-    </div>
+        
+        <div class="card" >
+            <div class="card-body">
 
+                <div class="d-flex justify-content-between form-group mb-3">
+                    <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
+                        <div class="row"> 
+                            <div class="col-md-4"> 
+                                <div class="input-group">
+                                    <textbox id="vlPesquisa" class="form-control" placeholder="Buscar por código ou nome...">
+                                        <attribute name="onOK">
+                                            <![CDATA[
+                                                winOrgaoList.filtrar();
+                                            ]]>
+                                        </attribute>
+                                    </textbox> 	 	
+                                    <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winOrgaoList.filtrar()" />
+                                </div>
+                            </div>
+                            <div class="col-md-4"> 	 	
+                                <listbox id="vlCampo" mold="select" class="form-select">
+                                    <listitem value="" selected="true">
+                                        <listcell label="Todos os campos"/>
+                                    </listitem>
+                                    <listitem value="codigo">
+                                        <listcell label="Código"/>
+                                    </listitem>
+                                    <listitem value="nome">
+                                        <listcell label="Nome"/>
+                                    </listitem>
+                                </listbox>
+                            </div>
+                            <div class="col-md-4"> 	 	
+                                <listbox id="vlTipoOrgao" mold="select" class="form-select" onChange="winOrgaoList.filtrar()">
+                                    <listitem value="" selected="true">
+                                        <listcell label="Todos os tipos"/>
+                                    </listitem>
+                                    <listitem value="generico_somente">
+                                        <listcell label="Órgão Genérico"/>
+                                    </listitem>
+                                    <listitem value="diretoria">
+                                        <listcell label="Diretoria"/>
+                                    </listitem>
+                                    <listitem value="setor">
+                                        <listcell label="Setor"/>
+                                    </listitem>
+                                </listbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                         </div>
+                </div>
+        
+                <div class="row responsive-grid-md"> 
+                    <grid id="resultados" sizedByContent="false" mold="paging" width="100%" pageSize="10" emptyMessage="Nenhum órgão encontrado">
+                        <columns>
+                            <column label="Código" sort="auto(cdOrgao)" width="10%" />
+                            <column label="Nome" sort="auto(nmOrgao)" width="70%"/>
+                            <column label="Tipo" width="10%"/>
+                            <column label="" width="120px" />
+                        </columns>
+                        <template name="model">
+                            <row onClick="winOrgaoList.onClickedVerOrgao(event)" style="cursor: pointer;">
+                                <attribute ca:name="id">${each.cdOrgao}</attribute>
+                                <label>${each.cdOrgao}</label>
+                                <label>${each.nmOrgao}</label>
+                                
+                                <label value="${factory.OrgaoFactory.obterTipo(each).getDescricao()}"/> 
+                                
+                                <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winOrgaoList.onClickedAlterarOrgao(event)" >
+                                    <attribute ca:name="id">${each.cdOrgao}</attribute>
+                                </button>
+                            </row>
+                        </template>
+                    </grid>
+                </div>
+        
+            </div>
+        </div>
+    </nodom> 	 	 
 </zk>

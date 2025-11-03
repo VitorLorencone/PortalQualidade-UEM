@@ -18,7 +18,7 @@
                 <div class="d-flex justify-content-between form-group mb-3">
                     <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
                         <div class="row"> 
-                            <div class="col-md-6"> 
+                            <div class="col-md-4"> 
                                 <div class="input-group">
                                     <textbox id="vlPesquisa" class="form-control" placeholder="Buscar por nome, email ou celular...">
                                         <attribute name="onOK">
@@ -30,7 +30,7 @@
                                     <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winPessoaList.filtrar()" />
                                 </div>
                             </div>
-                            <div class="col-md-6">                
+                            <div class="col-md-4">                
                                 <listbox id="vlCampo" mold="select" class="form-select">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os campos"/>
@@ -43,6 +43,25 @@
                                     </listitem>
                                     <listitem value="celular">
                                         <listcell label="Celular"/>
+                                    </listitem>
+                                </listbox>
+                            </div>
+                            <div class="col-md-4">                
+                                <listbox id="vlTipoPessoa" mold="select" class="form-select" onChange="winPessoaList.filtrar()">
+                                    
+                                    <listitem value="" selected="true">
+                                        <listcell label="Todos os tipos"/>
+                                    </listitem>
+
+                                    <listitem value="generica_somente">
+                                        <listcell label="Pessoa Genérica"/>
+                                    </listitem>
+                                    
+                                    <listitem value="hu">
+                                        <listcell label="Funcionário HU"/>
+                                    </listitem>
+                                    <listitem value="qualidade">
+                                        <listcell label="Funcionário Qualidade"/>
                                     </listitem>
                                 </listbox>
                             </div>

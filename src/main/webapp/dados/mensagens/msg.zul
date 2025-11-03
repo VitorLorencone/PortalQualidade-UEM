@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+    <nodom title="" id="winMensagem" use="controller.mensagens.MsgController">
+   
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Cadastro de Mensagem</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Voltar" iconSclass="z-icon-arrow-left" onClick="winMensagem.voltar()" class="btn btn-secondary"/>
+            </div>
+        </div>
+       
+        <div class="card">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label value="Código da Mensagem: "/>  
+                        <label id="cdMensagem" value=""/>
+                    </div>
+                    <div class="col-md-12">
+                        <label value="Nome/Título"/>  
+                        <textbox id="nome" maxlength="200" class="form-control" placeholder="Insira o título da mensagem"/>
+                    </div>
+                    <div class="col-md-12">
+                        <label value="Corpo da Mensagem"/>  
+                        <textbox id="corpo" rows="5" maxlength="1000" class="form-control" multiline="true" placeholder="Digite o conteúdo da mensagem"/>          
+                    </div>
+                    <div class="col-md-4">
+                        <label value="Data de Início" />  
+                        <datebox id="dtInicio" class="form-control" format="dd/MM/yyyy" placeholder="dd/mm/aaaa"/>            
+                    </div>
+                    <div class="col-md-4">
+                        <label value="Data de Fim" />  
+                        <datebox id="dtFim" class="form-control" format="dd/MM/yyyy" placeholder="dd/mm/aaaa"/>            
+                    </div>
+                    <div class="col-md-4">
+                        <label value="Frequência" />  
+                        <listbox id="frequencia" mold="select" class="form-select">
+                            <listitem value="UNICA">
+                                <listcell label="Única"/>
+                            </listitem>
+                            <listitem value="DIARIA">
+                                <listcell label="Diária"/>
+                            </listitem>
+                            <listitem value="SEMANAL">
+                                <listcell label="Semanal"/>
+                            </listitem>
+                            <listitem value="MENSAL">
+                                <listcell label="Mensal"/>
+                            </listitem>
+                            <listitem value="ANUAL">
+                                <listcell label="Anual"/>
+                            </listitem>
+                        </listbox>            
+                    </div>
+                    <div class="d-flex">
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-danger" iconSclass="z-icon-trash" id="excluir" label="Excluir" onClick="winMensagem.excluir()" visible="false"/>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <button class="btn btn-secondary" iconSclass="" id="cancelar" label="Cancelar" onClick="winMensagem.voltar()" visible="false"/>
+                            <button class="btn btn-primary" iconSclass="z-icon-check" id="salvar" label="Salvar" onClick="winMensagem.gravar()" visible="false"/>
+                        </div>
+                    </div>
+                </div>
+       
+            </div>
+        </div>
+ 
+    </nodom>      
+</zk>

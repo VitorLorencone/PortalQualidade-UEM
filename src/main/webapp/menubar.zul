@@ -28,12 +28,7 @@
                         <n:li class="nav-item">
                             <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaMensagens()">MENSAGENS</a>
                         </n:li>
-
-                        <!-- Regras -->
-                        <n:li class="nav-item">
-                            <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaRegras()">REGRAS</a>
-                        </n:li>
-
+                        
                         <!-- Órgãos -->
                         <n:li class="nav-item">
                             <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaOrgaos()">ÓRGÃOS</a>
