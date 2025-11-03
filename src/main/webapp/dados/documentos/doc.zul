@@ -179,7 +179,9 @@
                                                 <label value="${each.nmOrgao}"/>
                                                 <button label="Remover" class="btn btn-sm btn-outline-danger"
                                                     iconSclass="z-icon-trash"
-                                                    onClick='winDocumento.removerSetor(${each.cdOrgao})'/>
+                                                    onClick="winDocumento.removerSetor(self)">
+                                                    <custom-attributes cdOrgao="${each.cdOrgao}"/>
+                                                </button>
                                             </row>
                                         </template>
                                     </grid>
@@ -224,7 +226,9 @@
                                                 <label value="${each.nome}"/>
                                                 <button label="Remover" class="btn btn-sm btn-outline-danger"
                                                     iconSclass="z-icon-trash"
-                                                    onClick='winDocumento.removerFuncionario(${each.cdPessoa})'/>
+                                                    onClick="winDocumento.removerFuncionario(self)">
+                                                    <custom-attributes cdPessoa="${each.cdPessoa}"/>
+                                                </button>
                                             </row>
                                         </template>
                                     </grid>

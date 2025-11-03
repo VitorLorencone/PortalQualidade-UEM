@@ -302,7 +302,8 @@ public class DocController extends Window {
     /**
      * Remove um setor do documento
      */
-    public void removerSetor(Integer cdSetor) {
+    public void removerSetor(Button button) {
+        Integer cdSetor = (Integer) button.getAttribute("cdOrgao");
         if (zkUtils.MensagemConfirmacao("Deseja remover este setor do documento?")) {
             
             System.out.println("Tentando remover setor ID: " + cdSetor + " do documento ID: " + documento.getCdDocumento());
@@ -411,7 +412,8 @@ public class DocController extends Window {
     /**
      * Remove um funcionário qualidade do documento
      */
-    public void removerFuncionario(Integer cdPessoa) {
+    public void removerFuncionario(Button button) {
+        Integer cdPessoa = (Integer) button.getAttribute("cdPessoa");
         if (zkUtils.MensagemConfirmacao("Deseja remover este funcionário do documento?")) {
             
             System.out.println("Tentando remover funcionário ID: " + cdPessoa + " do documento ID: " + documento.getCdDocumento());
