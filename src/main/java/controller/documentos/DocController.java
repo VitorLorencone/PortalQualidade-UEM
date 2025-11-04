@@ -10,16 +10,22 @@ package controller.documentos;
 import dao.DocumentoDAO;
 import dao.DiretoriaDAO;
 import dao.FuncionarioHUDAO;
+import dao.SetorDAO;
+import dao.FuncionarioQualidadeDAO;
 import model.Documento;
 import model.Diretoria;
 import model.EstadoDocumento;
 import model.FuncionarioHU;
+import model.Setor;
+import model.FuncionarioQualidade;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DocController extends Window {
 
@@ -37,6 +43,16 @@ public class DocController extends Window {
     private Button btnSalvar;
     private Button btnExcluir;
     private Button btnCancelar;
+    
+    // Componentes para gerenciar Setores
+    private Grid gridSetoresVinculados;
+    private Listbox lstSetoresDisponiveis;
+    private Button btnAdicionarSetor;
+    
+    // Componentes para gerenciar Funcionários Qualidade
+    private Grid gridFuncionariosVinculados;
+    private Listbox lstFuncionariosDisponiveis;
+    private Button btnAdicionarFuncionario;
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
@@ -44,6 +60,8 @@ public class DocController extends Window {
     private DocumentoDAO documentoDao = new DocumentoDAO();
     private DiretoriaDAO diretoriaDao = new DiretoriaDAO();
     private FuncionarioHUDAO funcionarioHUDao = new FuncionarioHUDAO();
+    private SetorDAO setorDao = new SetorDAO();
+    private FuncionarioQualidadeDAO funcionarioQualidadeDao = new FuncionarioQualidadeDAO();
 
     private Documento documento = new Documento();
 
@@ -67,6 +85,15 @@ public class DocController extends Window {
         this.btnSalvar = (Button) getFellow("salvar");
         this.btnExcluir = (Button) getFellow("excluir");
         this.btnCancelar = (Button) getFellow("cancelar");
+        
+        // Componentes das abas de relacionamentos N:N
+        this.gridSetoresVinculados = (Grid) getFellow("gridSetoresVinculados");
+        this.lstSetoresDisponiveis = (Listbox) getFellow("lstSetoresDisponiveis");
+        this.btnAdicionarSetor = (Button) getFellow("btnAdicionarSetor");
+        
+        this.gridFuncionariosVinculados = (Grid) getFellow("gridFuncionariosVinculados");
+        this.lstFuncionariosDisponiveis = (Listbox) getFellow("lstFuncionariosDisponiveis");
+        this.btnAdicionarFuncionario = (Button) getFellow("btnAdicionarFuncionario");
 
         // Pega os parâmetros que vieram da outra página
         Integer documentoId = (Integer) zkUtils.getParametro("documento");
@@ -80,6 +107,9 @@ public class DocController extends Window {
                 this.btnSalvar.setVisible(true);
                 this.btnCancelar.setVisible(true);
                 this.cdDocumento.setVisible(false);
+                // Desabilita as abas de relacionamento para novo documento
+                this.btnAdicionarSetor.setDisabled(true);
+                this.btnAdicionarFuncionario.setDisabled(true);
             } else if (acao.equals("editar")) {
                 this.btnSalvar.setVisible(true);
                 this.btnCancelar.setVisible(true);
@@ -93,6 +123,9 @@ public class DocController extends Window {
                 this.estado.setDisabled(true);
                 this.diretoria.setDisabled(true);
                 this.rt.setDisabled(true);
+                // Desabilita botões de adicionar/remover nas abas
+                this.btnAdicionarSetor.setDisabled(true);
+                this.btnAdicionarFuncionario.setDisabled(true);
             }
         }
 
@@ -103,9 +136,13 @@ public class DocController extends Window {
         // Caso tenha algum id de documento que veio por parâmetro,
         // então busca esse documento no banco e popula os campos com os valores
         if (documentoId != null) {
-            documento = (Documento) documentoDao.buscar(documentoId);
+            documento = documentoDao.buscarComRelacionamentos(documentoId);
             if (documento != null) {
                 popularCampos();
+                carregarSetoresVinculados();
+                carregarSetoresDisponiveis();
+                carregarFuncionariosVinculados();
+                carregarFuncionariosDisponiveis();
             }
         }
     }
@@ -115,16 +152,13 @@ public class DocController extends Window {
      */
     private void carregarDiretorias() {
         try {
-            // Lista todas as diretorias do banco usando filtro "1=1" e ordenação
             List<Diretoria> diretorias = diretoriaDao.listar("1=1", "order by t.nmOrgao");
             
             if (diretorias != null && !diretorias.isEmpty()) {
-                // Limpa os itens atuais (exceto o primeiro que é "Selecione...")
                 while (this.diretoria.getItemCount() > 1) {
                     this.diretoria.removeItemAt(1);
                 }
                 
-                // Adiciona cada diretoria como um item do listbox
                 for (Diretoria dir : diretorias) {
                     Listitem item = new Listitem();
                     item.setValue(dir.getCdOrgao());
@@ -137,8 +171,6 @@ public class DocController extends Window {
                 }
                 
                 System.out.println("Diretorias carregadas: " + diretorias.size());
-            } else {
-                System.out.println("Nenhuma diretoria encontrada no banco de dados");
             }
         } catch (Exception e) {
             System.err.println("Erro ao carregar diretorias: " + e.getMessage());
@@ -147,20 +179,17 @@ public class DocController extends Window {
     }
 
     /**
-     * Carrega os funcionários HU (responsáveis técnicos) no listbox dinamicamente do banco
+     * Carrega os funcionários HU no listbox
      */
     private void carregarResponsaveisTecnicos() {
         try {
-            // Lista todos os funcionários HU do banco usando filtro "1=1" e ordenação
             List<FuncionarioHU> funcionarios = funcionarioHUDao.listar("1=1", "order by t.nome");
             
             if (funcionarios != null && !funcionarios.isEmpty()) {
-                // Limpa os itens atuais (exceto o primeiro que é "Selecione...")
                 while (this.rt.getItemCount() > 1) {
                     this.rt.removeItemAt(1);
                 }
                 
-                // Adiciona cada funcionário como um item do listbox
                 for (FuncionarioHU func : funcionarios) {
                     Listitem item = new Listitem();
                     item.setValue(func.getCdPessoa());
@@ -173,18 +202,238 @@ public class DocController extends Window {
                 }
                 
                 System.out.println("Funcionários HU carregados: " + funcionarios.size());
-            } else {
-                System.out.println("Nenhum funcionário HU encontrado no banco de dados");
             }
         } catch (Exception e) {
             System.err.println("Erro ao carregar responsáveis técnicos: " + e.getMessage());
             e.printStackTrace();
         }
     }
-
+    
     /**
-     * Limpa os campos do .zul.
+     * Carrega os setores já vinculados ao documento
      */
+    private void carregarSetoresVinculados() {
+        // Inicializa a lista se for null
+        if (documento.getSetores() == null) {
+            documento.setSetores(new ArrayList<>());
+        }
+        
+        System.out.println("Carregando setores vinculados. Total: " + documento.getSetores().size());
+        
+        SimpleListModel listModel = new SimpleListModel(documento.getSetores());
+        this.gridSetoresVinculados.setModel(listModel);
+    }
+    
+    /**
+     * Carrega os setores disponíveis (não vinculados) para seleção
+     */
+    private void carregarSetoresDisponiveis() {
+        try {
+            List<Setor> todosSetores = setorDao.listar("1=1", "order by t.nmOrgao");
+            
+            // Inicializa a lista se for null
+            if (documento.getSetores() == null) {
+                documento.setSetores(new ArrayList<>());
+            }
+            
+            // Filtra apenas os setores que NÃO estão vinculados ao documento
+            List<Integer> idsVinculados = documento.getSetores().stream()
+                .map(Setor::getCdOrgao)
+                .collect(Collectors.toList());
+            
+            List<Setor> setoresDisponiveis = todosSetores.stream()
+                .filter(s -> !idsVinculados.contains(s.getCdOrgao()))
+                .collect(Collectors.toList());
+            
+            System.out.println("Setores disponíveis: " + setoresDisponiveis.size());
+            System.out.println("Setores vinculados (IDs): " + idsVinculados);
+            
+            // Limpa e preenche o listbox
+            this.lstSetoresDisponiveis.getItems().clear();
+            
+            if (!setoresDisponiveis.isEmpty()) {
+                for (Setor setor : setoresDisponiveis) {
+                    Listitem item = new Listitem();
+                    item.setValue(setor.getCdOrgao());
+                    item.setLabel(setor.getNmOrgao());
+                    this.lstSetoresDisponiveis.appendChild(item);
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar setores disponíveis: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Adiciona um setor ao documento
+     */
+    public void adicionarSetor() {
+        if (this.lstSetoresDisponiveis.getSelectedItem() == null) {
+            Clients.showNotification("Selecione um setor!", 
+                Clients.NOTIFICATION_TYPE_WARNING, this.lstSetoresDisponiveis, "end_center", 0);
+            return;
+        }
+        
+        Integer cdSetor = (Integer) this.lstSetoresDisponiveis.getSelectedItem().getValue();
+        
+        System.out.println("Tentando adicionar setor ID: " + cdSetor + " ao documento ID: " + documento.getCdDocumento());
+        
+        boolean adicionou = documentoDao.adicionarSetor(documento.getCdDocumento(), cdSetor);
+        
+        if (adicionou) {
+            Toast.show("Setor vinculado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+            
+            // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+            documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+            
+            System.out.println("Documento recarregado. Setores: " + 
+                (documento.getSetores() != null ? documento.getSetores().size() : 0));
+            
+            carregarSetoresVinculados();
+            carregarSetoresDisponiveis();
+        } else {
+            zkUtils.MensagemErro("Erro ao vincular setor. Verifique os logs.");
+            System.err.println("Falha ao adicionar setor ao documento");
+        }
+    }
+    
+    /**
+     * Remove um setor do documento
+     */
+    public void removerSetor(Button button) {
+        Integer cdSetor = (Integer) button.getAttribute("cdOrgao");
+        if (zkUtils.MensagemConfirmacao("Deseja remover este setor do documento?")) {
+            
+            System.out.println("Tentando remover setor ID: " + cdSetor + " do documento ID: " + documento.getCdDocumento());
+            
+            boolean removeu = documentoDao.removerSetor(documento.getCdDocumento(), cdSetor);
+            
+            if (removeu) {
+                Toast.show("Setor removido com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+                
+                // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+                documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+                
+                carregarSetoresVinculados();
+                carregarSetoresDisponiveis();
+            } else {
+                zkUtils.MensagemErro("Erro ao remover setor");
+            }
+        }
+    }
+    
+    /**
+     * Carrega os funcionários qualidade já vinculados ao documento
+     */
+    private void carregarFuncionariosVinculados() {
+        // Inicializa a lista se for null
+        if (documento.getFuncionariosQualidade() == null) {
+            documento.setFuncionariosQualidade(new ArrayList<>());
+        }
+        
+        System.out.println("Carregando funcionários vinculados. Total: " + documento.getFuncionariosQualidade().size());
+        
+        SimpleListModel listModel = new SimpleListModel(documento.getFuncionariosQualidade());
+        this.gridFuncionariosVinculados.setModel(listModel);
+    }
+    
+    /**
+     * Carrega os funcionários qualidade disponíveis (não vinculados)
+     */
+    private void carregarFuncionariosDisponiveis() {
+        try {
+            List<FuncionarioQualidade> todosFuncionarios = funcionarioQualidadeDao.listar("1=1", "order by t.nome");
+            
+            // Inicializa a lista se for null
+            if (documento.getFuncionariosQualidade() == null) {
+                documento.setFuncionariosQualidade(new ArrayList<>());
+            }
+            
+            // Filtra apenas os funcionários que NÃO estão vinculados
+            List<Integer> idsVinculados = documento.getFuncionariosQualidade().stream()
+                .map(FuncionarioQualidade::getCdPessoa)
+                .collect(Collectors.toList());
+            
+            List<FuncionarioQualidade> funcionariosDisponiveis = todosFuncionarios.stream()
+                .filter(f -> !idsVinculados.contains(f.getCdPessoa()))
+                .collect(Collectors.toList());
+            
+            System.out.println("Funcionários disponíveis: " + funcionariosDisponiveis.size());
+            
+            // Limpa e preenche o listbox
+            this.lstFuncionariosDisponiveis.getItems().clear();
+            
+            if (!funcionariosDisponiveis.isEmpty()) {
+                for (FuncionarioQualidade func : funcionariosDisponiveis) {
+                    Listitem item = new Listitem();
+                    item.setValue(func.getCdPessoa());
+                    item.setLabel(func.getNome());
+                    this.lstFuncionariosDisponiveis.appendChild(item);
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar funcionários disponíveis: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Adiciona um funcionário qualidade ao documento
+     */
+    public void adicionarFuncionario() {
+        if (this.lstFuncionariosDisponiveis.getSelectedItem() == null) {
+            Clients.showNotification("Selecione um funcionário!", 
+                Clients.NOTIFICATION_TYPE_WARNING, this.lstFuncionariosDisponiveis, "end_center", 0);
+            return;
+        }
+        
+        Integer cdPessoa = (Integer) this.lstFuncionariosDisponiveis.getSelectedItem().getValue();
+        
+        System.out.println("Tentando adicionar funcionário ID: " + cdPessoa + " ao documento ID: " + documento.getCdDocumento());
+        
+        boolean adicionou = documentoDao.adicionarFuncionarioQualidade(documento.getCdDocumento(), cdPessoa);
+        
+        if (adicionou) {
+            Toast.show("Funcionário vinculado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+            
+            // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+            documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+            
+            carregarFuncionariosVinculados();
+            carregarFuncionariosDisponiveis();
+        } else {
+            zkUtils.MensagemErro("Erro ao vincular funcionário");
+        }
+    }
+    
+    /**
+     * Remove um funcionário qualidade do documento
+     */
+    public void removerFuncionario(Button button) {
+        Integer cdPessoa = (Integer) button.getAttribute("cdPessoa");
+        if (zkUtils.MensagemConfirmacao("Deseja remover este funcionário do documento?")) {
+            
+            System.out.println("Tentando remover funcionário ID: " + cdPessoa + " do documento ID: " + documento.getCdDocumento());
+            
+            boolean removeu = documentoDao.removerFuncionarioQualidade(documento.getCdDocumento(), cdPessoa);
+            
+            if (removeu) {
+                Toast.show("Funcionário removido com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+                
+                // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+                documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+                
+                carregarFuncionariosVinculados();
+                carregarFuncionariosDisponiveis();
+            } else {
+                zkUtils.MensagemErro("Erro ao remover funcionário");
+            }
+        }
+    }
+
     public void limparCampos() {
         this.cdDocumento.setValue("-1");
         this.nmDocumento.setRawValue(null);
@@ -198,16 +447,12 @@ public class DocController extends Window {
         this.nmDocumento.setFocus(true);
     }
 
-    /**
-     * Popula os campos .zul com os valores do banco.
-     */
     public void popularCampos() {
         limparCampos();
         zkUtils.popularCampo(this.cdDocumento, (Object) this.documento.getCdDocumento());
         zkUtils.popularCampo(this.nmDocumento, (Object) this.documento.getNmDocumento());
         zkUtils.popularCampo(this.deDescricao, (Object) this.documento.getDeDescricao());
         
-        // Popular datas
         if (this.documento.getDtCriacao() != null) {
             this.dtCriacao.setValue(this.documento.getDtCriacao());
         }
@@ -215,30 +460,23 @@ public class DocController extends Window {
             this.dtVencimento.setValue(this.documento.getDtVencimento());
         }
 
-        // Popular tipo de documento
         if (this.documento.getTpDocumento() != null) {
             selecionarTipoDocumento(this.documento.getTpDocumento());
         }
 
-        // Popular estado
         if (this.documento.getEstado() != null) {
             selecionarEstado(this.documento.getEstado());
         }
 
-        // Popular diretoria
         if (this.documento.getDiretoria() != null) {
             selecionarDiretoria(this.documento.getDiretoria().getCdOrgao());
         }
 
-        // Popular responsável técnico
         if (this.documento.getRt() != null) {
             selecionarRT(this.documento.getRt().getCdPessoa());
         }
     }
 
-    /**
-     * Seleciona o tipo de documento no listbox
-     */
     private void selecionarTipoDocumento(String tipo) {
         for (Listitem item : this.tpDocumento.getItems()) {
             if (item.getValue().equals(tipo)) {
@@ -248,11 +486,8 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Seleciona o estado no listbox baseado no código String
-     */
     private void selecionarEstado(EstadoDocumento estadoDoc) {
-        String codigoEstado = estadoDoc.name(); // Retorna "ELABORACAO", "AVALIACAO", etc.
+        String codigoEstado = estadoDoc.name();
         
         for (Listitem item : this.estado.getItems()) {
             if (item.getValue() != null && item.getValue().equals(codigoEstado)) {
@@ -262,9 +497,6 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Seleciona a diretoria no listbox
-     */
     private void selecionarDiretoria(Integer cdOrgao) {
         for (Listitem item : this.diretoria.getItems()) {
             if (item.getValue() != null && item.getValue().equals(cdOrgao)) {
@@ -274,9 +506,6 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Seleciona o responsável técnico no listbox
-     */
     private void selecionarRT(Integer cdPessoa) {
         for (Listitem item : this.rt.getItems()) {
             if (item.getValue() != null && item.getValue().equals(cdPessoa)) {
@@ -286,9 +515,6 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Valida se os campos preenchidos estão corretos.
-     */
     public boolean validarCampos() {
         boolean gerouErro = false;
 
@@ -322,7 +548,6 @@ public class DocController extends Window {
             return false;
         }
 
-        // Validação: data de vencimento deve ser posterior à data de criação
         if (this.dtCriacao.getValue() != null && this.dtVencimento.getValue() != null) {
             if (this.dtVencimento.getValue().before(this.dtCriacao.getValue())) {
                 Clients.showNotification("Data de vencimento deve ser posterior à data de criação!", 
@@ -335,24 +560,18 @@ public class DocController extends Window {
         return !gerouErro;
     }
 
-    /**
-     * Grava os dados no banco.
-     */
     public void gravar() {
         if (validarCampos()) {
-            // Atualiza os dados do documento com os valores preenchidos
             documento.setNmDocumento(this.nmDocumento.getValue());
             documento.setTpDocumento((String) this.tpDocumento.getSelectedItem().getValue());
             documento.setDtCriacao(this.dtCriacao.getValue());
             documento.setDtVencimento(this.dtVencimento.getValue());
             documento.setDeDescricao(this.deDescricao.getValue());
             
-            // Atualiza o estado (converte String para ENUM)
             String estadoString = (String) this.estado.getSelectedItem().getValue();
             EstadoDocumento estadoEnum = EstadoDocumento.valueOf(estadoString);
             documento.setEstado(estadoEnum);
 
-            // Atualiza diretoria se selecionada
             if (this.diretoria.getSelectedItem() != null && this.diretoria.getSelectedIndex() > 0) {
                 Integer cdOrgao = (Integer) this.diretoria.getSelectedItem().getValue();
                 Diretoria dir = diretoriaDao.buscar(cdOrgao);
@@ -361,7 +580,6 @@ public class DocController extends Window {
                 documento.setDiretoria(null);
             }
 
-            // Atualiza responsável técnico se selecionado
             if (this.rt.getSelectedItem() != null && this.rt.getSelectedIndex() > 0) {
                 Integer cdPessoa = (Integer) this.rt.getSelectedItem().getValue();
                 FuncionarioHU funcionario = funcionarioHUDao.buscar(cdPessoa);
@@ -371,24 +589,35 @@ public class DocController extends Window {
             }
 
             if (Integer.parseInt(this.cdDocumento.getValue()) == -1) {
-                // Se não tem id significa que é objeto novo, então incluímos no banco
                 Integer id = documentoDao.incluirAutoincrementando(documento);
                 if (id != null && id > 0) {
                     Toast.show("Documento cadastrado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
                     this.cdDocumento.setValue(id.toString());
-                    this.voltar();
+                    // Atualiza o objeto documento com o ID gerado
+                    documento.setCdDocumento(id);
+                    
+                    // IMPORTANTE: Recarrega o documento do banco para garantir que tem todos os dados
+                    documento = documentoDao.buscarComRelacionamentos(id);
+                    
+                    // Habilita os botões de relacionamento
+                    this.btnAdicionarSetor.setDisabled(false);
+                    this.btnAdicionarFuncionario.setDisabled(false);
+                    
+                    // CORREÇÃO: Carrega as listas após salvar documento novo
+                    carregarSetoresVinculados();
+                    carregarSetoresDisponiveis();
+                    carregarFuncionariosVinculados();
+                    carregarFuncionariosDisponiveis();
+                    
+                    System.out.println("Documento salvo com ID: " + id);
                 } else {
                     zkUtils.MensagemErro("Houve um erro e não foi possível incluir");
-                    System.out.println("ID retornado: " + id);
-                    System.out.println("Documento: " + documento);
                 }
             } else {
-                // Se já tem id significa que é objeto que já existe no banco, então fazemos update
                 documento.setCdDocumento(Integer.valueOf(this.cdDocumento.getValue()));
                 boolean atualizou = documentoDao.atualizar(documento);
                 if (atualizou) {
                     Toast.show("Documento atualizado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
-                    this.voltar();
                 } else {
                     zkUtils.MensagemErro("Houve um erro e não foi possível atualizar");
                 }
@@ -396,9 +625,6 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Exclui o objeto Documento do banco de dados.
-     */
     public void excluir() {
         if (zkUtils.MensagemConfirmacao("Deseja excluir o documento atual?")) {
             if (!this.cdDocumento.getValue().equals("-1")) {
@@ -416,9 +642,6 @@ public class DocController extends Window {
         }
     }
 
-    /**
-     * Volta para a url de retorno.
-     */
     public void voltar() {
         Include include = (Include) win.getParent();
         include.setSrc(this.urlRetorno);

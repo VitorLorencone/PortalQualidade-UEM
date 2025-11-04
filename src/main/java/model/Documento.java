@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -60,20 +61,40 @@ public class Documento implements Serializable {
 
     // RELACIONAMENTOS N:N (gerenciados em telas/abas separadas QUE SERÃO FEITAS DEPOIS)
 
-    // Relacionamento bidirecional com Setor
-    @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
+    // Relacionamento N:N com Setor - DOCUMENTO é o dono
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "SIS_DOCUMENTO_SETOR",
+        joinColumns = @JoinColumn(name = "CD_DOCUMENTO"),
+        inverseJoinColumns = @JoinColumn(name = "CD_ORGAO")
+    )
     private List<Setor> setores;
 
-    // Relacionamento bidirecional com FuncionárioQualidade
-    @ManyToMany(mappedBy = "documentos", fetch = FetchType.LAZY)
+    // Relacionamento N:N com FuncionarioQualidade - DOCUMENTO é o dono
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "SIS_DOCUMENTO_FUNCIONARIO_QUALIDADE",
+        joinColumns = @JoinColumn(name = "CD_DOCUMENTO"),
+        inverseJoinColumns = @JoinColumn(name = "CD_PESSOA")
+    )
     private List<FuncionarioQualidade> funcionariosQualidade;
-
-    // Relacionamento bidirecional com FuncionarioHU no contexto de Avaliador
-    @ManyToMany(mappedBy = "documentosAvaliador", fetch = FetchType.LAZY)
+    
+    // Relacionamento N:N com FuncionarioHU (Avaliadores) - DOCUMENTO é o dono
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "SIS_DOCUMENTO_AVALIADORES",
+        joinColumns = @JoinColumn(name = "CD_DOCUMENTO"),
+        inverseJoinColumns = @JoinColumn(name = "CD_PESSOA")
+    )
     private List<FuncionarioHU> avaliadores;
-
-    // Relacionamento bidirecional com FuncionarioHU no contexto de Autor
-    @ManyToMany(mappedBy = "documentosAutor", fetch = FetchType.LAZY)
+    
+    // Relacionamento N:N com FuncionarioHU (Autores) - DOCUMENTO é o dono
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "SIS_DOCUMENTO_AUTORES",
+        joinColumns = @JoinColumn(name = "CD_DOCUMENTO"),
+        inverseJoinColumns = @JoinColumn(name = "CD_PESSOA")
+    )
     private List<FuncionarioHU> autores;
 
 }

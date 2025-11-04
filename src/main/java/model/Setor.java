@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -19,13 +17,9 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "CD_ORGAO")
 public class Setor extends Orgao {
 
-    // Relacionamento com Documento
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "SIS_DOCUMENTO_SETOR",
-        joinColumns = @JoinColumn(name = "CD_ORGAO"),
-        inverseJoinColumns = @JoinColumn(name = "CD_DOCUMENTO")
-    )
+    // Relacionamento bidirecional N:N com Documento
+    // mappedBy indica que DOCUMENTO é o dono do relacionamento
+    @ManyToMany(mappedBy = "setores", fetch = FetchType.LAZY)
     private List<Documento> documentos;
 
     // Caso precise, pode ter atributos específicos
