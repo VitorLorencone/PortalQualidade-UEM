@@ -90,7 +90,8 @@ public class EmailController extends Window {
             email.setParaEmail(destinatarioEmail.getValue());
             email.setAssunto(assunto.getValue());
             email.setMensagem(mensagemHtml.getValue());
-            if (email.enviarEmailHtml()) {
+            //troquei enviarEmailHtml
+            if (email.enviarEmailTexto()) {
                 Toast.show("E-mail enviado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
                 limparCampos();
             } else {

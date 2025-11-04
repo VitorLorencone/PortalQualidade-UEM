@@ -32,16 +32,32 @@ public class Email {
     public boolean enviarEmailTexto() {
         try {
             SimpleEmail email = new SimpleEmail();
-            email.setHostName(HOST);
-            email.setSmtpPort(PORT);
-            email.setCharset("UTF-8");
-
+            //email.setHostName(HOST);
+            //email.setSmtpPort(PORT);
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(587);
+            email.setAuthentication("enzo.enactusuem@gmail.com", "skxy wabz zvcc alew");
+            email.setStartTLSEnabled(true);
+            email.setFrom("enzo.enactusuem@gmail.com");
             email.addTo(getParaEmail(), getParaEmail());
-            email.setFrom(getDeEmail(), getDeNome());
+            //email.setSubject("Teste de envio pelo Gmail");
+            //email.setMsg("Este é um teste de envio via Gmail usando Java!");
+            //email.send();
+
+
+            //skxy wabz zvcc alew
+
+            //email.addTo(getParaEmail(), getParaEmail());
+            //email.setFrom(getDeEmail(), getDeNome());
             email.setSubject(getAssunto());
             email.setMsg(getMensagem());
 
             String messagaID = email.send();
+            
+            //
+
+            System.out.println("E-mail enviado com sucesso!");            
+            email.setCharset("UTF-8");
 
             return true;
         } catch (EmailException ex) {
