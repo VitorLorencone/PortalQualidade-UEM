@@ -14,10 +14,12 @@
         <div class="card">
             <div class="card-body">
                 
-                <!-- Tabs para Dados Gerais, Setores e Equipe -->
+                <!-- Tabs para Dados Gerais, Avaliadores, Autores, Setores e Equipe -->
                 <tabbox>
                     <tabs>
                         <tab label="Dados Gerais" selected="true"/>
+                        <tab label="Avaliadores" id="tabAvaliadores"/>
+                        <tab label="Autores" id="tabAutores"/>
                         <tab label="Setores" id="tabSetores"/>
                         <tab label="Equipe Qualidade" id="tabEquipe"/>
                     </tabs>
@@ -142,7 +144,101 @@
                             </div>
                         </tabpanel>
                         
-                        <!-- ABA 2: SETORES -->
+                        <!-- ABA 2: AVALIADORES -->
+                        <tabpanel>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <n:h5>Gerenciar Avaliadores</n:h5>
+                                    <n:p class="text-muted">Vincule os avaliadores deste documento.</n:p>
+                                </div>
+                                
+                                <!-- Funcionários Disponíveis -->
+                                <div class="col-md-5">
+                                    <label value="Funcionários Disponíveis"/>
+                                    <listbox id="lstAvaliadoresDisponiveis" height="300px" class="form-control">
+                                        <!-- Carregados dinamicamente -->
+                                    </listbox>
+                                    <div class="mt-2">
+                                        <button id="btnAdicionarAvaliador" label="Adicionar Avaliador" 
+                                            iconSclass="z-icon-arrow-right" 
+                                            onClick="winDocumento.adicionarAvaliador()" 
+                                            class="btn btn-primary"/>
+                                    </div>
+                                </div>
+                                
+                                <!-- Funcionários Vinculados -->
+                                <div class="col-md-7">
+                                    <label value="Avaliadores Vinculados ao Documento"/>
+                                    <grid id="gridAvaliadoresVinculados" emptyMessage="Nenhum avaliador vinculado">
+                                        <columns>
+                                            <column label="Código" width="15%"/>
+                                            <column label="Nome" width="65%"/>
+                                            <column label="" width="20%"/>
+                                        </columns>
+                                        <template name="model">
+                                            <row>
+                                                <label value="${each.cdPessoa}"/>
+                                                <label value="${each.nome}"/>
+                                                <button label="Remover" class="btn btn-sm btn-outline-danger"
+                                                    iconSclass="z-icon-trash"
+                                                    onClick="winDocumento.removerAvaliador(self)">
+                                                    <custom-attributes cdPessoa="${each.cdPessoa}"/>
+                                                </button>
+                                            </row>
+                                        </template>
+                                    </grid>
+                                </div>
+                            </div>
+                        </tabpanel>
+                        
+                        <!-- ABA 3: AUTORES -->
+                        <tabpanel>
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <n:h5>Gerenciar Autores do Documento</n:h5>
+                                    <n:p class="text-muted">Vincule os autores deste documento.</n:p>
+                                </div>
+                                
+                                <!-- Funcionários Disponíveis -->
+                                <div class="col-md-5">
+                                    <label value="Autores Disponíveis"/>
+                                    <listbox id="lstAutoresDisponiveis" height="300px" class="form-control">
+                                        <!-- Carregados dinamicamente -->
+                                    </listbox>
+                                    <div class="mt-2">
+                                        <button id="btnAdicionarAutor" label="Adicionar Autor" 
+                                            iconSclass="z-icon-arrow-right" 
+                                            onClick="winDocumento.adicionarAutor()" 
+                                            class="btn btn-primary"/>
+                                    </div>
+                                </div>
+                                
+                                <!-- Funcionários Vinculados -->
+                                <div class="col-md-7">
+                                    <label value="Autores Vinculados ao Documento"/>
+                                    <grid id="gridAutoresVinculados" emptyMessage="Nenhum autor vinculado">
+                                        <columns>
+                                            <column label="Código" width="15%"/>
+                                            <column label="Nome" width="65%"/>
+                                            <column label="" width="20%"/>
+                                        </columns>
+                                        <template name="model">
+                                            <row>
+                                                <label value="${each.cdPessoa}"/>
+                                                <label value="${each.nome}"/>
+                                                <button label="Remover" class="btn btn-sm btn-outline-danger"
+                                                    iconSclass="z-icon-trash"
+                                                    onClick="winDocumento.removerAutor(self)">
+                                                    <custom-attributes cdPessoa="${each.cdPessoa}"/>
+                                                </button>
+                                            </row>
+                                        </template>
+                                    </grid>
+                                </div>
+                            </div>
+                        </tabpanel>
+                        
+                        <!-- ABA 4: SETORES -->
                         <tabpanel>
                             <div class="row g-3">
                                 <div class="col-md-12">
@@ -189,7 +285,7 @@
                             </div>
                         </tabpanel>
                         
-                        <!-- ABA 3: EQUIPE QUALIDADE -->
+                        <!-- ABA 5: EQUIPE QUALIDADE -->
                         <tabpanel>
                             <div class="row g-3">
                                 <div class="col-md-12">
