@@ -20,6 +20,9 @@ import model.Setor;
 import model.FuncionarioQualidade;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
+
+import com.itextpdf.text.ListItem;
+
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
@@ -43,6 +46,16 @@ public class DocController extends Window {
     private Button btnSalvar;
     private Button btnExcluir;
     private Button btnCancelar;
+    
+    // Componentes para gerenciar Avaliadores
+    private Grid gridAvaliadoresVinculados;
+    private Listbox lstAvaliadoresDisponiveis;
+    private Button btnAdicionarAvaliador;
+    
+    // Componentes para gerenciar Avaliadores
+    private Grid gridAutoresVinculados;
+    private Listbox lstAutoresDisponiveis;
+    private Button btnAdicionarAutor;
     
     // Componentes para gerenciar Setores
     private Grid gridSetoresVinculados;
@@ -87,6 +100,14 @@ public class DocController extends Window {
         this.btnCancelar = (Button) getFellow("cancelar");
         
         // Componentes das abas de relacionamentos N:N
+        this.gridAvaliadoresVinculados = (Grid) getFellow("gridAvaliadoresVinculados");
+        this.lstAvaliadoresDisponiveis = (Listbox) getFellow("lstAvaliadoresDisponiveis");
+        this.btnAdicionarAvaliador = (Button) getFellow("btnAdicionarAvaliador");
+
+        this.gridAutoresVinculados = (Grid) getFellow("gridAutoresVinculados");
+        this.lstAutoresDisponiveis = (Listbox) getFellow("lstAutoresDisponiveis");
+        this.btnAdicionarAutor = (Button) getFellow("btnAdicionarAutor");
+
         this.gridSetoresVinculados = (Grid) getFellow("gridSetoresVinculados");
         this.lstSetoresDisponiveis = (Listbox) getFellow("lstSetoresDisponiveis");
         this.btnAdicionarSetor = (Button) getFellow("btnAdicionarSetor");
@@ -108,6 +129,8 @@ public class DocController extends Window {
                 this.btnCancelar.setVisible(true);
                 this.cdDocumento.setVisible(false);
                 // Desabilita as abas de relacionamento para novo documento
+                this.btnAdicionarAvaliador.setDisabled(true);
+                this.btnAdicionarAutor.setDisabled(true);
                 this.btnAdicionarSetor.setDisabled(true);
                 this.btnAdicionarFuncionario.setDisabled(true);
             } else if (acao.equals("editar")) {
@@ -124,6 +147,8 @@ public class DocController extends Window {
                 this.diretoria.setDisabled(true);
                 this.rt.setDisabled(true);
                 // Desabilita botões de adicionar/remover nas abas
+                this.btnAdicionarAvaliador.setDisabled(true);
+                this.btnAdicionarAutor.setDisabled(true);
                 this.btnAdicionarSetor.setDisabled(true);
                 this.btnAdicionarFuncionario.setDisabled(true);
             }
@@ -139,6 +164,10 @@ public class DocController extends Window {
             documento = documentoDao.buscarComRelacionamentos(documentoId);
             if (documento != null) {
                 popularCampos();
+                carregarAvaliadoresVinculados();
+                carregarAvaliadoresDisponiveis();
+                carregarAutoresVinculados();
+                carregarAutoresDisponiveis();
                 carregarSetoresVinculados();
                 carregarSetoresDisponiveis();
                 carregarFuncionariosVinculados();
@@ -206,6 +235,235 @@ public class DocController extends Window {
         } catch (Exception e) {
             System.err.println("Erro ao carregar responsáveis técnicos: " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Carrega os avaliadores já vinculados ao documento
+     */
+    private void carregarAvaliadoresVinculados() {
+        // Inicializa a lista se for null
+        if (documento.getAvaliadores() == null) {
+            documento.setAvaliadores(new ArrayList<>());
+        }
+
+        System.out.println("Carregando avaliadores vinculados. Total: " + documento.getAvaliadores().size());
+
+        SimpleListModel listModel = new SimpleListModel<>(documento.getAvaliadores());
+        this.gridAvaliadoresVinculados.setModel(listModel);
+    }
+    
+    /**
+     * Carrega os avaliadores disponíveis (não vinculados) para seleção
+     */
+    private void carregarAvaliadoresDisponiveis() {
+        try {
+            List<FuncionarioHU> todosFuncionariosHU = funcionarioHUDao.listar("1=1", "order by t.nome");
+
+            // Incializa a lista se for null
+            if (documento.getAvaliadores() == null) {
+                documento.setAvaliadores(new ArrayList<>());
+            }
+
+            // Filtra apenas os avaliadores que NÃO estão vinculados ao documento
+            List<Integer> idsVinculados = documento.getAvaliadores().stream()
+                .map(FuncionarioHU::getCdPessoa)
+                .collect(Collectors.toList());
+            
+            List<FuncionarioHU> funcionariosHUDisponiveis = todosFuncionariosHU.stream()
+                .filter(f -> !idsVinculados.contains(f.getCdPessoa()))
+                .collect(Collectors.toList());
+
+            System.out.println("Avaliadores disponíveis: " + funcionariosHUDisponiveis.size());
+            System.out.println("Avaliadores vinculados (IDs): " + idsVinculados);
+
+            // Limpa e preenche o listbox
+            this.lstAvaliadoresDisponiveis.getItems().clear();
+
+            if (!funcionariosHUDisponiveis.isEmpty()) {
+                for (FuncionarioHU funcionarioHU: funcionariosHUDisponiveis) {
+                    Listitem item = new Listitem();
+                    item.setValue(funcionarioHU.getCdPessoa());
+                    item.setLabel(funcionarioHU.getNome());
+                    this.lstAvaliadoresDisponiveis.appendChild(item);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar avaliadores disponíveis: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Adiciona um avaliador ao documento
+     */
+    public void adicionarAvaliador() {
+        if (this.lstAvaliadoresDisponiveis.getSelectedItem() == null) {
+            Clients.showNotification("Selecione um avaliador!", 
+                Clients.NOTIFICATION_TYPE_WARNING, this.lstAutoresDisponiveis, "end_center", 0);
+            return;
+        }
+        
+        Integer cdAvaliador = (Integer) this.lstAutoresDisponiveis.getSelectedItem().getValue();
+        
+        System.out.println("Tentando adicionar avaliador ID: " + cdAvaliador + " ao documento ID: " + documento.getCdDocumento());
+        
+        boolean adicionou = documentoDao.adicionarAvaliador(documento.getCdDocumento(), cdAvaliador);
+        
+        if (adicionou) {
+            Toast.show("Avaliador vinculado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+            
+            // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+            documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+            
+            System.out.println("Documento recarregado. Avaliadores: " + 
+                (documento.getAvaliadores() != null ? documento.getSetores().size() : 0));
+            
+            carregarAvaliadoresVinculados();
+            carregarAvaliadoresDisponiveis();
+        } else {
+            zkUtils.MensagemErro("Erro ao vincular avaliador. Verifique os logs.");
+            System.err.println("Falha ao adicionar avaliador ao documento");
+        }
+    }
+    
+    /**
+     * Remove um avaliador do documento
+     */
+    public void removerAvaliador(Button button) {
+        Integer cdAvaliador = (Integer) button.getAttribute("cdPessoa");
+        if (zkUtils.MensagemConfirmacao("Deseja remover este avaliador do documento?")) {
+            
+            System.out.println("Tentando remover avaliador ID: " + cdAvaliador + " do documento ID: " + documento.getCdDocumento());
+            
+            boolean removeu = documentoDao.removerAvaliador(documento.getCdDocumento(), cdAvaliador);
+            
+            if (removeu) {
+                Toast.show("Avaliador removido com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+                
+                // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+                documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+                
+                carregarAvaliadoresVinculados();
+                carregarAvaliadoresDisponiveis();
+            } else {
+                zkUtils.MensagemErro("Erro ao remover setor");
+            }
+        }
+    }
+    /**
+     * Carrega os autores já vinculados ao documento
+     */
+    private void carregarAutoresVinculados() {
+        // Inicializa a lista se for null
+        if (documento.getAutores() == null) {
+            documento.setAutores(new ArrayList<>());
+        }
+
+        System.out.println("Carregando autores vinculados. Total: " + documento.getAutores().size());
+
+        SimpleListModel listModel = new SimpleListModel<>(documento.getAutores());
+        this.gridAutoresVinculados.setModel(listModel);
+    }
+    
+    /**
+     * Carrega os avaliadores disponíveis (não vinculados) para seleção
+     */
+    private void carregarAutoresDisponiveis() {
+        try {
+            List<FuncionarioHU> todosFuncionariosHU = funcionarioHUDao.listar("1=1", "order by t.nome");
+
+            // Incializa a lista se for null
+            if (documento.getAutores() == null) {
+                documento.setAutores(new ArrayList<>());
+            }
+
+            // Filtra apenas os avaliadores que NÃO estão vinculados ao documento
+            List<Integer> idsVinculados = documento.getAutores().stream()
+                .map(FuncionarioHU::getCdPessoa)
+                .collect(Collectors.toList());
+            
+            List<FuncionarioHU> funcionariosHUDisponiveis = todosFuncionariosHU.stream()
+                .filter(f -> !idsVinculados.contains(f.getCdPessoa()))
+                .collect(Collectors.toList());
+
+            System.out.println("Autores disponíveis: " + funcionariosHUDisponiveis.size());
+            System.out.println("Autores vinculados (IDs): " + idsVinculados);
+
+            // Limpa e preenche o listbox
+            this.lstAutoresDisponiveis.getItems().clear();
+
+            if (!funcionariosHUDisponiveis.isEmpty()) {
+                for (FuncionarioHU funcionarioHU: funcionariosHUDisponiveis) {
+                    Listitem item = new Listitem();
+                    item.setValue(funcionarioHU.getCdPessoa());
+                    item.setLabel(funcionarioHU.getNome());
+                    this.lstAutoresDisponiveis.appendChild(item);
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar avaliadores disponíveis: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Adiciona um autor ao documento
+     */
+    public void adicionarAutor() {
+        if (this.lstAutoresDisponiveis.getSelectedItem() == null) {
+            Clients.showNotification("Selecione um autor!", 
+                Clients.NOTIFICATION_TYPE_WARNING, this.lstAutoresDisponiveis, "end_center", 0);
+            return;
+        }
+        
+        Integer cdAutor = (Integer) this.lstAutoresDisponiveis.getSelectedItem().getValue();
+        
+        System.out.println("Tentando adicionar autor ID: " + cdAutor + " ao documento ID: " + documento.getCdDocumento());
+        
+        boolean adicionou = documentoDao.adicionarAutor(documento.getCdDocumento(), cdAutor);
+        
+        if (adicionou) {
+            Toast.show("Avaliador vinculado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+            
+            // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+            documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+            
+            System.out.println("Documento recarregado. Avaliadores: " + 
+                (documento.getAutores() != null ? documento.getSetores().size() : 0));
+            
+            carregarAutoresVinculados();
+            carregarAutoresDisponiveis();
+        } else {
+            zkUtils.MensagemErro("Erro ao vincular avaliador. Verifique os logs.");
+            System.err.println("Falha ao adicionar avaliador ao documento");
+        }
+    }
+    
+    /**
+     * Remove um autor do documento
+     */
+    public void removerAutor(Button button) {
+        Integer cdAutor = (Integer) button.getAttribute("cdPessoa");
+        if (zkUtils.MensagemConfirmacao("Deseja remover este autor do documento?")) {
+            
+            System.out.println("Tentando remover autor ID: " + cdAutor + " do documento ID: " + documento.getCdDocumento());
+            
+            boolean removeu = documentoDao.removerAutor(documento.getCdDocumento(), cdAutor);
+            
+            if (removeu) {
+                Toast.show("Avaliador removido com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+                
+                // IMPORTANTE: Recarrega o documento com relacionamentos atualizados
+                documento = documentoDao.buscarComRelacionamentos(documento.getCdDocumento());
+                
+                carregarAutoresVinculados();
+                carregarAutoresDisponiveis();
+            } else {
+                zkUtils.MensagemErro("Erro ao remover setor");
+            }
         }
     }
     
@@ -604,6 +862,10 @@ public class DocController extends Window {
                     this.btnAdicionarFuncionario.setDisabled(false);
                     
                     // CORREÇÃO: Carrega as listas após salvar documento novo
+                    carregarAutoresVinculados();
+                    carregarAutoresDisponiveis();
+                    carregarAvaliadoresVinculados();
+                    carregarAvaliadoresDisponiveis();
                     carregarSetoresVinculados();
                     carregarSetoresDisponiveis();
                     carregarFuncionariosVinculados();
