@@ -182,11 +182,36 @@ public class MsgTesteMailController extends Window {
                 }
 
                 String assunto = "Aviso sobre o documento: " + doc.getNmDocumento();
-                String mensagem = "<p>Olá " + rt.getNome() + ",</p>"
-                        + "<p>O documento <b>" + doc.getNmDocumento() + "</b> "
+                
+                String estadoDoc = doc.getEstado().getDescricao();
+
+                String mensagem = "";
+
+                switch (estadoDoc) {
+                    case "Elaboração":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ELABORAÇÃO</p>";
+                        break;
+                    case "Avaliação":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem AVALIAÇÃO</p>";
+                        break;                        
+                    case "Sugestão":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem SUGESTÃO</p>";
+                        break;                    
+                    case "Assinatura":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ASSINATURA</p>";
+                        break;
+                }
+
+                /*
+                String mensagem = "<p>Olá @destinatario,</p>"
+                        + "<p>O documento <b> @documento </b> "
                         + "está no estado <b>"
                         + (doc.getEstado() != null ? doc.getEstado().toString() : "N/A")
                         + "</b>.</p><p>Por favor, verifique o sistema.</p>";
+                */
+
+                mensagem = mensagem.replace("@destinatario", rt.getNome())
+                                   .replace("@documento", doc.getNmDocumento());
 
                 Email email = new Email();
                 email.setDeEmail("nao-responda@meusistem.com");
@@ -195,7 +220,7 @@ public class MsgTesteMailController extends Window {
                 email.setAssunto(assunto);
                 email.setMensagem(mensagem);
 
-                if (email.enviarEmailTexto()) {
+                if (email.enviarEmailHtml()) {
                     enviados++;
                 }
             }

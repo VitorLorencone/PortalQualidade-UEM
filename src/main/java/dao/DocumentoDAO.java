@@ -44,4 +44,24 @@ public class DocumentoDAO extends GenericDAO<Documento, Integer> {
         }
         return documentos;
     }
+
+    public List<Documento> buscarProximosDoVencimento() {
+        List<Documento> documentos = null;
+        Session session = null;
+        try {
+            session = openSession();
+            String hql = "SELECT d FROM Documento d " +
+                         "WHERE d.dataVencimento BETWEEN CURRENT_DATE " +
+                         "AND FUNCTION('DATE_ADD', CURRENT_DATE, INTERVAL 7 DAY)";
+
+            Query<Documento> query = session.createQuery(hql, Documento.class);
+            printQuery(query);
+            documentos = query.list();
+        } catch (Exception e) {
+            printException(e);
+        } finally {
+            closeSession(session);
+        }
+        return documentos;
+    }
 }
