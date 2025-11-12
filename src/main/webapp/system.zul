@@ -21,10 +21,12 @@
     <include src="menubar.zul"/>
         
     <!-- FOOTER -->
+    <!--
     <div class="col p-3" style="min-height: calc(100vh - 195px) !important;">
         <include id="conteudo"/>
     </div>
     <include src="footer.zul"/>
+    -->
  
     <!-- JS -->
     <n:script type="text/javascript" src="js/jquery.mask.js" defer="true"></n:script>
