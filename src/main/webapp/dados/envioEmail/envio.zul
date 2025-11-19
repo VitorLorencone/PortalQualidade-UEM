@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
 
-    <nodom title="" id="winEnvioEmail" use="
+    <nodom title="" id="winEnvioEmail" use="controller.envioEmails.EnvioEmailsController">
+        <div id="titulo-envio-mensages" class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Envio de Mensagens por Email</n:h4>
+            </div>
+        </div>
+
+    </nodom>
 
 </zk> 
