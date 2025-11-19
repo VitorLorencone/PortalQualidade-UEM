@@ -15,24 +15,12 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-md-12">
-                        <label value="Código da Mensagem: "/>  
-                        <label id="cdMensagem" value=""/>
-                    </div>
-                    <div class="col-md-12">
                         <label value="Nome/Título"/>  
                         <textbox id="nome" maxlength="200" class="form-control" placeholder="Insira o título da mensagem"/>
                     </div>
                     <div class="col-md-12">
                         <label value="Corpo da Mensagem"/>  
                         <textbox id="corpo" rows="5" maxlength="1000" class="form-control" multiline="true" placeholder="Digite o conteúdo da mensagem"/>          
-                    </div>
-                    <div class="col-md-4">
-                        <label value="Data de Início" />  
-                        <datebox id="dtInicio" class="form-control" format="dd/MM/yyyy" placeholder="dd/mm/aaaa"/>            
-                    </div>
-                    <div class="col-md-4">
-                        <label value="Data de Fim" />  
-                        <datebox id="dtFim" class="form-control" format="dd/MM/yyyy" placeholder="dd/mm/aaaa"/>            
                     </div>
                     <div class="col-md-4">
                         <label value="Frequência" />  
