@@ -1,4 +1,4 @@
-package menu.controller;
+package controller.menuBar;
 
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Include;
@@ -60,8 +60,8 @@ public class MenuController extends Window {
     }
 
     // BEGIN TESTE - ADD 04/11/2025
-    public void abrirPaginaTesteMensagens() {
-        this.conteudo.setSrc("dados/documentos/testeMensagens.zul");
+    public void abrirPaginaEnvioEmails() {
+        this.conteudo.setSrc("dados/envioEmail/envio.zul");
         Clients.evalJavaScript("window.history.pushState(null, '', '/testeMensagens');");
     }
     // END TESTE

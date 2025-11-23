@@ -16,21 +16,19 @@
 
                 <!-- Parte com botões. A classe justify-content-between fará com que os botões fiquem justificados, ou seja, grudado à esquerda e à direita. -->
                 <div class="d-flex justify-content-between form-group mb-3">
-                    <div class="col-sm-10 col-md-10 col-lg-8 pl-0">
+                    <div class="col-sm-10 col-md-10 col-lg-10 pl-0">
                         <div class="row"> 
-                            <div class="col-md-4"> 
+                            <div class="col-md-6"> 
                                 <div class="input-group">
                                     <textbox id="vlPesquisa" class="form-control" placeholder="Buscar por nome, email ou celular...">
                                         <attribute name="onOK">
-                                <![CDATA[
-                                    winPessoaList.filtrar();
-                                ]]>
+                                            <![CDATA[winPessoaList.filtrar();]]>
                                         </attribute>
                                     </textbox>        
                                     <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winPessoaList.filtrar()" />
                                 </div>
                             </div>
-                            <div class="col-md-4">                
+                            <div class="col-md-3">                
                                 <listbox id="vlCampo" mold="select" class="form-select">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os campos"/>
@@ -46,7 +44,7 @@
                                     </listitem>
                                 </listbox>
                             </div>
-                            <div class="col-md-4">                
+                            <div class="col-md-3">                
                                 <listbox id="vlTipoPessoa" mold="select" class="form-select" onChange="winPessoaList.filtrar()">
                                     
                                     <listitem value="" selected="true">
