@@ -4,7 +4,7 @@
   
         <div class="d-flex pb-4">
             <div class="col">
-                <n:h4>Cadastro de Documentos</n:h4>
+                <n:h4>Documentos</n:h4>
             </div>
             <div class="col text-end">
                 <button label="Novo Documento" iconSclass="z-icon-plus" 
