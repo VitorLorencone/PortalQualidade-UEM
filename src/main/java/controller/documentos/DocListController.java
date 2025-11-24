@@ -98,7 +98,7 @@ public class DocListController extends Window {
             SimpleListModel listModel = new SimpleListModel(documentos);
             this.resultados.setModel(listModel);
         }
-    }
+    } // filtrar
 
     /**
      * Executado quando é clicado no botão "novo documento". Abre a tela de cadastro

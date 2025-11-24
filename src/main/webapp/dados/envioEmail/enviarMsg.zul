@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
-    <nodom title="" id="winMensagem" use="controller.mensagens.MsgController">
+    <nodom title="" id="winEnviarMsg" use="controller.envioEmails.EnviarMsgController">
    
         <div class="d-flex pb-4">
             <div class="col">
-                <n:h4>Cadastro de Mensagem</n:h4>
+                <n:h4>Mensagem a Ser Enviada</n:h4>
             </div>
             <div class="col text-end">
-                <button label="Voltar" iconSclass="z-icon-arrow-left" onClick="winMensagem.voltar()" class="btn btn-secondary"/>
+                <button label="Voltar" iconSclass="z-icon-arrow-left" onClick="winEnviarMsg.voltar()" class="btn btn-secondary"/>
             </div>
         </div>
        
@@ -56,11 +56,12 @@
                     </div>
                     <div class="d-flex">
                         <div class="col-md-6">
-                            <button class="btn btn-outline-danger" iconSclass="z-icon-trash" id="excluir" label="Excluir" onClick="winMensagem.excluir()" visible="false"/>
+                            <button class="btn btn-outline-danger" iconSclass="z-icon-trash" id="excluir" label="Excluir" onClick="winEnviarMsg.excluir()" visible="false"/>
                         </div>
                         <div class="col-md-6 text-end">
-                            <button class="btn btn-secondary" iconSclass="" id="cancelar" label="Cancelar" onClick="winMensagem.voltar()" visible="false"/>
-                            <button class="btn btn-primary" iconSclass="z-icon-check" id="salvar" label="Salvar" onClick="winMensagem.gravar()" visible="false"/>
+                            <button class="btn btn-secondary" iconSclass="" id="cancelar" label="Cancelar" onClick="winEnviarMsg.voltar()" visible="false"/>
+                            <button class="btn btn-primary" iconSclass="z-icon-check" id="salvar" label="Salvar" onClick="winEnviarMsg.gravar()" visible="false"/>
+                            <button class="btn btn-primary" iconSclass="z-icon-check" id="enviar" label="Enviar" onClick="winEnviarMsg.enviar()" visible="false"/>                            
                         </div>
                     </div>
                 </div>

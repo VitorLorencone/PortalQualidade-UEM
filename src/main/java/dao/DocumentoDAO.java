@@ -66,6 +66,7 @@ public class DocumentoDAO extends GenericDAO<Documento, Integer> {
                 // Inicializa as coleções LAZY para evitar LazyInitializationException
                 Hibernate.initialize(documento.getSetores());
                 Hibernate.initialize(documento.getFuncionariosQualidade());
+                Hibernate.initialize(documento.getRt());
                 
                 System.out.println("Documento " + cdDocumento + " carregado com " + 
                     (documento.getSetores() != null ? documento.getSetores().size() : 0) + " setores e " +

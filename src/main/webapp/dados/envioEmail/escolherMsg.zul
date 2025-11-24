@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
-    <nodom title="" id="winMensagemList" use="controller.mensagens.MsgListController">
+    <nodom title="" id="winEscolherMsg" use="controller.envioEmails.EscolherMsgsController">
         <style>
             .linha-msg-padrao {
                 background-color: #f4e7ffff;
@@ -9,10 +9,10 @@
         </style>
         <div class="d-flex pb-4">
             <div class="col">
-                <n:h4>Cadastro de Mensagens</n:h4>
+                <n:h4>Escolher Mensagem</n:h4>
             </div>
             <div class="col text-end">
-                <button label="Nova Mensagem" iconSclass="z-icon-plus" onClick="winMensagemList.novaMensagem()" class="btn btn-primary"/>
+                <button label="Voltar" iconSclass="z-icon-arrow-left" onClick="winEscolherMsg.voltar()" class="btn btn-secondary"/>
             </div>
         </div>
         
@@ -27,11 +27,11 @@
                                     <textbox id="vlPesquisa" class="form-control" placeholder="Buscar mensagens...">
                                         <attribute name="onOK">
                                 <![CDATA[
-                                    winMensagemList.filtrar();
+                                    winEscolherMsg.filtrar();
                                 ]]>
                                         </attribute>
                                     </textbox>        
-                                    <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winMensagemList.filtrar()" />
+                                    <button label="Filtrar" class="btn btn-light btn-outline-secondary" iconSclass="z-icon-search" onClick="winEscolherMsg.filtrar()" />
                                 </div>
                             </div>
                             <div class="col-md-6">                
@@ -63,12 +63,12 @@
                             <column label="" width="120px" />
                         </columns>
                         <template name="model">
-                            <row onClick="winMensagemList.onClickedVerMensagem(event)" sclass="${each.deCategoria == 'Padrao' ? 'linha-msg-padrao' : ''}" style="cursor: pointer;">
+                            <row onClick="winEscolherMsg.onClickedVerMensagem(event)" sclass="${each.deCategoria == 'Padrao' ? 'linha-msg-padrao' : ''}" style="cursor: pointer;">
                                 <attribute ca:name="id">${each.cdMensagem}</attribute>
                                 <label value="${each.deNome}"/>
                                 <label value="${empty each.deCorpo ? '' : (c:length(each.deCorpo) gt 50 ? c:substring(each.deCorpo, 0, 50).concat('...') : each.deCorpo)}"/>
                                 <label value="${empty each.deFrequencia ? '' : each.deFrequencia}"/>
-                                <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winMensagemList.onClickedAlterarMensagem(event)">
+                                <button label="Alterar" class="border-0 btn btn-outline-primary" iconSclass="z-icon-pencil" onClick="winEscolherMsg.onClickedAlterarMensagem(event)">
                                     <attribute ca:name="id">${each.cdMensagem}</attribute>
                                 </button>
                             </row>
