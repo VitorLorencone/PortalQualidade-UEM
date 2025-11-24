@@ -47,7 +47,7 @@
                     </n:ul>
 
                     <n:form class="d-flex">
-                        <button class="btn btn-outline-secondary">PERFIL</button>
+                        <button class="btn btn-outline-secondary" href="#" onClick="winMenu.abrirPaginaPerfil()">PERFIL</button>
                     </n:form>
 
                 </n:div>

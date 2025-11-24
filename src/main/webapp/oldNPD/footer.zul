@@ -1,8 +1,0 @@
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
-    
-    <div class="col text-center bg-body-secondary text-secondary" style="position: relative; min-height: 69px; line-height: 69px;">
-        <n:span class="fw-bold">Núcleo de Processamento de Dados</n:span>
-        - Projeto modelo em Maven para desenvolvimento Java com layout responsivo utilizando Bootstrap.
-    </div>
-    
-</zk>
