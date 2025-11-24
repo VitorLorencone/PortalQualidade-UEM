@@ -123,7 +123,16 @@
                                 <label value="${each.nmDocumento}"/>
                                 <label value="${each.tpDocumento}"/>
                                 <label value="${each.dtCriacao != null ? c:formatDate(each.dtCriacao, 'dd/MM/yyyy') : '-'}"/>
-                                <label value="${each.estado != null ? each.estado.descricao : '-'}"/>
+                                
+                                <label value="${each.estado != null ? each.estado.descricao : '-'}"
+                                    style="${each.estado != null ? 
+                                        (each.estado.codigo eq 'elaboracao' ? 'color: blue; font-weight: bold;' :
+                                        each.estado.codigo eq 'avaliacao' ? 'color: orange; font-weight: bold;' :
+                                        each.estado.codigo eq 'sugestao' ? 'color: green; font-weight: bold;' :
+                                        each.estado.codigo eq 'assinatura' ? 'color: purple; font-weight: bold;' : '') 
+                                    : ''}"
+                                />
+                                
                                 <label value="${each.diretoria != null ? each.diretoria.nmOrgao : '-'}"/>
                                 <button label="Alterar" class="border-0 btn btn-outline-primary" 
                                     iconSclass="z-icon-pencil" 

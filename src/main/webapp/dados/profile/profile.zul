@@ -1,10 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+<zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native">
+    <nodom id="winProfile" use="controller.profile.ProfileController">
 
-    <div class="col p-3 d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 195px);">
-        <div class="text-center">
-            <label value="Estamos em Perfil" class="h3"/>
+        <div class="d-flex pb-4">
+            <div class="col">
+                <n:h4>Perfil do Usuário</n:h4>
+            </div>
+            <div class="col text-end">
+                <button label="Voltar" iconSclass="z-icon-arrow-left"
+                        onClick="winProfile.voltar()"
+                        class="btn btn-secondary"/>
+            </div>
         </div>
-    </div>
 
+        <div class="card">
+            <div class="card-body text-center">
+                <n:h5>Informações da Sessão</n:h5>
+
+                <div class="mt-3">
+                    <label value="Nome:" class="fw-bold me-2"/>
+                    <label id="lb_nome_usuario" value="(Carregando...)"/>
+                </div>
+                <div>
+                    <label value="E-mail:" class="fw-bold me-2"/>
+                    <label id="lb_email_usuario" value="(Carregando...)"/>
+                </div>
+
+                <div class="pt-4">
+                    <button label="Sair" iconSclass="z-icon-sign-out"
+                            class="btn btn-danger btn-lg"
+                            onClick="winProfile.sair()"/>
+                </div>
+
+                <div class="mt-4">
+                    <label id="lb_versao" class="text-muted small"/>
+                </div>
+
+                <label id="msg_erro" style="color:red; display:none;"/>
+            </div>
+        </div>
+
+        <div id="div_desenv" visible="false" class="alert alert-warning mt-3">
+            Ambiente de desenvolvimento
+        </div>
+
+    </nodom>
 </zk>

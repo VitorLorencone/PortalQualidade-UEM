@@ -107,13 +107,16 @@ public class DocController extends Window {
                 this.btnSalvar.setVisible(true);
                 this.btnCancelar.setVisible(true);
                 this.cdDocumento.setVisible(false);
+
                 // Desabilita as abas de relacionamento para novo documento
                 this.btnAdicionarSetor.setDisabled(true);
                 this.btnAdicionarFuncionario.setDisabled(true);
+                
             } else if (acao.equals("editar")) {
                 this.btnSalvar.setVisible(true);
                 this.btnCancelar.setVisible(true);
                 this.btnExcluir.setVisible(true);
+
             } else if (acao.equals("ler")) {
                 this.nmDocumento.setDisabled(true);
                 this.tpDocumento.setDisabled(true);
@@ -123,6 +126,7 @@ public class DocController extends Window {
                 this.estado.setDisabled(true);
                 this.diretoria.setDisabled(true);
                 this.rt.setDisabled(true);
+
                 // Desabilita botões de adicionar/remover nas abas
                 this.btnAdicionarSetor.setDisabled(true);
                 this.btnAdicionarFuncionario.setDisabled(true);
@@ -618,6 +622,7 @@ public class DocController extends Window {
                 boolean atualizou = documentoDao.atualizar(documento);
                 if (atualizou) {
                     Toast.show("Documento atualizado com sucesso!", "Sucesso", Toast.Type.SUCCESS);
+                    this.voltar();
                 } else {
                     zkUtils.MensagemErro("Houve um erro e não foi possível atualizar");
                 }

@@ -185,6 +185,23 @@ public class LoginController extends Window {
 
     }
 
+    public void sair() {
+        try {
+            // Invalida a sessão atual do ZK (remove todos os atributos da sessão)
+            Executions.getCurrent().getSession().invalidate();
+
+            // Opcional: também limpar a referência na sua classe Sessao (caso ela mantenha estado estático)
+            Sessao.getInstance().setUsuario(null);
+
+            // Redireciona para a tela de login
+            Executions.sendRedirect("/login");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showErro("Erro ao encerrar sessão: " + e.getMessage());
+        }
+    }
+
     /**
      * Mostra erro na tela de login
      *
