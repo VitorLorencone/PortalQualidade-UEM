@@ -69,6 +69,7 @@ public class DocumentoDAO extends GenericDAO<Documento, Integer> {
                 Hibernate.initialize(documento.getAutores());
                 Hibernate.initialize(documento.getSetores());
                 Hibernate.initialize(documento.getFuncionariosQualidade());
+                Hibernate.initialize(documento.getRt());
                 
                 System.out.println("Documento " + cdDocumento + " carregado com " + 
                     (documento.getAvaliadores() != null ? documento.getAvaliadores().size() : 0) + " avaliadores, " +

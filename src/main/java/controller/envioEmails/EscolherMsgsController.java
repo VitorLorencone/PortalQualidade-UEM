@@ -1,32 +1,37 @@
-/*
- * Universidade Estadual de Maringá - UEM
- * Núcleo de Processamento de Dados - NPD
- * Alunos de Ciência da Computação - 2025
- * Copyright (c) 2025. All rights reserved.
- */
-package controller.mensagens;
+package controller.envioEmails;
 
-import dao.MensagemDAO;
-import model.Mensagem;
+import java.text.Normalizer;
+import java.util.List;
+
+import org.zkoss.zk.ui.Sessions;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
-import org.zkoss.zk.ui.event.Event;
+
+import dao.MensagemDAO;
+import model.Documento;
+import model.FuncionarioHU;
+import model.Mensagem;
+import utilitarios.Email;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
-import java.text.Normalizer;
-import java.util.List;
+import zk.custom.Toast;
 
-public class MsgListController extends Window {
-
+public class EscolherMsgsController extends Window {
     private Window win;
 
     private Listbox vlCampo;
     private Textbox vlPesquisa;
     private Grid resultados;
+
+    private String urlRetorno;
+
+    private List<Integer> docsSelecionadosIds;
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
@@ -34,13 +39,16 @@ public class MsgListController extends Window {
     private final MensagemDAO mensagemDao = new MensagemDAO();
 
     public void onCreate() {
-        this.win = (Window) getFellow("winMensagemList");
+        this.win = (Window) getFellow("winEscolherMsg");
 
         // Pegamos os campos definidos no .zul e vinculamos à uma variável 
         // para pegarmos ou popularmos com valores
         this.vlPesquisa = (Textbox) getFellow("vlPesquisa");
         this.vlCampo = (Listbox) getFellow("vlCampo");
         this.resultados = (Grid) getFellow("resultados");
+
+        this.urlRetorno = (String) zkUtils.getParametro("url_retorno");
+        this.docsSelecionadosIds = (List<Integer>) zkUtils.getParametro("documentosSelecionados");
 
         filtrar();
     }
@@ -79,6 +87,14 @@ public class MsgListController extends Window {
     }
 
     /**
+     * Volta para a página inicial do envio de mensagens
+     */
+    public void voltar() {
+        Include include = (Include) win.getParent();
+        include.setSrc("dados/envioEmail/envio.zul");
+    }
+
+    /**
      * Executado quando é clicado no botão "nova mensagem". Abre a tela de cadastro
      * passando como parâmetro a ação "novo". Essa ação fará que apenas o botão
      * de Salvar apareça.
@@ -97,6 +113,7 @@ public class MsgListController extends Window {
         Integer cdMensagem = Integer.valueOf(event.getTarget().getClientAttribute("id"));
         zkUtils.setParametro("mensagem", cdMensagem);
         zkUtils.setParametro("ação", "ler");
+        zkUtils.setParametro("documentosSelecionados", this.docsSelecionadosIds);
         this.redirecionar();
     }
 
@@ -123,6 +140,7 @@ public class MsgListController extends Window {
         String urlOrigem = include.getSrc(); // O source do include é a página atual
         include.setSrc(null);
         zkUtils.setParametro("url_retorno", urlOrigem); // A página atual será a url de retorno
-        include.setSrc("dados/mensagens/msg.zul"); // Vai para a página de cadastro de mensagem (arquivo msg.zul)
+        include.setSrc("dados/envioEmail/enviarMsg.zul"); // Vai para a página de cadastro de mensagem (arquivo msg.zul)
     }
+
 }

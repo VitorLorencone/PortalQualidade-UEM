@@ -62,7 +62,7 @@ public class MenuController extends Window {
     // BEGIN TESTE - ADD 04/11/2025
     public void abrirPaginaEnvioEmails() {
         this.conteudo.setSrc("dados/envioEmail/envio.zul");
-        Clients.evalJavaScript("window.history.pushState(null, '', '/testeMensagens');");
+        Clients.evalJavaScript("window.history.pushState(null, '', '/envio');");
     }
     // END TESTE
     

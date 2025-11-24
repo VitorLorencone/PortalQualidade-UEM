@@ -40,6 +40,9 @@ public class Mensagem implements Serializable {
     
     @Column(name = "DE_FREQUENCIA", length = 1)
     private String deFrequencia;
+
+    @Column(name = "DE_CATEGORIA", length = 11)
+    private String deCategoria;
     
     // Métodos auxiliares para trabalhar com o enum
     public FrequenciaMensagem getFrequenciaEnum() {

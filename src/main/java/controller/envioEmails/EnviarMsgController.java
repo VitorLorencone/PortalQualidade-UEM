@@ -4,20 +4,30 @@
  * Alunos de Ciência da Computação - 2025
  * Copyright (c) 2025. All rights reserved.
  */
-package controller.mensagens;
+package controller.envioEmails;
 
+import dao.DocumentoDAO;
 import dao.MensagemDAO;
 import model.Mensagem;
+import model.Documento;
 import model.FrequenciaMensagem;
+import model.FuncionarioHU;
+
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
+
+import utilitarios.Email;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class MsgController extends Window {
+public class EnviarMsgController extends Window {
 
     private Window win;
     private Label cdMensagem;
@@ -30,19 +40,23 @@ public class MsgController extends Window {
     private Button btnSalvar;
     private Button btnExcluir;
     private Button btnCancelar;
+    private Button btnEnviar;
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
 
     private MensagemDAO mensagemDao = new MensagemDAO();
+    private DocumentoDAO docDao = new DocumentoDAO();
 
     private Mensagem mensagem = new Mensagem();
 
     private String urlRetorno = "";
 
+    private List<Integer> docsSelecionadosIds = new ArrayList<>(); 
+
     public void onCreate() {
 
-        this.win = ((Window) getFellow("winMensagem"));
+        this.win = ((Window) getFellow("winEnviarMsg"));
 
         this.cdMensagem = (Label) getFellow("cdMensagem");
         this.nome = (Textbox) getFellow("nome");
@@ -53,12 +67,16 @@ public class MsgController extends Window {
         this.btnSalvar = (Button) getFellow("salvar");
         this.btnExcluir = (Button) getFellow("excluir");
         this.btnCancelar = (Button) getFellow("cancelar");
+        this.btnEnviar = (Button) getFellow("enviar");
+
 
         // Pega os parâmetros que vieram da outra página
         Integer mensagemId = (Integer) zkUtils.getParametro("mensagem");
         String acao = (String) zkUtils.getParametro("ação");
         String categoriaMsg = (String) zkUtils.getParametro("categoria");
         urlRetorno = (String) zkUtils.getParametro("url_retorno");
+
+        this.docsSelecionadosIds = (List<Integer>) zkUtils.getParametro("documentosSelecionados");
 
         // Mostra os botões de acordo com a ação
         if (acao != null) {
@@ -86,6 +104,7 @@ public class MsgController extends Window {
                 this.dtFim.setReadonly(true);
                 this.dtFim.setDisabled(true);
                 this.frequencia.setDisabled(true);
+                this.btnEnviar.setVisible(true);
             }
         }
 
@@ -202,7 +221,6 @@ public class MsgController extends Window {
             mensagem.setDeCorpo(this.corpo.getValue());
             mensagem.setDtInicio(this.dtInicio.getValue());
             mensagem.setDtFim(this.dtFim.getValue());
-            mensagem.setDeCategoria("Customizada");
             
             // Pega a frequência selecionada e converte de String para Enum
             if (this.frequencia.getSelectedItem() != null) {
@@ -255,7 +273,89 @@ public class MsgController extends Window {
      * Volta para a url de retorno.
      */
     public void voltar() {
+        zkUtils.setParametro("documentosSelecionados", this.docsSelecionadosIds);
         Include include = (Include) win.getParent();
         include.setSrc(this.urlRetorno);
+        
+    }
+
+
+    public void enviar() {
+        try {
+            List<Documento> documentos = new ArrayList<>();
+            for (Integer id : this.docsSelecionadosIds) {
+                Documento doc = this.docDao.buscarComRelacionamentos(id);
+                documentos.add(doc);
+            }
+
+            if (documentos == null || documentos.isEmpty()) {
+                Grid resultados = new Grid();
+                resultados.setModel(new SimpleListModel(documentos));
+                Clients.showNotification("Nenhum documento encontrado.", 
+                        Clients.NOTIFICATION_TYPE_WARNING, resultados, "middle_center", 3000);
+                return;
+            }
+
+            int enviados = 0;
+            for (Documento doc : documentos) {
+                FuncionarioHU rt = doc.getRt();
+                if (rt == null || rt.getEmail() == null || rt.getEmail().isBlank()) {
+                    System.out.println("Documento " + doc.getNmDocumento() + " sem RT com e-mail.");
+                    continue;
+                }
+
+                String assunto = "Aviso sobre o documento: " + doc.getNmDocumento();
+                
+                //String estadoDoc = doc.getEstado().getDescricao();
+
+                String mensagem = this.corpo.getValue();
+                
+                /*
+                switch (estadoDoc) {
+                    case "Elaboração":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ELABORAÇÃO</p>";
+                        break;
+                    case "Avaliação":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem AVALIAÇÃO</p>";
+                        break;                        
+                    case "Sugestão":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem SUGESTÃO</p>";
+                        break;                    
+                    case "Assinatura":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ASSINATURA</p>";
+                        break;
+                }
+                 */
+
+                /*
+                String mensagem = "<p>Olá @destinatario,</p>"
+                        + "<p>O documento <b> @documento </b> "
+                        + "está no estado <b>"
+                        + (doc.getEstado() != null ? doc.getEstado().toString() : "N/A")
+                        + "</b>.</p><p>Por favor, verifique o sistema.</p>";
+                */
+
+                mensagem = mensagem.replace("@destinatario", rt.getNome())
+                                   .replace("@documento", doc.getNmDocumento());
+
+                Email email = new Email();
+                email.setDeEmail("nao-responda@meusistem.com");
+                email.setDeNome("Sistema de Documentos");
+                email.setParaEmail(rt.getEmail());
+                email.setAssunto(assunto);
+                email.setMensagem(mensagem);
+
+                if (email.enviarEmailHtml()) {
+                    enviados++;
+                }
+            }
+
+            Toast.show("E-mails enviados: " + enviados + " / " + documentos.size(),
+                    "Envio concluído", Toast.Type.SUCCESS);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.show("Erro ao enviar e-mails: " + e.getMessage(), "Erro", Toast.Type.ERROR);
+        }
     }
 }
