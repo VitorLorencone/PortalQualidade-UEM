@@ -93,6 +93,9 @@
                                     <listitem value="ASSINATURA">
                                         <listcell label="Assinatura"/>
                                     </listitem>
+                                    <listitem value="FINALIZADO">
+                                            <listcell label="Finalizado"/>
+                                    </listitem>
                                 </listbox>
                             </div>
                         </div>
@@ -128,7 +131,8 @@
                                     style="${each.estado != null ? 
                                         (each.estado.codigo eq 'elaboracao' ? 'color: blue; font-weight: bold;' :
                                         each.estado.codigo eq 'avaliacao' ? 'color: orange; font-weight: bold;' :
-                                        each.estado.codigo eq 'sugestao' ? 'color: green; font-weight: bold;' :
+                                        each.estado.codigo eq 'sugestao' ? 'color: yellow; font-weight: bold;' :
+                                        each.estado.codigo eq 'finalizado' ? 'color: green; font-weight: bold;' :
                                         each.estado.codigo eq 'assinatura' ? 'color: purple; font-weight: bold;' : '') 
                                     : ''}"
                                 />

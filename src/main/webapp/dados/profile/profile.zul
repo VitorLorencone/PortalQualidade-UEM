@@ -17,10 +17,6 @@
             <div class="card-body text-center">
                 <n:h5>Informações da Sessão</n:h5>
 
-                <div class="mt-3">
-                    <label value="Nome:" class="fw-bold me-2"/>
-                    <label id="lb_nome_usuario" value="(Carregando...)"/>
-                </div>
                 <div>
                     <label value="E-mail:" class="fw-bold me-2"/>
                     <label id="lb_email_usuario" value="(Carregando...)"/>

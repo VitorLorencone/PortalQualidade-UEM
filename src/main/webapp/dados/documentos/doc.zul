@@ -81,6 +81,9 @@
                                         <listitem value="ASSINATURA">
                                             <listcell label="Assinatura"/>
                                         </listitem>
+                                        <listitem value="FINALIZADO">
+                                            <listcell label="Finalizado"/>
+                                        </listitem>
                                     </listbox>
                                 </div>
                                 
