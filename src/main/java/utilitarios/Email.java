@@ -32,16 +32,33 @@ public class Email {
     public boolean enviarEmailTexto() {
         try {
             SimpleEmail email = new SimpleEmail();
-            email.setHostName(HOST);
-            email.setSmtpPort(PORT);
-            email.setCharset("UTF-8");
+            // configurações de conexão
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(587);
+            // chave de autenticação: skxy wabz zvcc alew
+            email.setAuthentication("enzo.enactusuem@gmail.com", "skxy wabz zvcc alew");
+            email.setStartTLSEnabled(true);
 
+            // o remetente precisa ser o mesmo de "setAuthentication"
+            email.setFrom("enzo.enactusuem@gmail.com");
+            // destinatário
             email.addTo(getParaEmail(), getParaEmail());
-            email.setFrom(getDeEmail(), getDeNome());
+            // conteúdo
             email.setSubject(getAssunto());
             email.setMsg(getMensagem());
 
+            //email.setHostName(HOST);
+            //email.setSmtpPort(PORT);
+            //email.setSubject("Teste de envio pelo Gmail");
+            //email.setMsg("Este é um teste de envio via Gmail usando Java!");
+            //email.send();
+            //email.addTo(getParaEmail(), getParaEmail());
+            //email.setFrom(getDeEmail(), getDeNome());
+
             String messagaID = email.send();
+
+            System.out.println("E-mail enviado com sucesso!");            
+            email.setCharset("UTF-8");
 
             return true;
         } catch (EmailException ex) {
@@ -58,6 +75,22 @@ public class Email {
     public boolean enviarEmailHtml() {
         try {
             HtmlEmail email = new HtmlEmail();
+            
+            // configurações de conexão
+            email.setHostName("smtp.gmail.com");
+            email.setSmtpPort(587);
+            // chave de autenticação: skxy wabz zvcc alew
+            email.setAuthentication("enzo.enactusuem@gmail.com", "skxy wabz zvcc alew");
+            email.setStartTLSEnabled(true);
+
+            // o remetente precisa ser o mesmo de "setAuthentication"
+            email.setFrom("enzo.enactusuem@gmail.com");
+            // destinatário
+            email.addTo(getParaEmail(), getParaEmail());
+            // conteúdo
+            email.setSubject(getAssunto());
+            email.setMsg(getMensagem());
+            /*
             email.setHostName(HOST);
             email.setSmtpPort(PORT);
             email.setCharset("UTF-8");
@@ -66,6 +99,7 @@ public class Email {
             email.setFrom(getDeEmail(), getDeNome());
             email.setSubject(getAssunto());
             email.setHtmlMsg(getMensagem());
+            */
 
             String messagaID = email.send();
 

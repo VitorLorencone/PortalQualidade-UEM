@@ -53,6 +53,13 @@ public class MenuController extends Window {
         this.conteudo.setSrc("/dados/profile/profile.zul");
         Clients.evalJavaScript("window.history.pushState(null, '', '/perfil');");
     }
+
+    // BEGIN TESTE - ADD 04/11/2025
+    public void abrirPaginaTesteMensagens() {
+        this.conteudo.setSrc("dados/documentos/testeMensagens.zul");
+        Clients.evalJavaScript("window.history.pushState(null, '', '/testeMensagens');");
+    }
+    // END TESTE
     
     // FUNÇÕES ANTIGAS
     // Deixando aqui para compatibilidade com as páginas antigas que o NPD disponibilizou

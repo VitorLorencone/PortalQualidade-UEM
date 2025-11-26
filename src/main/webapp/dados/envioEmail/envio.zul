@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
-    <nodom title="" id="winDocumentoList" use="controller.documentos.DocListController">
-  
-        <div class="d-flex pb-4">
+
+    <nodom title="" id="winEnvioEmail" use="controller.envioEmails.EnvioEmailsController">
+        <div id="titulo-envio-mensages" class="d-flex pb-4">
             <div class="col">
-                <n:h4>Documentos</n:h4>
+                <n:h4>Envio de Mensagens por Email</n:h4>
             </div>
             <div class="col text-end">
-                <button label="Novo Documento" iconSclass="z-icon-plus" 
-                    onClick="winDocumentoList.novoDocumento()" class="btn btn-primary"/>
+                <button label="Escolher Mensagem" iconSclass="z-icon-plus" 
+                    onClick="winEnvioEmail.escolherMensagem()" class="btn btn-primary"/>
             </div>
         </div>
-        
+
         <div class="card">
             <div class="card-body">
-
                 <!-- Parte com botões. A classe justify-content-between fará com que os botões fiquem justificados -->
                 <div class="d-flex justify-content-between form-group mb-3">
                     <div class="col-sm-12 col-md-12 col-lg-10 pl-0">
@@ -25,12 +24,12 @@
                                         placeholder="Buscar documentos...">
                                         <attribute name="onOK">
                                 <![CDATA[
-                                    winDocumentoList.filtrar();
+                                    winEnvioEmail.filtrar();
                                 ]]>
                                         </attribute>
                                     </textbox>        
                                     <button label="Filtrar" class="btn btn-light btn-outline-secondary" 
-                                        iconSclass="z-icon-search" onClick="winDocumentoList.filtrar()"/>
+                                        iconSclass="z-icon-search" onClick="winEnvioEmail.filtrar()"/>
                                 </div>
                             </div>
                             <div class="col-md-3">                
@@ -48,7 +47,7 @@
                             </div>
                             <div class="col-md-3">                
                                 <listbox id="vlTipoDocumento" mold="select" class="form-select" 
-                                    onChange="winDocumentoList.filtrar()">
+                                    onChange="winEnvioEmail.filtrar()">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os tipos"/>
                                     </listitem>
@@ -77,7 +76,7 @@
                             </div>
                             <div class="col-md-3">                
                                 <listbox id="vlEstado" mold="select" class="form-select" 
-                                    onChange="winDocumentoList.filtrar()">
+                                    onChange="winEnvioEmail.filtrar()">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os estados"/>
                                     </listitem>
@@ -93,9 +92,6 @@
                                     <listitem value="ASSINATURA">
                                         <listcell label="Assinatura"/>
                                     </listitem>
-                                    <listitem value="FINALIZADO">
-                                            <listcell label="Finalizado"/>
-                                    </listitem>
                                 </listbox>
                             </div>
                         </div>
@@ -104,7 +100,7 @@
                         
                     </div>
                 </div>
-        
+
                 <!-- Parte com o grid. Aqui definimos as colunas e como os dados serão mostrados. -->
                 <div class="row responsive-grid-md"> 
                     <grid id="resultados" sizedByContent="false" mold="paging" width="100%" 
@@ -119,36 +115,27 @@
                             <column label="" width="120px"/>
                         </columns>
                         <template name="model">
-                            <row onClick="winDocumentoList.onClickedVerDocumento(event)" 
+                            <row onClick="winEnvioEmail.onClickedVerDocumento(event)" 
                                 style="cursor: pointer;">
                                 <attribute ca:name="id">${each.cdDocumento}</attribute>
                                 <label value="${each.cdDocumento}"/>
                                 <label value="${each.nmDocumento}"/>
                                 <label value="${each.tpDocumento}"/>
                                 <label value="${each.dtCriacao != null ? c:formatDate(each.dtCriacao, 'dd/MM/yyyy') : '-'}"/>
-                                
-                                <label value="${each.estado != null ? each.estado.descricao : '-'}"
-                                    style="${each.estado != null ? 
-                                        (each.estado.codigo eq 'elaboracao' ? 'color: blue; font-weight: bold;' :
-                                        each.estado.codigo eq 'avaliacao' ? 'color: orange; font-weight: bold;' :
-                                        each.estado.codigo eq 'sugestao' ? 'color: yellow; font-weight: bold;' :
-                                        each.estado.codigo eq 'finalizado' ? 'color: green; font-weight: bold;' :
-                                        each.estado.codigo eq 'assinatura' ? 'color: purple; font-weight: bold;' : '') 
-                                    : ''}"
-                                />
-                                
+                                <label value="${each.estado != null ? each.estado.descricao : '-'}"/>
                                 <label value="${each.diretoria != null ? each.diretoria.nmOrgao : '-'}"/>
                                 <button label="Alterar" class="border-0 btn btn-outline-primary" 
                                     iconSclass="z-icon-pencil" 
-                                    onClick="winDocumentoList.onClickedAlterarDocumento(event)">
+                                    onClick="winEnvioEmail.onClickedAlterarDocumento(event)">
                                     <attribute ca:name="id">${each.cdDocumento}</attribute>
                                 </button>
                             </row>
                         </template>
                     </grid>
                 </div>
-        
             </div>
         </div>
-    </nodom>       
-</zk>
+
+    </nodom>
+
+</zk> 
