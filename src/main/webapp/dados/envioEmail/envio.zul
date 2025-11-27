@@ -43,6 +43,12 @@
                                     <listitem value="descricao">
                                         <listcell label="Descrição"/>
                                     </listitem>
+                                    <listitem value="data">
+                                        <listcell label="Data Criação"/>
+                                    </listitem>
+                                    <listitem value="diretoria">
+                                        <listcell label="Diretoria"/>
+                                    </listitem>
                                 </listbox>
                             </div>
                             <div class="col-md-3">                
@@ -53,21 +59,6 @@
                                     </listitem>
                                     <listitem value="POP">
                                         <listcell label="POP"/>
-                                    </listitem>
-                                    <listitem value="IT">
-                                        <listcell label="IT"/>
-                                    </listitem>
-                                    <listitem value="PR">
-                                        <listcell label="PR"/>
-                                    </listitem>
-                                    <listitem value="PS">
-                                        <listcell label="PS"/>
-                                    </listitem>
-                                    <listitem value="FORM">
-                                        <listcell label="FORM"/>
-                                    </listitem>
-                                    <listitem value="REG">
-                                        <listcell label="REG"/>
                                     </listitem>
                                     <listitem value="OUTROS">
                                         <listcell label="OUTROS"/>
@@ -89,8 +80,8 @@
                                     <listitem value="SUGESTAO">
                                         <listcell label="Sugestão"/>
                                     </listitem>
-                                    <listitem value="ASSINATURA">
-                                        <listcell label="Assinatura"/>
+                                    <listitem value="FINALIZADO">
+                                        <listcell label="Finalizado"/>
                                     </listitem>
                                 </listbox>
                             </div>

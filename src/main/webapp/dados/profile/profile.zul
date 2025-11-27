@@ -28,10 +28,6 @@
                             onClick="winProfile.sair()"/>
                 </div>
 
-                <div class="mt-4">
-                    <label id="lb_versao" class="text-muted small"/>
-                </div>
-
                 <label id="msg_erro" style="color:red; display:none;"/>
             </div>
         </div>

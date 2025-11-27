@@ -45,21 +45,6 @@
                                         <listitem value="POP" selected="true">
                                             <listcell label="POP - Procedimento Operacional Padrão"/>
                                         </listitem>
-                                        <listitem value="IT">
-                                            <listcell label="IT - Instrução de Trabalho"/>
-                                        </listitem>
-                                        <listitem value="PR">
-                                            <listcell label="PR - Procedimento"/>
-                                        </listitem>
-                                        <listitem value="PS">
-                                            <listcell label="PS - Protocolo de Serviço"/>
-                                        </listitem>
-                                        <listitem value="FORM">
-                                            <listcell label="FORM - Formulário"/>
-                                        </listitem>
-                                        <listitem value="REG">
-                                            <listcell label="REG - Regulamento"/>
-                                        </listitem>
                                         <listitem value="OUTROS">
                                             <listcell label="OUTROS - Outros Tipos"/>
                                         </listitem>

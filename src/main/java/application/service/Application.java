@@ -14,6 +14,9 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.sys.PageCtrl;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.Window;
+
+import java.util.TimeZone;
+
 import utilitarios.Utils;
 
 public class Application {
@@ -39,6 +42,8 @@ public class Application {
         }
 
         verificaAmbiente();
+
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
     }
 
     private void verificaAmbiente() {

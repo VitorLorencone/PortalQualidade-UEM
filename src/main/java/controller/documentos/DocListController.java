@@ -53,52 +53,91 @@ public class DocListController extends Window {
         filtrar();
     }
 
-    public void filtrar() {
-        String filtro = " 1=1 ";
-        String ordem = " order by t.nmDocumento ";
-        String campoSelecionado = this.vlCampo.getSelectedItem() != null ? 
+public void filtrar() {
+
+    String filtro = " 1=1 ";
+    String ordem = " ORDER BY t.nmDocumento ";
+
+    String campoSelecionado = this.vlCampo.getSelectedItem() != null ?
             (String) this.vlCampo.getSelectedItem().getValue() : "";
-        String tipoDocumentoSelecionado = this.vlTipoDocumento.getSelectedItem() != null ? 
+
+    String tipoDocumento = this.vlTipoDocumento.getSelectedItem() != null ?
             (String) this.vlTipoDocumento.getSelectedItem().getValue() : "";
-        String estadoSelecionado = this.vlEstado.getSelectedItem() != null ?
+
+    String estado = this.vlEstado.getSelectedItem() != null ?
             (String) this.vlEstado.getSelectedItem().getValue() : "";
-        String textoDaPesquisa = this.vlPesquisa.getValue();
 
-        // Filtro por tipo de documento
-        if (tipoDocumentoSelecionado != null && !tipoDocumentoSelecionado.isEmpty()) {
-            filtro += " AND t.tpDocumento = '" + tipoDocumentoSelecionado + "'";
+    String textoPesquisa = this.vlPesquisa.getValue();
+
+    if (tipoDocumento != null && !tipoDocumento.isEmpty()) {
+        filtro += " AND t.tpDocumento = '" + tipoDocumento + "'";
+    }
+
+    if (estado != null && !estado.isEmpty()) {
+        filtro += " AND t.estado = '" + estado + "'";
+    }
+
+    if (textoPesquisa != null && !textoPesquisa.trim().isEmpty()) {
+
+        String texto = Normalizer.normalize(textoPesquisa, Normalizer.Form.NFD)
+                .replaceAll("[^\\p{ASCII}]", "")
+                .trim()
+                .toUpperCase();
+
+        if ("nome".equals(campoSelecionado)) {
+
+            filtro += " AND UPPER(t.nmDocumento) LIKE '%" + texto + "%'";
+
+        } else if ("descricao".equals(campoSelecionado)) {
+
+            filtro += " AND UPPER(t.deDescricao) LIKE '%" + texto + "%'";
+
+        } else if ("data_cri".equals(campoSelecionado)) {
+
+            filtro += " AND DATE_FORMAT(t.dtCriacao, '%d/%m/%y') LIKE '%" + texto + "%'";
+
+        } else if ("data_ven".equals(campoSelecionado)) {
+
+            filtro += " AND DATE_FORMAT(t.dtVencimento, '%d/%m/%y') LIKE '%" + texto + "%'";
+
+        } else if ("diretoria".equals(campoSelecionado)) {
+
+            filtro += " AND UPPER(t.diretoria.nmOrgao) LIKE '%" + texto + "%'";
+
+        } else if ("rt".equals(campoSelecionado)) {
+
+            filtro += " AND UPPER(t.rt.nome) LIKE '%" + texto + "%'";
+
+        } else if ("setor".equals(campoSelecionado)) {
+            filtro += " AND UPPER(s.nmOrgao) LIKE '%" + texto + "%'";
+
+        } else if ("avaliador".equals(campoSelecionado)) {
+            filtro += " AND UPPER(av.nome) LIKE '%" + texto + "%'";
+
+        } else if ("qualidade".equals(campoSelecionado)) {
+            filtro += " AND UPPER(fq.nome) LIKE '%" + texto + "%'";
+            
+        } else {
+            filtro += " AND ( "
+                    + "UPPER(t.nmDocumento) LIKE '%" + texto + "%' "
+                    + "OR UPPER(t.deDescricao) LIKE '%" + texto + "%' "
+                    + "OR DATE_FORMAT(t.dtCriacao, '%d/%m/%y') LIKE '%" + texto + "%' "
+                    + "OR DATE_FORMAT(t.dtVencimento, '%d/%m/%y') LIKE '%" + texto + "%' "
+                    + "OR UPPER(t.diretoria.nmOrgao) LIKE '%" + texto + "%' "
+                    + "OR UPPER(t.rt.nome) LIKE '%" + texto + "%' "
+                    + "OR UPPER(s.nmOrgao) LIKE '%" + texto + "%' "
+                    + "OR UPPER(av.nome) LIKE '%" + texto + "%' "
+                    + "OR UPPER(fq.nome) LIKE '%" + texto + "%' "
+                    + ")";
         }
+    }
 
-        // Filtro por estado
-        if (estadoSelecionado != null && !estadoSelecionado.isEmpty()) {
-            filtro += " AND t.estado = '" + estadoSelecionado + "'";
-        }
+    List<Documento> documentos = documentoDao.listarComFetch(filtro, ordem);
 
-        // Filtro por texto de pesquisa
-        if (textoDaPesquisa != null && !textoDaPesquisa.isEmpty()) {
-            String textoTratado = Normalizer.normalize(textoDaPesquisa, Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "").trim().toUpperCase();
-
-            if ("nome".equals(campoSelecionado)) {
-                filtro += " AND UPPER(t.nmDocumento) LIKE '%" + textoTratado + "%'";
-            } else if ("descricao".equals(campoSelecionado)) {
-                filtro += " AND UPPER(t.deDescricao) LIKE '%" + textoTratado + "%'";
-            } else {
-                // Se "Todos os campos" estiver selecionado
-                filtro += " AND ( UPPER(t.nmDocumento) LIKE '%" + textoTratado + "%'"
-                        + " OR UPPER(t.deDescricao) LIKE '%" + textoTratado + "%'"
-                        + " )";
-            }
-        }
-
-        // IMPORTANTE: Usar listarComFetch para carregar relacionamentos LAZY
-        List<Documento> documentos = documentoDao.listarComFetch(filtro, ordem);
-        
-        if (documentos != null) {
-            SimpleListModel listModel = new SimpleListModel(documentos);
-            this.resultados.setModel(listModel);
-        }
-    } // filtrar
+    if (documentos != null) {
+        this.resultados.setModel(new SimpleListModel(documentos));
+    }
+}
 
     /**
      * Executado quando é clicado no botão "novo documento". Abre a tela de cadastro

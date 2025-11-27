@@ -55,21 +55,6 @@
                                     <listitem value="POP">
                                         <listcell label="POP"/>
                                     </listitem>
-                                    <listitem value="IT">
-                                        <listcell label="IT"/>
-                                    </listitem>
-                                    <listitem value="PR">
-                                        <listcell label="PR"/>
-                                    </listitem>
-                                    <listitem value="PS">
-                                        <listcell label="PS"/>
-                                    </listitem>
-                                    <listitem value="FORM">
-                                        <listcell label="FORM"/>
-                                    </listitem>
-                                    <listitem value="REG">
-                                        <listcell label="REG"/>
-                                    </listitem>
                                     <listitem value="OUTROS">
                                         <listcell label="OUTROS"/>
                                     </listitem>

@@ -1,15 +1,17 @@
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
+    <nodom id="winMenu" use="controller.menuBar.MenuController"> 
     <n:nav class="navbar pt-0 pl-0 pb-2" style="background-color: white; background-image:url(${c:encodeURL('/images/header_background.png')  }); background-repeat: repeat-x; background-position: bottom;">
         <div class="container-fluid p-0">
             <div class="d-flex pull-left m-0 h4">
                 <div>
-                    <image src="/images/hum-header.png" style="height:70px"/> 
+                    <image src="/images/hum-header.png" style="height:70px; cursor:pointer;" onClick="winMenu.voltarPortal()"/>
                 </div>
-                <div class="align-self-center">
+                <div class="align-self-center" style='cursor:pointer' onClick="winMenu.voltarPortal()">
                     Portal da Qualidade 
                     <n:small class="text-body-secondary">Sistema do HUM UEM</n:small>
                 </div>
             </div>
         </div>
     </n:nav>
+    </nodom>
 </zk>
