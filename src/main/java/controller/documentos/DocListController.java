@@ -21,17 +21,22 @@ import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import java.text.Normalizer;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DocListController extends Window {
-
     private Window win;
+    private Include menubar;
 
+    // ELEMENTOS GRÁFICOS
     private Listbox vlCampo;
     private Listbox vlTipoDocumento;
     private Listbox vlEstado;
     private Textbox vlPesquisa;
     private Grid resultados;
+
+    // PARAMETROS ZK
+    private List<Integer> selecionadosIds;
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
@@ -41,7 +46,8 @@ public class DocListController extends Window {
 
     public void onCreate() {
         this.win = (Window) getFellow("winDocumentoList");
-
+        this.menubar = (Include) getFellowIfAny("menubar", true);
+    
         // Pegamos os campos definidos no .zul e vinculamos à uma variável
         // para pegarmos ou popular com valores
         this.vlPesquisa = (Textbox) getFellow("vlPesquisa");
@@ -93,12 +99,21 @@ public class DocListController extends Window {
 
         // IMPORTANTE: Usar listarComFetch para carregar relacionamentos LAZY
         List<Documento> documentos = documentoDao.listarComFetch(filtro, ordem);
+
+        this.selecionadosIds = new ArrayList<>();
+        for (Documento doc : documentos) {
+            Integer id = (Integer) doc.getCdDocumento();
+            this.selecionadosIds.add(id);
+        }
         
         if (documentos != null) {
             SimpleListModel listModel = new SimpleListModel(documentos);
             this.resultados.setModel(listModel);
         }
     } // filtrar
+
+
+    // BOTÕES -----------------------------------------------------------------
 
     /**
      * Executado quando é clicado no botão "novo documento". Abre a tela de cadastro
@@ -107,8 +122,21 @@ public class DocListController extends Window {
      */
     public void novoDocumento() throws Exception {
         zkUtils.setParametro("ação", "novo");
-        this.redirecionar();
+        this.redirecionar("dados/documentos/doc.zul");
     }
+
+    /**
+     * Chamada pelo botão "enviar emails". Abre a tela de mensagens com o parametro "intencao" igual a "enviar"
+     */
+    public void enviarEmail() {
+        zkUtils.setParametroSessao("intencao", "enviar");
+        zkUtils.setParametroSessao("docSelecionados", this.selecionadosIds);
+        Include telaMae = (Include) this.win.getParent();
+        zkUtils.setParametro("url_retorno", telaMae.getSrc());
+        this.menubar.setSrc("");
+        this.redirecionar("dados/mensagens/msgs.zul");
+    }
+
 
     /**
      * Executado quando é clicado em "ver documento". Abre a tela de cadastro passando
@@ -119,7 +147,7 @@ public class DocListController extends Window {
         Integer cdDocumento = Integer.valueOf(event.getTarget().getClientAttribute("id"));
         zkUtils.setParametro("documento", cdDocumento);
         zkUtils.setParametro("ação", "ler");
-        this.redirecionar();
+        this.redirecionar("dados/documentos/doc.zul");
     }
 
     /**
@@ -131,7 +159,7 @@ public class DocListController extends Window {
         Integer cdDocumento = Integer.valueOf(event.getTarget().getClientAttribute("id"));
         zkUtils.setParametro("documento", cdDocumento);
         zkUtils.setParametro("ação", "editar");
-        this.redirecionar();
+        this.redirecionar("dados/documentos/doc.zul");
     }
 
     /**
@@ -139,11 +167,11 @@ public class DocListController extends Window {
      * a url de retorno, ou seja, a url que aparecerá no botão "Voltar" e a url
      * que será redirecionado automaticamente após salvar ou excluir os dados.
      */
-    private void redirecionar() {
+    private void redirecionar(String destino) {
         Include include = (Include) win.getParent(); // pega o "pai" desta tela, o qual é um "include"
         String urlOrigem = include.getSrc(); // o source do include é a página atual
         include.setSrc(null);
         zkUtils.setParametro("url_retorno", urlOrigem); // a página atual será a url de retorno
-        include.setSrc("dados/documentos/doc.zul"); // vai para a página de cadastro de documento
+        include.setSrc(destino); // vai para a página de cadastro de documento
     }
 }

@@ -2,16 +2,19 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client" xmlns:ca="client/attribute">
     <nodom title="" id="winMensagemList" use="controller.mensagens.MsgListController">
+
         <style>
             .linha-msg-padrao {
                 background-color: #f4e7ffff;
             }
         </style>
+
         <div class="d-flex pb-4">
             <div class="col">
-                <n:h4>Cadastro de Mensagens</n:h4>
+                <label id="LBLtituloPagina" value="Cadastro de Mensagens" style="font-size:36px;font-weight:bold;" />
             </div>
             <div class="col text-end">
+                <button label="Voltar" id="btnvoltar" iconSclass="z-icon-arrow-left" onClick="winMensagemList.voltar()" class="btn btn-secondary"/>
                 <button label="Nova Mensagem" iconSclass="z-icon-plus" onClick="winMensagemList.novaMensagem()" class="btn btn-primary"/>
             </div>
         </div>

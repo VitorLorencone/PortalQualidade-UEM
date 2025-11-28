@@ -15,16 +15,19 @@
 <zk xmlns="http://www.zkoss.org/2005/zul" xmlns:n="native" xmlns:w="client">
 
     <!-- HEADER/CABEÇALHO -->
-    <include src="header.zul"/>
+    <include id="cabecalho" src="header.zul"/>
     
     <!-- MENU -->
-    <include src="menubar.zul"/>
+    <include id="menubar" src="menubar.zul"/>
         
     <!-- FOOTER -->
     <div class="col p-3" style="min-height: calc(100vh - 195px) !important;">
         <include id="conteudo"/>
     </div>
+
+    <!--
     <include src="footer.zul"/>
+    -->
  
     <!-- JS -->
     <n:script type="text/javascript" src="js/jquery.mask.js" defer="true"></n:script>

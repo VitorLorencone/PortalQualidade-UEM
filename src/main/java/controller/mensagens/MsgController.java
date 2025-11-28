@@ -11,6 +11,8 @@ import model.Mensagem;
 import model.FrequenciaMensagem;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
+
+import java.util.List;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
@@ -20,6 +22,8 @@ import java.util.Date;
 public class MsgController extends Window {
 
     private Window win;
+
+    // COMPONENTES GRÁFICOS
     private Label cdMensagem;
     private Textbox nome;
     private Textbox corpo;
@@ -30,6 +34,15 @@ public class MsgController extends Window {
     private Button btnSalvar;
     private Button btnExcluir;
     private Button btnCancelar;
+    private Button btnEnviar;
+
+    // PARAMETROS ZK - recebidos
+    private Integer mensagemId;
+    private List<Integer> docSelecionados;
+    private String intencao;
+    private String acao;
+    private String categoriaMsg;
+    private String urlRetorno;
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
@@ -38,54 +51,83 @@ public class MsgController extends Window {
 
     private Mensagem mensagem = new Mensagem();
 
-    private String urlRetorno = "";
-
+    /**
+     * Chamado quando a página "dados/mensagens/msg.zul" é acessada
+     */
     public void onCreate() {
-
         this.win = ((Window) getFellow("winMensagem"));
 
+        // COMPONENTES GRÁFICOS (binding)
         this.cdMensagem = (Label) getFellow("cdMensagem");
         this.nome = (Textbox) getFellow("nome");
         this.corpo = (Textbox) getFellow("corpo");
         this.dtInicio = (Datebox) getFellow("dtInicio");
         this.dtFim = (Datebox) getFellow("dtFim");
         this.frequencia = (Listbox) getFellow("frequencia");
+
         this.btnSalvar = (Button) getFellow("salvar");
         this.btnExcluir = (Button) getFellow("excluir");
         this.btnCancelar = (Button) getFellow("cancelar");
+        this.btnEnviar = (Button) getFellow("enviar");
+        
+        // PARAMETROS ZK
+        this.mensagemId = (Integer) zkUtils.getParametro("mensagem");
+        this.docSelecionados = (List<Integer>) zkUtils.getParametroSessao("docSelecionados");
+        zkUtils.setParametroSessao("docSelecionados", this.docSelecionados);
+        this.intencao = (String) zkUtils.getParametroSessao("intencao");
+        zkUtils.setParametroSessao("intencao", this.intencao);
+        this.acao = (String) zkUtils.getParametro("ação");
+        this.categoriaMsg = (String) zkUtils.getParametro("categoria");
+        this.urlRetorno = (String) zkUtils.getParametro("url_retorno");
 
-        // Pega os parâmetros que vieram da outra página
-        Integer mensagemId = (Integer) zkUtils.getParametro("mensagem");
-        String acao = (String) zkUtils.getParametro("ação");
-        String categoriaMsg = (String) zkUtils.getParametro("categoria");
-        urlRetorno = (String) zkUtils.getParametro("url_retorno");
+        // debug dos parametros
+        System.out.println(">>> DEBUG MSGCONTROLLER");
+        System.out.println("intencao: ");
+        System.out.println(this.intencao);
+        System.out.println("intencao: ");
+        System.out.println(this.docSelecionados);
 
         // Mostra os botões de acordo com a ação
+        /**
+         * As ações podem ser:
+         * - novo
+         * - editar
+         * - ler
+         * As intenções podem ser:
+         * - manter
+         * - enviar
+         */
         if (acao != null) {
-            if (acao.equals("novo")) {
-                this.btnSalvar.setVisible(true);
-                this.btnCancelar.setVisible(true);
-                this.cdMensagem.setVisible(false);
-            } else if (acao.equals("editar")) {
-                if (categoriaMsg.equalsIgnoreCase("Padrao")) {
+            String act = (String) acao;
+            switch(act) {
+                case "novo":
+                    this.btnSalvar.setVisible(true);
+                    this.btnCancelar.setVisible(true);
+                    this.cdMensagem.setVisible(false);
+                    break;
+                case "editar":
+                    if (categoriaMsg.equalsIgnoreCase("Padrao")) {
+                        this.nome.setReadonly(true);
+                        this.btnSalvar.setVisible(true);
+                        this.btnCancelar.setVisible(true);
+                        this.btnExcluir.setVisible(false);                    
+                    } else {
+                        this.btnSalvar.setVisible(true);
+                        this.btnCancelar.setVisible(true);
+                        this.btnExcluir.setVisible(true);
+                    }
+                    break;
+                case "ler":
                     this.nome.setReadonly(true);
-                    this.btnSalvar.setVisible(true);
-                    this.btnCancelar.setVisible(true);
-                    this.btnExcluir.setVisible(false);                    
-                } else {
-                    this.btnSalvar.setVisible(true);
-                    this.btnCancelar.setVisible(true);
-                    this.btnExcluir.setVisible(true);
-                }
-
-            } else if (acao.equals("ler")) {
-                this.nome.setReadonly(true);
-                this.corpo.setReadonly(true);
-                this.dtInicio.setReadonly(true);
-                this.dtInicio.setDisabled(true);
-                this.dtFim.setReadonly(true);
-                this.dtFim.setDisabled(true);
-                this.frequencia.setDisabled(true);
+                    this.corpo.setReadonly(true);
+                    this.dtInicio.setReadonly(true);
+                    this.dtInicio.setDisabled(true);
+                    this.dtFim.setDisabled(true);
+                    this.frequencia.setDisabled(true);
+                    if (this.intencao.equalsIgnoreCase("enviar")) {
+                        this.btnEnviar.setVisible(true);
+                    }
+                    break;                    
             }
         }
 

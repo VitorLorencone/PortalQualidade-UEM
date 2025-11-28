@@ -754,6 +754,24 @@ public class ZkUtils {
         }
     }
 
+    /**
+     * Guarda um parâmetro na sessão (longo prazo).
+     * Funciona mesmo em redirects ou quando abre uma nova página.
+     */
+    public void setParametroSessao(String chave, Object obj) {
+        Sessions.getCurrent().setAttribute(chave, obj);
+    }
+
+    /**
+     * Recupera parâmetro da sessão.
+     */
+    public Object getParametroSessao(String chave) {
+        return Sessions.getCurrent().getAttribute(chave);
+    }
+
+
+
+
     /* *****************************
     
        INFORMAÇõES DO LADO CLIENTE
