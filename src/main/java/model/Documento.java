@@ -36,8 +36,11 @@ public class Documento implements Serializable {
     @Column(name = "TP_DOCUMENTO")
     private String tpDocumento;
 
-    //@Column(name = "DE_LINK")
-    //private String deLink;
+    @Column(name = "DE_LINK_PDF")
+    private String deLinkPdf;
+    
+    @Column(name = "DE_LINK_DOCS")
+    private String deLinkDocs;
 
     @Column(name = "DT_CRIACAO")
     private Date dtCriacao;
@@ -62,7 +65,7 @@ public class Documento implements Serializable {
     @JoinColumn(name = "CD_PESSOA", referencedColumnName = "CD_PESSOA")
     private FuncionarioHU rt;
 
-    // RELACIONAMENTOS N:N (gerenciados em telas/abas separadas QUE SERÃO FEITAS DEPOIS)
+    // RELACIONAMENTOS N:N (gerenciados em telas/abas separadas)
 
     // Relacionamento N:N com Setor - DOCUMENTO é o dono
     @ManyToMany(fetch = FetchType.LAZY)
@@ -99,5 +102,4 @@ public class Documento implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "CD_PESSOA")
     )
     private List<FuncionarioHU> autores;
-
 }
