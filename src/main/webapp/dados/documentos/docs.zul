@@ -7,8 +7,8 @@
                 <n:h4>Documentos</n:h4>
             </div>
             <div class="col text-end">
-                <button label="Novo Documento" iconSclass="z-icon-plus" 
-                    onClick="winDocumentoList.novoDocumento()" class="btn btn-primary"/>
+                <button label="Novo Documento" iconSclass="z-icon-plus" onClick="winDocumentoList.novoDocumento()" class="btn btn-primary"/>
+                <button label="Enviar Emails" iconSclass="z-icon-plus" onClick="winDocumentoList.enviarEmail()" class="btn btn-primary"/>
             </div>
         </div>
         

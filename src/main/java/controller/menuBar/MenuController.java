@@ -5,11 +5,15 @@ import org.zkoss.zul.Include;
 import org.zkoss.zul.Window;
 import org.zkoss.zk.ui.util.Clients;
 import application.service.Sessao;
+import utilitarios.ZkUtils;
 
 public class MenuController extends Window {
 
     private Window winMenu;
     private Include conteudo;
+
+    // ZK UTILS
+    private final ZkUtils zkUtils = new ZkUtils();
 
     public void onCreate() {
         Sessao.getInstance().validarSessao(); // Validar Sessão
@@ -35,6 +39,7 @@ public class MenuController extends Window {
     }
 
     public void abrirPaginaMensagens() {
+        zkUtils.setParametroSessao("intencao", "manter");
         this.conteudo.setSrc("/dados/mensagens/msgs.zul");
         Clients.evalJavaScript("window.history.pushState(null, '', '/mensagens');");
     }

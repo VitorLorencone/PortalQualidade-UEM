@@ -8,25 +8,46 @@ package controller.mensagens;
 
 import dao.MensagemDAO;
 import model.Mensagem;
+
+// ELEMENTOS GRÁFICOS E OUTROS DO ZK
+import org.zkoss.zul.Label;
 import org.zkoss.zul.Grid;
 import org.zkoss.zul.Include;
 import org.zkoss.zul.Listbox;
 import org.zkoss.zul.SimpleListModel;
 import org.zkoss.zul.Textbox;
 import org.zkoss.zul.Window;
+import org.zkoss.zul.Button;
 import org.zkoss.zk.ui.event.Event;
+
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MsgListController extends Window {
 
     private Window win;
+    private Include conteudo;
+    private Include menubar;
 
+    // ELEMENTOS GRÁFICOS
+    private Label LBLtituloPagina;
     private Listbox vlCampo;
     private Textbox vlPesquisa;
     private Grid resultados;
+    private Button btnVoltar;
+
+    // PARAMETROS ZK - recebidos
+    private List<Integer> docSelecionados = new ArrayList<>();
+    private String intencao;
+
+    // Outras informações
+    private String urlRetorno;
+    private String urlAtual;
+    private Include telaMae;
+
 
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
@@ -35,12 +56,44 @@ public class MsgListController extends Window {
 
     public void onCreate() {
         this.win = (Window) getFellow("winMensagemList");
+        this.conteudo = (Include) getFellowIfAny("conteudo", true);
+        this.menubar = (Include) getFellowIfAny("menubar", true);
+        System.out.println(">> DEBUG msgListcontroller");
+        System.out.println("src menubar");
+        System.out.println(this.menubar.getSrc());
 
         // Pegamos os campos definidos no .zul e vinculamos à uma variável 
         // para pegarmos ou popularmos com valores
+        this.LBLtituloPagina = (Label) getFellow("LBLtituloPagina");
         this.vlPesquisa = (Textbox) getFellow("vlPesquisa");
         this.vlCampo = (Listbox) getFellow("vlCampo");
         this.resultados = (Grid) getFellow("resultados");
+        this.btnVoltar = (Button) getFellow("btnvoltar");
+        this.btnVoltar.setVisible(false);
+
+        // PARAMETROS ZK
+        this.docSelecionados = (List<Integer>) zkUtils.getParametroSessao("docSelecionados");
+        zkUtils.setParametroSessao("docSelecionados", this.docSelecionados);
+        this.intencao = (String) zkUtils.getParametroSessao("intencao");
+        zkUtils.setParametroSessao("intencao", this.intencao);
+        this.urlRetorno = (String) zkUtils.getParametro("url_retorno");
+
+        // Outras informações
+        this.telaMae = (Include) win.getParent();
+        this.urlAtual = telaMae.getSrc();
+
+        // Atualizando a interface
+        if (this.intencao.equalsIgnoreCase("enviar")) {
+            this.LBLtituloPagina.setValue("Escolha sua mensagem");
+            this.btnVoltar.setVisible(true);
+        } 
+
+        // debug
+        System.out.println(">>> DEBUG MSGLISTCONTROLLER");
+        System.out.println("parametro intencao");
+        System.out.println(this.intencao);
+        System.out.println("parametro docSelecionados");
+        System.out.println(this.docSelecionados);
 
         filtrar();
     }
@@ -76,6 +129,14 @@ public class MsgListController extends Window {
             SimpleListModel listModel = new SimpleListModel(mensagens);
             this.resultados.setModel(listModel);
         }
+    }
+
+    public void voltar() {
+        System.out.println(">>> DEBUG btn Voltar : funcao voltar chamada");
+        System.out.printf("url de retorno : ");
+        System.out.println(this.urlRetorno);
+        this.menubar.setSrc("menubar.zul");
+        this.conteudo.setSrc(this.urlRetorno);
     }
 
     /**
