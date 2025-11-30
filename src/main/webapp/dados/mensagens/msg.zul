@@ -61,7 +61,7 @@
                         <div class="col-md-6 text-end">
                             <button class="btn btn-secondary" iconSclass="" id="cancelar" label="Cancelar" onClick="winMensagem.voltar()" visible="false"/>
                             <button class="btn btn-primary" iconSclass="z-icon-check" id="salvar" label="Salvar" onClick="winMensagem.gravar()" visible="false"/>
-                            <button class="btn btn-primary" iconSclass="z-icon-check" id="enviar" label="Enviar" visible="true"/>
+                            <button class="btn btn-primary" iconSclass="z-icon-check" id="enviar" label="Enviar" onClick="winMensagem.enviar()" visible="true"/>
                         </div>
                     </div>
                 </div>
