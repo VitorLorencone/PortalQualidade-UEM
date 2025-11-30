@@ -1,6 +1,7 @@
 # Portal Qualidade
 
 ### O que é
+
 O Portal da Qualidade é um sistema de gerenciamento de documentos produzidos pelo Escritório da Qualidade do Hospital Regional Universitário de Maringá (HUM) que tem como objetivo aumentar a produtividade dos funcionários do escritório por meio da automação de tarefas rotineiras.
 
 Os documentos administrados pelo Escritório da Qualidade, como os Procedimentos Operacionais Padrões (POPs) são essenciais ao funcionamento do hospital, pois garantem a eficiência e segurança das ações realizadas por formalizarem como tudo deve ser feito, desde trocar uma lâmpada até atender um paciente em parada cardiorrespiratória.
@@ -10,7 +11,6 @@ Além disso, sendo o Escritório da Qualidade um setor do HUM, suas atividades p
 Tendo isso em mente, os funcionários do Escritório da Qualidade, em conversa com a equipe de alunos, determinou que necessitam de um sistema que compra as seguintes funções gerais principais:
 - Que envie mensagens pré definidas de forma automática por e-mail;
 - Que monitore os documentos próximos do prazo de validade;
-
 
 ### ZK Framework e Bootstrap
 
@@ -31,6 +31,10 @@ Tendo isso em mente, os funcionários do Escritório da Qualidade, em conversa c
 -   Está sendo utilizado o banco de dados MySQL. Favor alterar o arquivo `src/main/resources/hibernate.cfg.xml` para a base de desenvolvimento de sua equipe.
 - No geral, ele tentará se conectar com um banco de dados `portalqualidade` em `localhost:3306` com usuário e senhas ambos `admin`, mas que podem ser alterados no arquivo de configuração.
 - Todo banco é construído com Hibernate, mas um Dump com dados de exemplo também pode ser encontrado nesse repositório. Você apenas precisa garantir ter uma conexão aberta na porta acima e com mesmo nome e login.
+
+### Sistema de E-mails
+
+- O sistema de e-mails é feito através da API do Google e está cadastrado no código com o e-mail de um dos alunos, sendo necessário alterar para o e-mail oficial do setor da qualidade.
 
 ### Comandos de Run
 
