@@ -27,28 +27,35 @@ public class DocumentoDAO extends GenericDAO<Documento, Integer> {
     public List<Documento> listarComFetch(String filtro, String ordem) {
         List<Documento> documentos = null;
         Session session = null;
+        
         try {
             session = openSession();
-            
-            // Query HQL com LEFT JOIN FETCH para carregar relacionamentos LAZY
-            String hql = "SELECT DISTINCT t FROM Documento t " +
-                         "LEFT JOIN FETCH t.diretoria " +
-                         "LEFT JOIN FETCH t.rt " +
-                         "WHERE " + filtro + " " + ordem;
-            
+
+            // HQL com TODOS os relacionamentos necessários
+            String hql = "SELECT DISTINCT t FROM Documento t "
+                    + "LEFT JOIN FETCH t.diretoria d "
+                    + "LEFT JOIN FETCH t.rt r "
+                    + "LEFT JOIN t.setores s "
+                    + "LEFT JOIN t.avaliadores av "
+                    + "LEFT JOIN t.funcionariosQualidade fq "
+                    + "WHERE " + filtro + " "
+                    + ordem;
+
             Query<Documento> query = session.createQuery(hql, Documento.class);
-            
+
             printQuery(query);
-            
+
             documentos = query.list();
-            
+
         } catch (Exception e) {
             printException(e);
         } finally {
             closeSession(session);
         }
+
         return documentos;
     }
+
     
     /**
      * Busca um documento e inicializa os relacionamentos N:N (setores e funcionários qualidade)

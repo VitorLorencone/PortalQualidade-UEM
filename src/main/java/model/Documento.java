@@ -36,6 +36,9 @@ public class Documento implements Serializable {
     @Column(name = "TP_DOCUMENTO")
     private String tpDocumento;
 
+    //@Column(name = "DE_LINK")
+    //private String deLink;
+
     @Column(name = "DT_CRIACAO")
     private Date dtCriacao;
 

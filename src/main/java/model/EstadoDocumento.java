@@ -8,7 +8,8 @@ public enum EstadoDocumento {
     ELABORACAO("Elaboração", "elaboracao"),
     AVALIACAO("Avaliação", "avaliacao"),
     SUGESTAO("Sugestão", "sugestao"),
-    ASSINATURA("Assinatura", "assinatura");
+    ASSINATURA("Assinatura", "assinatura"),
+    FINALIZADO("Finalizado", "finalizado");
     
     private final String descricao;
     private final String codigo;

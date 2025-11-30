@@ -18,16 +18,20 @@
     <include id="cabecalho" src="header.zul"/>
     
     <!-- MENU -->
-    <include id="menubar" src="menubar.zul"/>
-        
-    <!-- FOOTER -->
-    <div class="col p-3" style="min-height: calc(100vh - 195px) !important;">
-        <include id="conteudo"/>
+    <include src="menubar.zul"/>
+
+    <!-- Mensagem inicial -->
+    <div class="col p-3"
+         style="min-height: calc(100vh - 195px) !important; display: flex; justify-content: center; align-items: center; position: relative;">
+
+        <div id="mensagemInicial" style="font-size: 24px; font-weight: bold; position: absolute;">
+            Bem-vindo(a) ao Sistema do Portal da Qualidade!
+        </div>
+
+        <include id="conteudo" onLoad="mensagemInicial.setVisible(false)"/>
     </div>
 
-    <!--
     <include src="footer.zul"/>
-    -->
  
     <!-- JS -->
     <n:script type="text/javascript" src="js/jquery.mask.js" defer="true"></n:script>

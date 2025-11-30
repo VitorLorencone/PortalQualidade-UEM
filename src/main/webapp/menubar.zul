@@ -34,11 +34,6 @@
                             <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaOrgaos()">ÓRGÃOS</a>
                         </n:li>
 
-                        <!-- Relatórios -->
-                        <n:li class="nav-item">
-                            <a class="nav-link link-dark btn btn-light" style="width: 150px;" href="#" onClick="winMenu.abrirPaginaRelatorios()">RELATÓRIOS</a>
-                        </n:li>
-
                         <!-- TESTE MENSAGENS -->
                         <n:li class="nav-item">
                             <a class="nav-link link-dark btn btn-light" style="width: 200px;" href="#" onClick="winMenu.abrirPaginaEnvioEmails()">ENVIO DE EMAILS</a>

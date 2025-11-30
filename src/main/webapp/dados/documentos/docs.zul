@@ -44,6 +44,27 @@
                                     <listitem value="descricao">
                                         <listcell label="Descrição"/>
                                     </listitem>
+                                    <listitem value="data_cri">
+                                        <listcell label="Data Criação"/>
+                                    </listitem>
+                                    <listitem value="data_ven">
+                                        <listcell label="Data Vencimento"/>
+                                    </listitem>
+                                    <listitem value="diretoria">
+                                        <listcell label="Diretoria"/>
+                                    </listitem>
+                                    <listitem value="rt">
+                                        <listcell label="Responsável Técnico"/>
+                                    </listitem>
+                                    <listitem value="avaliador">
+                                        <listcell label="Avaliador"/>
+                                    </listitem>
+                                    <listitem value="setor">
+                                        <listcell label="Setor"/>
+                                    </listitem>
+                                    <listitem value="qualidade">
+                                        <listcell label="Funcionário Qualidade"/>
+                                    </listitem>
                                 </listbox>
                             </div>
                             <div class="col-md-3">                
@@ -54,21 +75,6 @@
                                     </listitem>
                                     <listitem value="POP">
                                         <listcell label="POP"/>
-                                    </listitem>
-                                    <listitem value="IT">
-                                        <listcell label="IT"/>
-                                    </listitem>
-                                    <listitem value="PR">
-                                        <listcell label="PR"/>
-                                    </listitem>
-                                    <listitem value="PS">
-                                        <listcell label="PS"/>
-                                    </listitem>
-                                    <listitem value="FORM">
-                                        <listcell label="FORM"/>
-                                    </listitem>
-                                    <listitem value="REG">
-                                        <listcell label="REG"/>
                                     </listitem>
                                     <listitem value="OUTROS">
                                         <listcell label="OUTROS"/>
@@ -92,6 +98,9 @@
                                     </listitem>
                                     <listitem value="ASSINATURA">
                                         <listcell label="Assinatura"/>
+                                    </listitem>
+                                    <listitem value="FINALIZADO">
+                                            <listcell label="Finalizado"/>
                                     </listitem>
                                 </listbox>
                             </div>
@@ -128,7 +137,8 @@
                                     style="${each.estado != null ? 
                                         (each.estado.codigo eq 'elaboracao' ? 'color: blue; font-weight: bold;' :
                                         each.estado.codigo eq 'avaliacao' ? 'color: orange; font-weight: bold;' :
-                                        each.estado.codigo eq 'sugestao' ? 'color: green; font-weight: bold;' :
+                                        each.estado.codigo eq 'sugestao' ? 'color: red; font-weight: bold;' :
+                                        each.estado.codigo eq 'finalizado' ? 'color: green; font-weight: bold;' :
                                         each.estado.codigo eq 'assinatura' ? 'color: purple; font-weight: bold;' : '') 
                                     : ''}"
                                 />

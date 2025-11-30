@@ -39,11 +39,6 @@ public class ProfileController extends Window {
         this.lbErro = (Label) getFellowIfAny("msg_erro", true);
         this.divDesenv = (Div) getFellowIfAny("div_desenv", true);
 
-        // Exibe a versão da aplicação
-        String versao = Application.getInstance().getVersion();
-        if (lbVersao != null)
-            lbVersao.setValue("Versão " + versao);
-
         // Mensagem de ambiente de desenvolvimento
         mensagemDesenvol();
 
@@ -61,8 +56,6 @@ public class ProfileController extends Window {
     private void carregarUsuarioLogado() {
         Usuario usuario = Sessao.getInstance().getUsuario();
         if (usuario != null) {
-            if (lbNomeUsuario != null && usuario.getNome() != null)
-                lbNomeUsuario.setValue(usuario.getNome());
             if (lbEmailUsuario != null && usuario.getEmail() != null)
                 lbEmailUsuario.setValue(usuario.getEmail());
         } else {
@@ -114,7 +107,6 @@ public class ProfileController extends Window {
     }
 
     public void voltar() {
-        Include include = (Include) janela.getParent();
-        include.setSrc(this.urlRetorno);
+        Executions.sendRedirect("/");
     }
 }
