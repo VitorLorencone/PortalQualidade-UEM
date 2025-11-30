@@ -36,6 +36,8 @@ public class DocController extends Window {
     private Label cdDocumento;
     private Textbox nmDocumento;
     private Listbox tpDocumento;
+    private Textbox deLinkPdf;
+    private Textbox deLinkDocs;
     private Datebox dtCriacao;
     private Datebox dtVencimento;
     private Textbox deDescricao;
@@ -88,6 +90,8 @@ public class DocController extends Window {
         this.cdDocumento = (Label) getFellow("cdDocumento");
         this.nmDocumento = (Textbox) getFellow("nmDocumento");
         this.tpDocumento = (Listbox) getFellow("tpDocumento");
+        this.deLinkPdf = (Textbox) getFellow("deLinkPdf");
+        this.deLinkDocs = (Textbox) getFellow("deLinkDocs");
         this.dtCriacao = (Datebox) getFellow("dtCriacao");
         this.dtVencimento = (Datebox) getFellow("dtVencimento");
         this.deDescricao = (Textbox) getFellow("deDescricao");
@@ -144,6 +148,8 @@ public class DocController extends Window {
                 this.nmDocumento.setDisabled(true);
                 this.tpDocumento.setDisabled(true);
                 this.dtCriacao.setDisabled(true);
+                this.deLinkPdf.setDisabled(true);
+                this.deLinkDocs.setDisabled(true);
                 this.dtVencimento.setDisabled(true);
                 this.deDescricao.setDisabled(true);
                 this.estado.setDisabled(true);
@@ -700,6 +706,8 @@ public class DocController extends Window {
         this.cdDocumento.setValue("-1");
         this.nmDocumento.setRawValue(null);
         this.tpDocumento.setSelectedIndex(0);
+        this.deLinkPdf.setRawValue(null);
+        this.deLinkDocs.setRawValue(null);
         this.dtCriacao.setValue(null);
         this.dtVencimento.setValue(null);
         this.deDescricao.setRawValue(null);
@@ -714,6 +722,8 @@ public class DocController extends Window {
         zkUtils.popularCampo(this.cdDocumento, (Object) this.documento.getCdDocumento());
         zkUtils.popularCampo(this.nmDocumento, (Object) this.documento.getNmDocumento());
         zkUtils.popularCampo(this.deDescricao, (Object) this.documento.getDeDescricao());
+        zkUtils.popularCampo(this.deLinkPdf, (Object) this.documento.getDeLinkPdf());
+        zkUtils.popularCampo(this.deLinkDocs, (Object) this.documento.getDeLinkDocs());
         
         if (this.documento.getDtCriacao() != null) {
             this.dtCriacao.setValue(this.documento.getDtCriacao());
@@ -826,6 +836,8 @@ public class DocController extends Window {
         if (validarCampos()) {
             documento.setNmDocumento(this.nmDocumento.getValue());
             documento.setTpDocumento((String) this.tpDocumento.getSelectedItem().getValue());
+            documento.setDeLinkPdf(this.deLinkPdf.getValue());
+            documento.setDeLinkDocs(this.deLinkDocs.getValue());
             documento.setDtCriacao(this.dtCriacao.getValue());
             documento.setDtVencimento(this.dtVencimento.getValue());
             documento.setDeDescricao(this.deDescricao.getValue());

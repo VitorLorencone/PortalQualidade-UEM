@@ -101,9 +101,17 @@
                                         </listitem>
                                     </listbox>
                                 </div>
-                                
+
                                 <div class="col-md-6">
-                                    
+                                    <label value="Link do PDF"/>  
+                                    <textbox id="deLinkPdf" maxlength="500" class="form-control" 
+                                        placeholder="Insira o link do documento em PDF"/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label value="Link do Google Docs"/>  
+                                    <textbox id="deLinkDocs" maxlength="500" class="form-control" 
+                                        placeholder="Insira o link do Google Docs"/>
                                 </div>
                                 
                                 <div class="col-md-12">
