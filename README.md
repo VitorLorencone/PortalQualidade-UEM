@@ -1,6 +1,15 @@
 # Portal Qualidade
 
 ### O que é
+O Portal da Qualidade é um sistema de gerenciamento de documentos produzidos pelo Escritório da Qualidade do Hospital Regional Universitário de Maringá (HUM) que tem como objetivo aumentar a produtividade dos funcionários do escritório por meio da automação de tarefas rotineiras.
+
+Os documentos administrados pelo Escritório da Qualidade, como os Procedimentos Operacionais Padrões (POPs) são essenciais ao funcionamento do hospital, pois garantem a eficiência e segurança das ações realizadas por formalizarem como tudo deve ser feito, desde trocar uma lâmpada até atender um paciente em parada cardiorrespiratória.
+
+Além disso, sendo o Escritório da Qualidade um setor do HUM, suas atividades passam pelo escrutínio dos diretores do hospital, que exigem a prestação de contas em relação aos trabalhos feitos no escritório. Essa prestação de contas costuma ser feita por meio de indicadores de produtividade, como número de documentos renovados em um determinado semestre ou o número de documentos que não puderam ser postados por conta de atrasos na etapa de revisão ou assinatura.
+
+Tendo isso em mente, os funcionários do Escritório da Qualidade, em conversa com a equipe de alunos, determinou que necessitam de um sistema que compra as seguintes funções gerais principais:
+- Que envie mensagens pré definidas de forma automática por e-mail;
+- Que monitore os documentos próximos do prazo de validade;
 
 
 ### ZK Framework e Bootstrap
