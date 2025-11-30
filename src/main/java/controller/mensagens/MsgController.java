@@ -6,17 +6,24 @@
  */
 package controller.mensagens;
 
+import dao.DocumentoDAO;
 import dao.MensagemDAO;
 import model.Mensagem;
+import model.Documento;
 import model.FrequenciaMensagem;
+import model.FuncionarioHU;
+
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.*;
 
 import java.util.List;
+
+import utilitarios.Email;
 import utilitarios.Utils;
 import utilitarios.ZkUtils;
 import zk.custom.Toast;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MsgController extends Window {
@@ -47,7 +54,9 @@ public class MsgController extends Window {
     private final Utils utils = new Utils();
     private final ZkUtils zkUtils = new ZkUtils();
 
+    // DAOs
     private MensagemDAO mensagemDao = new MensagemDAO();
+    private DocumentoDAO docDao = new DocumentoDAO();
 
     private Mensagem mensagem = new Mensagem();
 
@@ -72,10 +81,13 @@ public class MsgController extends Window {
         
         // PARAMETROS ZK
         this.mensagemId = (Integer) zkUtils.getParametro("mensagem");
+        
         this.docSelecionados = (List<Integer>) zkUtils.getParametroSessao("docSelecionados");
         zkUtils.setParametroSessao("docSelecionados", this.docSelecionados);
+
         this.intencao = (String) zkUtils.getParametroSessao("intencao");
         zkUtils.setParametroSessao("intencao", this.intencao);
+
         this.acao = (String) zkUtils.getParametro("ação");
         this.categoriaMsg = (String) zkUtils.getParametro("categoria");
         this.urlRetorno = (String) zkUtils.getParametro("url_retorno");
@@ -277,6 +289,8 @@ public class MsgController extends Window {
         }
     }
     
+
+    // BOTÕES --------------------------------------------------------------------
     /**
      * Exclui o objeto Mensagem do banco de dados.
      */
@@ -292,6 +306,90 @@ public class MsgController extends Window {
             }
         }
     }
+
+    /**
+     * Envia a mensagme para o email dos 
+     */
+    public void enviar() {
+        try {
+            List<Documento> documentos = new ArrayList<>();
+            for (Integer id : this.docSelecionados) {
+                Documento doc = this.docDao.buscarComRelacionamentos(id);
+                documentos.add(doc);
+            }
+
+            if (documentos == null || documentos.isEmpty()) {
+                Grid resultados = new Grid();
+                resultados.setModel(new SimpleListModel(documentos));
+                Clients.showNotification("Nenhum documento encontrado.", 
+                        Clients.NOTIFICATION_TYPE_WARNING, resultados, "middle_center", 3000);
+                return;
+            }
+
+            int enviados = 0;
+            for (Documento doc : documentos) {
+                FuncionarioHU rt = doc.getRt();
+                if (rt == null || rt.getEmail() == null || rt.getEmail().isBlank()) {
+                    System.out.println("Documento " + doc.getNmDocumento() + " sem RT com e-mail.");
+                    continue;
+                }
+
+                String assunto = "Aviso sobre o documento: " + doc.getNmDocumento();
+                
+                //String estadoDoc = doc.getEstado().getDescricao();
+
+                String mensagem = this.corpo.getValue();
+                
+                /*
+                switch (estadoDoc) {
+                    case "Elaboração":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ELABORAÇÃO</p>";
+                        break;
+                    case "Avaliação":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem AVALIAÇÃO</p>";
+                        break;                        
+                    case "Sugestão":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem SUGESTÃO</p>";
+                        break;                    
+                    case "Assinatura":
+                        mensagem = "<p>Ola @destinatario, </p> <p>Mensagem ASSINATURA</p>";
+                        break;
+                }
+                 */
+
+                /*
+                String mensagem = "<p>Olá @destinatario,</p>"
+                        + "<p>O documento <b> @documento </b> "
+                        + "está no estado <b>"
+                        + (doc.getEstado() != null ? doc.getEstado().toString() : "N/A")
+                        + "</b>.</p><p>Por favor, verifique o sistema.</p>";
+                */
+
+                mensagem = mensagem.replace("@destinatario", rt.getNome())
+                                   .replace("@documento", doc.getNmDocumento());
+
+                Email email = new Email();
+                email.setDeEmail("nao-responda@meusistem.com");
+                email.setDeNome("Sistema de Documentos");
+                email.setParaEmail(rt.getEmail());
+                email.setAssunto(assunto);
+                email.setMensagem(mensagem);
+
+                if (email.enviarEmailHtml()) {
+                    enviados++;
+                }
+            }
+
+            Toast.show("E-mails enviados: " + enviados + " / " + documentos.size(),
+                    "Envio concluído", Toast.Type.SUCCESS);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.show("Erro ao enviar e-mails: " + e.getMessage(), "Erro", Toast.Type.ERROR);
+        }
+    }
+    // ---------------------------------------------------------------------------
+
 
     /**
      * Volta para a url de retorno.

@@ -140,6 +140,11 @@ public void filtrar() {
 
     List<Documento> documentos = documentoDao.listarComFetch(filtro, ordem);
 
+    this.selecionadosIds = new ArrayList<>();
+    for (Documento doc : documentos) {
+        this.selecionadosIds.add(doc.getCdDocumento());
+    }
+
     if (documentos != null) {
         this.resultados.setModel(new SimpleListModel(documentos));
     }

@@ -131,12 +131,15 @@ public class MsgListController extends Window {
         }
     }
 
+    /**
+     * Volta para "docList"
+     */
     public void voltar() {
         System.out.println(">>> DEBUG btn Voltar : funcao voltar chamada");
         System.out.printf("url de retorno : ");
         System.out.println(this.urlRetorno);
         this.menubar.setSrc("menubar.zul");
-        this.conteudo.setSrc(this.urlRetorno);
+        this.conteudo.setSrc("/dados/documentos/docs.zul");
     }
 
     /**
