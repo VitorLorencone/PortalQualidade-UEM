@@ -14,9 +14,6 @@
 *.class
 *.bat
 
-# Hibernate
-src/main/resources/hibernate.cfg.xml
-
 # Maven 
 target/
 
