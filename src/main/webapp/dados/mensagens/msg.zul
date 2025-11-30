@@ -22,10 +22,27 @@
                         <label value="Nome/Título"/>  
                         <textbox id="nome" maxlength="200" class="form-control" placeholder="Insira o título da mensagem"/>
                     </div>
+
                     <div class="col-md-12">
                         <label value="Corpo da Mensagem"/>  
+
+                        <!-- BLOCO DE LEGENDA -->
+                        <div class="alert alert-info mt-2">
+                            <n:small>
+                                Utilize este campo para escrever a mensagem que será exibida aos usuários.  
+                                <n:br/>Você pode incluir:
+                                <n:ul>
+                                    <n:li>@destinatario - substitui o @ pelo destinatario do documento</n:li>
+                                    <n:li>@documento - substitui o @ pelo nome do documento</n:li>
+                                    <n:li>@link - substitui o @ pelo link do documento</n:li>
+                                    <n:li>@data - substitui o @ pela data de vencimento do documento</n:li>
+                                </n:ul>
+                            </n:small>
+                        </div>
+
                         <textbox id="corpo" rows="5" maxlength="1000" class="form-control" multiline="true" placeholder="Digite o conteúdo da mensagem"/>          
                     </div>
+
                     <div class="col-md-4">
                         <label value="Data de Início" />  
                         <datebox id="dtInicio" class="form-control" format="dd/MM/yyyy" placeholder="dd/mm/aaaa"/>            

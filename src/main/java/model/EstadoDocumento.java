@@ -5,11 +5,14 @@ package model;
  */
 public enum EstadoDocumento {
     
-    ELABORACAO("Elaboração", "elaboracao"),
+    NORMAZERO("Norma Zero", "normazero"),
+    REVISAO("Revisão", "revisao"),
     AVALIACAO("Avaliação", "avaliacao"),
-    SUGESTAO("Sugestão", "sugestao"),
-    ASSINATURA("Assinatura", "assinatura"),
-    FINALIZADO("Finalizado", "finalizado");
+    ASSINATURA("Assinatura de Aprovação", "assinatura"),
+    ELABORACAO("Elaboração", "elaboracao"),
+    REUNIAO("Reunião de Alinhamento", "reuniao"),
+    EXCLUSAO("Exclusão de Documento", "exclusao"),
+    CANCELAMENTO("Cancelamento do Processo", "cancelamento");
     
     private final String descricao;
     private final String codigo;

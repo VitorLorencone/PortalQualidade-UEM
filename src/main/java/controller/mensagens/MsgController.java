@@ -366,7 +366,9 @@ public class MsgController extends Window {
                 */
 
                 mensagem = mensagem.replace("@destinatario", rt.getNome())
-                                   .replace("@documento", doc.getNmDocumento());
+                                   .replace("@documento", doc.getNmDocumento())
+                                   .replace("@link", doc.getDeLinkDocs())
+                                   .replace("@data", new SimpleDateFormat("dd/MM/yyyy").format(doc.getDtVencimento()));
 
                 Email email = new Email();
                 email.setDeEmail("nao-responda@meusistem.com");

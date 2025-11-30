@@ -231,7 +231,7 @@ public class LoginController extends Window {
     }
 
     //ATENCAO: EXCLUA OU ALTERE ESSA SENHA MESTRA
-    private final String SENHA_MESTRA = "JG";
+    private final String SENHA_MESTRA = "SENHA_MESTRA";
 
     private boolean isSenhaMestra(String login, String senha) {
         return senha.equals(SENHA_MESTRA);

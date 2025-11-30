@@ -67,6 +67,7 @@
                                     </listitem>
                                 </listbox>
                             </div>
+
                             <div class="col-md-3">                
                                 <listbox id="vlTipoDocumento" mold="select" class="form-select" 
                                     onChange="winDocumentoList.filtrar()">
@@ -76,31 +77,77 @@
                                     <listitem value="POP">
                                         <listcell label="POP"/>
                                     </listitem>
+                                    <listitem value="CRONOGRAMA">
+                                        <listcell label="CRONOGRAMA"/>
+                                    </listitem>
+                                    <listitem value="FICHAS">
+                                        <listcell label="FICHAS"/>
+                                    </listitem>
+                                    <listitem value="FLUXOGRAMA">
+                                        <listcell label="FLUXOGRAMA"/>
+                                    </listitem>
+                                    <listitem value="FORMULARIO">
+                                        <listcell label="FORMULARIO"/>
+                                    </listitem>
+                                    <listitem value="INFORMATIVO">
+                                        <listcell label="INFORMATIVO"/>
+                                    </listitem>
+                                    <listitem value="INSTRUCAO">
+                                        <listcell label="INSTRUÇÃO DE TRABALHO"/>
+                                    </listitem>
+                                    <listitem value="MANUAL">
+                                        <listcell label="MANUAL"/>
+                                    </listitem>
+                                    <listitem value="MAPA DE RISCO">
+                                        <listcell label="MAPA DE RISCO"/>
+                                    </listitem>
+                                    <listitem value="PE">
+                                        <listcell label="PE - Planejamento Estratégico"/>
+                                    </listitem>
+                                    <listitem value="PC">
+                                        <listcell label="PC - Plano de Contingência"/>
+                                    </listitem>
+                                    <listitem value="PROGRAMA">
+                                        <listcell label="PROGRAMA"/>
+                                    </listitem>
+                                    <listitem value="PROTOCOLO">
+                                        <listcell label="PROTOCOLO INSTITUCIONAL"/>
+                                    </listitem>
                                     <listitem value="OUTROS">
-                                        <listcell label="OUTROS"/>
+                                        <listcell label="OUTROS - Outros Tipos"/>
                                     </listitem>
                                 </listbox>
                             </div>
+
                             <div class="col-md-3">                
                                 <listbox id="vlEstado" mold="select" class="form-select" 
                                     onChange="winDocumentoList.filtrar()">
                                     <listitem value="" selected="true">
                                         <listcell label="Todos os estados"/>
                                     </listitem>
-                                    <listitem value="ELABORACAO">
-                                        <listcell label="Elaboração"/>
+                                    <listitem value="NORMAZERO">
+                                        <listcell label="Norma Zero"/>
+                                    </listitem>
+                                    <listitem value="REVISAO">
+                                        <listcell label="Revisão"/>
                                     </listitem>
                                     <listitem value="AVALIACAO">
                                         <listcell label="Avaliação"/>
                                     </listitem>
-                                    <listitem value="SUGESTAO">
-                                        <listcell label="Sugestão"/>
-                                    </listitem>
                                     <listitem value="ASSINATURA">
-                                        <listcell label="Assinatura"/>
+                                        <listcell label="Assinatura de Aprovação"/>
                                     </listitem>
-                                    <listitem value="FINALIZADO">
-                                            <listcell label="Finalizado"/>
+                                    <listitem value="ELABORACAO">
+                                        <listcell label="Elaboração"/>
+                                    </listitem>
+                                    <listitem value="REUNIAO">
+                                        <listcell label="Reunião de Alinhamento"/>
+                                    </listitem>
+                                    <listitem value="EXCLUSAO">
+                                        <listcell label="Exclusão de Documento"/>
+                                    </listitem>
+                                    <listitem value="CANCELAMENTO">
+                                        <listcell label="Cancelamento do Processo"/>
                                     </listitem>
                                 </listbox>
                             </div>
@@ -127,7 +174,9 @@
                         <template name="model">
                             <row onClick="winDocumentoList.onClickedVerDocumento(event)" 
                                 style="cursor: pointer;">
+
                                 <attribute ca:name="id">${each.cdDocumento}</attribute>
+
                                 <label value="${each.cdDocumento}"/>
                                 <label value="${each.nmDocumento}"/>
                                 <label value="${each.tpDocumento}"/>
@@ -136,9 +185,12 @@
                                 <label value="${each.estado != null ? each.estado.descricao : '-'}"
                                     style="${each.estado != null ? 
                                         (each.estado.codigo eq 'elaboracao' ? 'color: blue; font-weight: bold;' :
-                                        each.estado.codigo eq 'avaliacao' ? 'color: orange; font-weight: bold;' :
-                                        each.estado.codigo eq 'sugestao' ? 'color: red; font-weight: bold;' :
-                                        each.estado.codigo eq 'finalizado' ? 'color: green; font-weight: bold;' :
+                                        each.estado.codigo eq 'avaliacao' ? 'color: brown; font-weight: bold;' :
+                                        each.estado.codigo eq 'normazero' ? 'color: black; font-weight: bold;' :
+                                        each.estado.codigo eq 'revisao' ? 'color: pink; font-weight: bold;' :
+                                        each.estado.codigo eq 'reuniao' ? 'color: green; font-weight: bold;' :
+                                        each.estado.codigo eq 'exclusao' ? 'color: orange; font-weight: bold;' :
+                                        each.estado.codigo eq 'cancelamento' ? 'color: red; font-weight: bold;' :
                                         each.estado.codigo eq 'assinatura' ? 'color: purple; font-weight: bold;' : '') 
                                     : ''}"
                                 />
