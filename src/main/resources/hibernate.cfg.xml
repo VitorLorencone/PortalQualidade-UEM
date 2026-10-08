@@ -7,8 +7,8 @@
         <property name="hibernate.hikari.dataSource.serverName">localhost</property>
         <property name="hibernate.hikari.dataSource.portNumber">3306</property>
         <property name="hibernate.hikari.dataSource.databaseName">portalqualidade</property>
-        <property name="hibernate.hikari.dataSource.user">admin</property>
-        <property name="hibernate.hikari.dataSource.password">admin</property>
+        <property name="hibernate.hikari.dataSource.user">xxxxxx</property>
+        <property name="hibernate.hikari.dataSource.password">xxxxxxxxxx</property>
 
         <!-- Configurações HikariCP -->
         <property name="hibernate.hikari.dataSourceClassName">com.mysql.cj.jdbc.MysqlDataSource</property>
